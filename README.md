@@ -6,4 +6,5 @@ docker build --rm -f Dockerfile -t gfish/devenv:1.0 .
 
 # Pushing to my account
 docker login
+
 docker push gfish/devenv:1.0
