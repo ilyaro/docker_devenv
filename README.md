@@ -18,4 +18,6 @@ docker push gfish/devenv:1.0
 docker run --rm -it gfish/devenv:1.0
 
 # Running with volume mapping
-docker run --rm -it -v ``pwd``:/work gfish/devenv:1.0
+docker run --rm -it -v $(pwd):/work gfish/devenv:1.0
+
+
