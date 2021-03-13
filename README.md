@@ -13,3 +13,6 @@ docker build --rm -f Dockerfile -t gfish/devenv:1.0 .
 docker login
 
 docker push gfish/devenv:1.0
+
+# Running development environment in Docker container:
+docker run --rm -it gfish/devenv:1.0
