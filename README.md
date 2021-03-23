@@ -18,7 +18,8 @@ docker push gfish/devenv:1.0
 docker run --rm -it gfish/devenv
 
 # Running with volume mapping, -d daemon, $HOME evn variable. 
-docker run --name devenv -d -e "HOME=/work" --rm -it -v $(pwd):/work gfish/devenv
+$ cd ~
+$ docker run --restart unless-stopped --name devenv -d -e "HOME=/work" -v $(pwd):/work gfish/devenv:1.0
 
 # Execute container
 docker exec -it devenv /bin/bash
