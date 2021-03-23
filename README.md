@@ -21,5 +21,8 @@ docker run --rm -it gfish/devenv
 $ cd ~
 $ docker run --restart unless-stopped --name devenv -it -d -e "HOME=/work" -v $(pwd):/work gfish/devenv:latest
 
+# On Windows 10 with WSL
+$ docker run --restart unless-stopped --name devenv -it -d -e "HOME=/work" -v /mnt/d/:/work gfish/devenv:latest
+
 # Execute container
 docker exec -it devenv /bin/bash
