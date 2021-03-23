@@ -7,7 +7,7 @@ https://docs.microsoft.com/en-us/learn/modules/use-docker-container-dev-env-vs-c
 
 
 # Building Docker image
-docker build --rm -f Dockerfile -t gfish/devenv:1.0 .
+docker build --rm -f Dockerfile -t gfish/devenv:1.x -t gfish/devenv:latest .
 
 # Pushing to my account
 docker login
