@@ -7,15 +7,15 @@ https://docs.microsoft.com/en-us/learn/modules/use-docker-container-dev-env-vs-c
 
 
 # Building Docker image
-docker build --rm -f Dockerfile -t gfish/devenv:1.x -t gfish/devenv:latest .
+$ docker build --rm -f Dockerfile -t gfish/devenv:$(git show -s --format=%ct-%h) -t gfish/devenv:latest .
 
 # Pushing to my account
-docker login
+$ docker login
 
-docker push gfish/devenv:1.0
+$ docker push gfish/devenv --all-tags
 
 # Running development environment in Docker container:
-docker run --rm -it gfish/devenv
+$ docker run --rm -it gfish/devenv
 
 # Running with volume mapping, -d daemon, $HOME evn variable. 
 $ cd ~

@@ -8,7 +8,6 @@ RUN yum update -y \
   git \
   python3 \
   python3-pip \
-  npm \
   && yum clean all
 RUN python3 -m pip install boto3
 RUN python3 -m pip install pyyaml
