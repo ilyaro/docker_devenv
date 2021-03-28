@@ -8,7 +8,7 @@ https://docs.microsoft.com/en-us/learn/modules/use-docker-container-dev-env-vs-c
 
 # Building Docker image
 $ docker build --rm -f Dockerfile -t gfish/devenv:$(git show -s --format=%ct-%h) -t gfish/devenv:latest .
-
+-v $(pwd):/work
 # Pushing to my account
 $ docker login
 
@@ -22,7 +22,8 @@ $ cd ~
 $ docker run --restart unless-stopped --name devenv -it -d -e "HOME=/work" -v $(pwd):/work gfish/devenv:latest
 
 # On Windows 10 with WSL
-$ docker run --restart unless-stopped --name devenv -it -d -e "HOME=/work" -v /mnt/d/:/work gfish/devenv:latest
+$ cd ~
+$ docker run --restart unless-stopped --name devenv -it -d -e "HOME=/work" -v $(pwd):/work -v /mnt/d/:/d gfish/devenv:latest
 
 # Execute container
 docker exec -it devenv /bin/bash
