@@ -23,7 +23,7 @@ $ docker run --restart unless-stopped --name devenv -it -d -e "HOME=/work" -v $(
 
 # On Windows 10 with WSL
 $ cd ~
-$ docker run --restart unless-stopped --name devenv -it -d -e "HOME=/work" -v $(pwd):/work -v /mnt/d/:/d gfish/devenv:latest
+$ docker run --restart unless-stopped --name devenv -it -d -e "HOME=/work" -v /mnt/c/Users/ilyaro:/work -v /mnt/d/:/d gfish/devenv:latest
 
 # Execute container
 docker exec -it devenv /bin/bash
