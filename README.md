@@ -27,3 +27,6 @@ $ docker run --restart unless-stopped --name devenv -it -d -e "HOME=/work" -v /m
 
 # Execute container
 docker exec -it devenv /bin/bash
+
+## How to set dockerd running on startup of Windows 10 WSL Ubuntu
+https://blog.nillsf.com/index.php/2020/06/29/how-to-automatically-start-the-docker-daemon-on-wsl2/
