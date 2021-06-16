@@ -8,7 +8,7 @@ https://docs.microsoft.com/en-us/learn/modules/use-docker-container-dev-env-vs-c
 
 # Building Docker image
 $ docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --rm -f Dockerfile -t gfish/devenv_user:$(git show -s --format=%ct-%h) -t gfish/devenv_user:latest . 
--v $(pwd):/work
+
 # Pushing to my account
 $ docker login
 
@@ -19,11 +19,11 @@ $ docker run --rm -it gfish/devenv_user
 
 # Running with volume mapping, -d daemon, $HOME evn variable. 
 $ cd ~
-$ docker run --restart unless-stopped --name devenv_user -it -d -e "HOME=/work" -v $(pwd):/work gfish/devenv_user:latest
+$ docker run --restart unless-stopped --name devenv_user -it -d -v $(pwd):/home/ilyaro gfish/devenv_user:latest
 
 # On Windows 10 with WSL
 
-$ docker run --restart unless-stopped --name devenv_user -it -d -e "HOME=/work" -v /mnt/c/Users/ilyaro:/work -v /mnt/d/:/d gfish/devenv_user:latest
+$ docker run --restart unless-stopped --name devenv_user -it -d -v /mnt/c/Users/ilyaro:/home/ilyaro -v /mnt/d/:/d gfish/devenv_user:latest
 
 # Execute container
 docker exec -it devenv_user /bin/bash
