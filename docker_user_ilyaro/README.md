@@ -9,6 +9,10 @@ https://docs.microsoft.com/en-us/learn/modules/use-docker-container-dev-env-vs-c
 # Building Docker image
 $ docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --rm -f Dockerfile -t gfish/devenv_user:$(git show -s --format=%ct-%h) -t gfish/devenv_user:latest . 
 
+## For ec2-user 
+docker build --build-arg UID=1000 --build-arg GID=1000 --rm -f Dockerfile_ec2-user -t gfish/devenv_ec2-user:$(git show -s --format=%ct-%h) -t g
+fish/devenv_ec2-user:latest .
+
 # Pushing to my account
 $ docker login
 
@@ -24,6 +28,9 @@ $ docker run --restart unless-stopped --name devenv_user -it -d -v $(pwd):/home/
 # On Windows 10 with WSL
 
 $ docker run --restart unless-stopped --name devenv_user -it -d -v /mnt/c/Users/ilyaro:/home/ilyaro -v /mnt/d/:/d gfish/devenv_user:latest
+
+## For ec2-user
+docker run --restart unless-stopped --name devenv_ec2-user -it -d -v /home/ec2-user:/home/ec2-user gfish/devenv_ec2-user:latest
 
 # Execute container
 docker exec -it devenv_user /bin/bash
