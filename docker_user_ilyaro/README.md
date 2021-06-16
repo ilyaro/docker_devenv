@@ -7,26 +7,26 @@ https://docs.microsoft.com/en-us/learn/modules/use-docker-container-dev-env-vs-c
 
 
 # Building Docker image
-$ docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --rm -f Dockerfile -t gfish/devenv:$(git show -s --format=%ct-%h) -t gfish/devenv_ilyaro:latest . 
+$ docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --rm -f Dockerfile -t gfish/devenv_user:$(git show -s --format=%ct-%h) -t gfish/devenv_user:latest . 
 -v $(pwd):/work
 # Pushing to my account
 $ docker login
 
-$ docker push gfish/devenv_ilyaro --all-tags
+$ docker push gfish/devenv_user --all-tags
 
 # Running development environment in Docker container:
-$ docker run --rm -it gfish/devenv_ilyaro
+$ docker run --rm -it gfish/devenv_user
 
 # Running with volume mapping, -d daemon, $HOME evn variable. 
 $ cd ~
-$ docker run --restart unless-stopped --name devenv -it -d -e "HOME=/work" -v $(pwd):/work gfish/devenv_ilyaro:latest
+$ docker run --restart unless-stopped --name devenv_user -it -d -e "HOME=/work" -v $(pwd):/work gfish/devenv_user:latest
 
 # On Windows 10 with WSL
 
-$ docker run --restart unless-stopped --name devenv -it -d -e "HOME=/work" -v /mnt/c/Users/ilyaro:/work -v /mnt/d/:/d gfish/devenv_ilyaro:latest
+$ docker run --restart unless-stopped --name devenv_user -it -d -e "HOME=/work" -v /mnt/c/Users/ilyaro:/work -v /mnt/d/:/d gfish/devenv_user:latest
 
 # Execute container
-docker exec -it devenv /bin/bash
+docker exec -it devenv_user /bin/bash
 
 ## How to set dockerd running on startup of Windows 10 WSL Ubuntu
 https://blog.nillsf.com/index.php/2020/06/29/how-to-automatically-start-the-docker-daemon-on-wsl2/
