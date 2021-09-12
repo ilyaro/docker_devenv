@@ -13,6 +13,9 @@ $ docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --rm -f Dockerf
 docker build --build-arg UID=1000 --build-arg GID=1000 --rm -f Dockerfile_ec2-user -t gfish/devenv_ec2-user:$(git show -s --format=%ct-%h) -t g
 fish/devenv_ec2-user:latest .
 
+## For amazone linux base image, cloud9 based
+docker build --rm -f Dockerfile_amazonlinux -t gfish/devenv_amazonlinux:$(git show -s --format=%ct-%h) -t gfish/devenv_amazonlinux:latest .
+
 # Pushing to my account
 $ docker login
 
@@ -23,7 +26,7 @@ $ docker run --rm -it gfish/devenv_user
 
 # Running with volume mapping, -d daemon, $HOME evn variable. 
 $ cd ~
-$ docker run --restart unless-stopped --name devenv_user -it -d -v $(pwd):/home/ilyaro gfish/devenv_user:latest
+$ NAME=devenv_amazonlinux;docker rm -f ${NAME};docker run --restart unless-stopped --name ${NAME} -it -d -v ${HOME}:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/sudoers:/etc/sudoers gfish/${NAME}:latest
 
 # On Windows 10 with WSL
 
