@@ -21,6 +21,13 @@ RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install pyyaml
 RUN python3 -m pip install redis
 
+RUN yum install -y yum-utils
+RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/$release/hashicorp.repo
+RUN export release=AmazonLinux
+RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/$release/hashicorp.repo
+RUN yum install terraform
+
+
 # Create user and enable root access
 RUN useradd --uid 1000 --shell /bin/bash -m --home-dir /home/ubuntu ubuntu && \
     sed -i 's/%wheel\s.*/%wheel ALL=NOPASSWD:ALL/' /etc/sudoers && \
