@@ -5,6 +5,8 @@ https://www.codemag.com/Article/1811021/Docker-for-Developers
 
 https://docs.microsoft.com/en-us/learn/modules/use-docker-container-dev-env-vs-code/
 
+Installing Docker od wsl2 Windows 10
+https://www.codegrepper.com/code-examples/shell/install+docker+on+wsl2+ubuntu
 
 # Building Docker image
 $ docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --rm -f Dockerfile -t gfish/devenv_user:$(git show -s --format=%ct-%h) -t gfish/devenv_user:latest . 
@@ -28,9 +30,12 @@ $ docker run --rm -it gfish/devenv_user
 $ cd ~
 $ NAME=devenv_amazonlinux;docker rm -f ${NAME};docker run --restart unless-stopped --name ${NAME} -it -d -v ${HOME}:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/sudoers:/etc/sudoers gfish/${NAME}:latest
 
-# On Windows 10 with WSL
+# On Windows 10 with WSL2
+# Add aliases to ~/.bash_aliases
 
-$ NAME=devenv_amazonlinux;docker rm -f ${NAME};docker run --restart unless-stopped --name ${NAME} -it -d -v /mnt/d:/mnt/d -v /mnt/c:/mnt/c -v ${HOME}:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/sudoers:/etc/sudoers gfish/${NAME}:latest
+$ alias dr='export IMNAME=devenv_amazonlinux;docker rm -f ${IMNAME};docker run --restart unless-stopped --name ${IMNAME} -it -d -v /mnt/d:/mnt/d -v /mnt/c:/mnt/c -v ${HOME}:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/sudoers:/etc/sudoers gfish/${IMNAME}:latest'
+
+$ alias de='docker exec -it devenv_amazonlinux /bin/bash'
 
 ## For ec2-user
 docker run --restart unless-stopped --name devenv_ec2-user -it -d -v /home/ec2-user:/home/ec2-user gfish/devenv_ec2-user:latest
@@ -38,5 +43,5 @@ docker run --restart unless-stopped --name devenv_ec2-user -it -d -v /home/ec2-u
 # Execute container
 docker exec -it devenv_user /bin/bash
 
-## How to set dockerd running on startup of Windows 10 WSL Ubuntu
+## How to set docker running on startup of Windows 10 WSL Ubuntu
 https://blog.nillsf.com/index.php/2020/06/29/how-to-automatically-start-the-docker-daemon-on-wsl2/
