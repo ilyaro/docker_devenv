@@ -4,9 +4,12 @@
 C:\WINDOWS\system32>mklink /D d:\mobahome\.ssh c:\Users\ilyaro\.ssh
 symbolic link created for d:\mobahome\.ssh <<===>> c:\Users\ilyaro\.ssh
 
-## Copy Home_dir/* to Host Machine WSL2 Ubuntu20 Centos7 where we run docker run
+## Copy Home_dir/* to ~/ (Home dir) of host Machine WSL2 Ubuntu20 Centos7 where we run docker run
  
-## Copy Root_etc/* on WSL2 host machine only to enable docker start on WSL Ubuntu start 
+## Copy Root_etc/* to /etc/ on WSL2 host machine only to enable docker start on WSL Ubuntu start 
+
+## Copy ca-certificates.crt to /etc/pki/tls/certs/ca-bundle.crt for curl and git to work properly with passowrd 
+ilyaro@ilyaro-5400:~$ sudo cp /etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt
 
 # docker_devenv_ilyaro
 Creating and maintain Docker image for development work, keeping development environment the same, on any system Need to be run with volume of git repositories attached 
