@@ -43,7 +43,7 @@ $ NAME=devenv_amazonlinux;docker rm -f ${NAME};docker run --restart unless-stopp
 # On Windows 10 with WSL2
 # Add aliases to ~/.bash_aliases
 
-$ alias dr='export IMNAME=devenv_amazonlinux;docker rm -f ${IMNAME};docker run --restart unless-stopped --name ${IMNAME} -it -d -v /mnt/d:/mnt/d -v /mnt/c:/mnt/c -v ${HOME}:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/sudoers:/etc/sudoers gfish/${IMNAME}:latest'
+$ alias drun='export IMNAME=devenv_amazonlinux;docker rm -f ${IMNAME};docker run --restart unless-stopped --name ${IMNAME} -it -d -v /mnt/d:/mnt/d -v /mnt/c:/mnt/c -v ${HOME}:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/pki/tls/certs:/etc/pki/tls/certs -v /etc/sudoers:/etc/sudoers gfish/${IMNAME}:latest'
 
 $ alias de='docker exec -it devenv_amazonlinux /bin/bash'
 
