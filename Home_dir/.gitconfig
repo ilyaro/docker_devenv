@@ -10,5 +10,6 @@
 	default = simple
 [core]
 	autocrlf=input
+## store password in cache (Timeout in seconds) for 60*60*24*30=2592000 - 30 days
 [credential]
 	helper = cache --timeout=2592000
