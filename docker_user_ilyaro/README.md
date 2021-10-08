@@ -4,9 +4,9 @@
 C:\WINDOWS\system32>mklink /D d:\mobahome\.ssh c:\Users\ilyaro\.ssh
 symbolic link created for d:\mobahome\.ssh <<===>> c:\Users\ilyaro\.ssh
 
-## Copy Root_etc/* and Home_dir/* to Host Machine WSL2 Ubuntu20 Centos7 where we run docker run
+## Copy Home_dir/* to Host Machine WSL2 Ubuntu20 Centos7 where we run docker run
  
-
+## Copy Root_etc/* on WSL2 host machine only to enable docker start on WSL Ubuntu start 
 
 # docker_devenv_ilyaro
 Creating and maintain Docker image for development work, keeping development environment the same, on any system Need to be run with volume of git repositories attached 
