@@ -1,0 +1,10 @@
+[alias]
+	st = status
+	ts = status
+[user]
+	name = ilyaro
+	email = ilyaro@checkpoint.com
+[pull]
+	rebase = true
+[push]
+	default = simple
