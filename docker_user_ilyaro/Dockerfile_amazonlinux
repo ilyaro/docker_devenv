@@ -6,7 +6,7 @@ LABEL maintainer="Ilya Rokhkin"
 RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 RUN yum update -y
 RUN yum install -y sudo bash curl wget git man-db nano vim bash-completion tmux  gcc gcc-c++ make tar unzip \
-	python3-pip
+	python3-pip meld
 
 # Enable the Docker container to communicate with AWS Cloud9 by
 # installing SSH.
