@@ -1,0 +1,3 @@
+ilyaro ALL = (root) NOPASSWD: /usr/sbin/service docker *
+ilyaro ALL=(ALL) NOPASSWD:ALL
+
