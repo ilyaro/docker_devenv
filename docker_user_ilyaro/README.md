@@ -1,3 +1,9 @@
+## For using mobaxterm home directory with .ssh as in Windows
+# Need to create d:\mobahome, specify it as Moba Home dir in Settings -> Configuration in MobaXterm
+# And create symboilink link as Administrator only from c:\Users\ilyaro\.ssh to d:\mobahome\.ssh
+C:\WINDOWS\system32>mklink /D d:\mobahome\.ssh c:\Users\ilyaro\.ssh
+symbolic link created for d:\mobahome\.ssh <<===>> c:\Users\ilyaro\.ssh
+
 # docker_devenv_ilyaro
 Creating and maintain Docker image for development work, keeping development environment the same, on any system Need to be run with volume of git repositories attached 
 Based on:
