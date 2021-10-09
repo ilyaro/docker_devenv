@@ -18,7 +18,7 @@ https://www.codemag.com/Article/1811021/Docker-for-Developers
 
 https://docs.microsoft.com/en-us/learn/modules/use-docker-container-dev-env-vs-code/
 
-Installing Docker od wsl2 Windows 10
+Installing Docker on wsl2 Windows 10
 https://www.codegrepper.com/code-examples/shell/install+docker+on+wsl2+ubuntu
 
 # Building Docker image
