@@ -87,6 +87,9 @@ RUN yum -y install \
 ## Yum repository for terraform
 RUN sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 
+## Prepare to install go
+sudo rpm --import https://mirror.go-repo.io/centos/RPM-GPG-KEY-GO-REPO
+curl -s https://mirror.go-repo.io/centos/go-repo.repo | sudo tee /etc/yum.repos.d/go-repo.repo
 ## Install Devops tools
 RUN yum install -y sudo \
 		   bash \
@@ -102,7 +105,8 @@ RUN yum install -y sudo \
         	   python3-pip \
 		   meld \
 		   nodejs \
-		   terraform
+		   terraformi \
+		   golang
 
 ## clean all to clean space
 RUN yum clean all
@@ -115,6 +119,8 @@ RUN python3 -m pip install redis
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 RUN unzip awscliv2.zip
 sudo ./aws/install
+
+sudo yum install golang
 
 # Set default command
 CMD ["/usr/bin/bash"]
