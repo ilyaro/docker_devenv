@@ -12,8 +12,6 @@ RUN [ -e /etc/yum.conf ] && sed -i '/tsflags=nodocs/d' /etc/yum.conf || true
 # Reinstall all packages to get man pages for them
 RUN yum -y reinstall "*" && yum clean all
 
-RUN yum update -y
-
 # Swap out the systemd-container package and install all useful packages
 RUN yum -y install \
            kernel \
@@ -103,7 +101,7 @@ RUN yum install -y sudo \
         	   python3-pip \
 		   meld \
 		   nodejs \
-		   terraformi \
+		   terraform \
 		   golang
 
 ## Update yum packages
