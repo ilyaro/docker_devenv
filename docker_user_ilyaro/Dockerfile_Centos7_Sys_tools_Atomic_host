@@ -83,8 +83,8 @@ RUN yum -y install \
            python-rhsm \
            rootfiles \
            yum-utils \
-           && yum clean all
 
+## Install Devops tools
 RUN yum install -y sudo \
 		   bash \
 		   curl \
@@ -96,15 +96,11 @@ RUN yum install -y sudo \
 		   gcc-c++ \
 		   make \
 		   unzip \
-        python3-pip meld
+        	   python3-pip \
+		   meld \
+		   nodejs \
 
-# Enable the Docker container to communicate with AWS Cloud9 by
-# installing SSH.
-RUN yum install -y openssh-server
-
-# Ensure that Node.js is installed.
-RUN yum install -y nodejs
-
+## clean all to clean space
 RUN yum clean all
 
 RUN python3 -m pip install --upgrade pip
