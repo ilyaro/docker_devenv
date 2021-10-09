@@ -111,5 +111,10 @@ RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install pyyaml
 RUN python3 -m pip install redis
 
+## Install aws cli
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+sudo ./aws/install
+
 # Set default command
 CMD ["/usr/bin/bash"]
