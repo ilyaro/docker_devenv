@@ -1,5 +1,6 @@
-FROM amazonlinux:latest
+FROM amazonlinux:2
 
+# https://docs.aws.amazon.com/cloud9/latest/user-guide/sample-docker.html
 LABEL maintainer="Ilya Rokhkin"
 
 # install common tools
