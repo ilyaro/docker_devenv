@@ -25,7 +25,7 @@ https://www.codegrepper.com/code-examples/shell/install+docker+on+wsl2+ubuntu
 $ docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) --rm -f Dockerfile -t gfish/devenv_user:$(git show -s --format=%ct-%h) -t gfish/devenv_user:latest . 
 
 ## For ec2-user 
-docker build --build-arg UID=1000 --build-arg GID=1000 --rm -f Dockerfile_ec2-user -t gfish/devenv_ec2-user:$(git show -s --format=%ct-%h) -t g
+$ docker --build-arg UID=1000 --build-arg GID=1000 --rm -f Dockerfile_ec2-user -t gfish/devenv_ec2-user:$(git show -s --format=%ct-%h) -t g
 fish/devenv_ec2-user:latest .
 
 ## For amazone linux base image, cloud9 based
