@@ -101,7 +101,7 @@ RUN yum install -y nano \
 ## Update yum packages
 RUN yum update -y
 
-
+## install python3 modules
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install pyyaml
 RUN python3 -m pip install redis
@@ -130,13 +130,6 @@ RUN yum clean all
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install pyyaml
 RUN python3 -m pip install redis
-
-## Install terraform
-RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/$release/hashicorp.repo
-RUN export release=AmazonLinux
-RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/$release/hashicorp.repo
-RUN yum install terraform
-
 
 # Create user and enable root access
 RUN useradd --uid 1000 --shell /bin/bash -m --home-dir /home/ubuntu ubuntu && \
