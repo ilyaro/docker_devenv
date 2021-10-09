@@ -34,7 +34,7 @@ NAME=amazonlinux
 ## For Centos 7 base image with tools 
 NAME=centos7tools
 
-$ docker build --rm -f Dockerfile_${NAME} -t gfish/devenv_${NAME}:$(git show -s --format=%ct-%h) -t gfish/devenv_${NAME}:latest
+$ docker build --rm -f Dockerfile_${NAME} -t gfish/devenv_${NAME}:$(git show -s --format=%ct-%h) -t gfish/devenv_${NAME}:latest .
 
 # Pushing to my account
 $ docker login
