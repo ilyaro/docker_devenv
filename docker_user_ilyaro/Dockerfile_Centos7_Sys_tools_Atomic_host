@@ -84,6 +84,9 @@ RUN yum -y install \
            rootfiles \
            yum-utils \
 
+## Yum repository for terraform
+RUN sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+
 ## Install Devops tools
 RUN yum install -y sudo \
 		   bash \
@@ -99,6 +102,7 @@ RUN yum install -y sudo \
         	   python3-pip \
 		   meld \
 		   nodejs \
+		   terraform
 
 ## clean all to clean space
 RUN yum clean all
@@ -106,12 +110,6 @@ RUN yum clean all
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install pyyaml
 RUN python3 -m pip install redis
-
-RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/$release/hashicorp.repo
-RUN export release=AmazonLinux
-RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/$release/hashicorp.repo
-RUN yum install terraform
-
 
 # Set default command
 CMD ["/usr/bin/bash"]
