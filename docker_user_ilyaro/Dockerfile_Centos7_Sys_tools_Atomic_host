@@ -86,6 +86,11 @@ RUN sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/h
 ## Prepare to install go
 sudo rpm --import https://mirror.go-repo.io/centos/RPM-GPG-KEY-GO-REPO
 curl -s https://mirror.go-repo.io/centos/go-repo.repo | sudo tee /etc/yum.repos.d/go-repo.repo
+
+## Prepare to install meld
+curl -s https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/m/meld-3.16.4-2.el7.noarch.rpm
+rpm -Uvh meld-3.16.4-2.el7.noarch.rpm
+
 ## Install Devops tools
 RUN yum install -y sudo \
 		   bash \
