@@ -79,35 +79,26 @@ RUN yum -y install \
            python-rhsm \
            rootfiles \
            yum-utils \
-
-## Yum repository for terraform
-RUN sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
-
-## Prepare to install go
-sudo rpm --import https://mirror.go-repo.io/centos/RPM-GPG-KEY-GO-REPO
-curl -s https://mirror.go-repo.io/centos/go-repo.repo | sudo tee /etc/yum.repos.d/go-repo.repo
+	   wget \
+	   curl \
+	   sudo \
+	   bash \
+	   tmux \
+	   unzip
 
 ## Prepare to install meld
-curl -s https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/m/meld-3.16.4-2.el7.noarch.rpm
-rpm -Uvh meld-3.16.4-2.el7.noarch.rpm
+RUN wget https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/m/meld-3.16.4-2.el7.noarch.rpm
+RUN rpm -Uvh meld-3.16.4-2.el7.noarch.rpm
 
 ## Install Devops tools
-RUN yum install -y sudo \
-		   bash \
-		   curl \
-		   wget \
-		   nano \
+RUN yum install -y nano \
 		   vim \
-		   tmux \
 		   gcc \
 		   gcc-c++ \
 		   make \
-		   unzip \
         	   python3-pip \
 		   meld \
-		   nodejs \
-		   terraform \
-		   golang
+		   nodejs 
 
 ## Update yum packages
 RUN yum update -y
@@ -122,7 +113,15 @@ RUN python3 -m pip install redis
 ## Install aws cli
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 RUN unzip awscliv2.zip
-sudo ./aws/install
+RUN ./aws/install
+
+## Install terraform
+RUN wget https://releases.hashicorp.com/terraform/1.0.8/terraform_1.0.8_linux_amd64.zip
+RUN unzip terraform_1.0.8_linux_amd64.zip -d /usr/local/bin/
+
+## Install go
+RUN wget https://golang.org/dl/go1.17.2.linux-amd64.tar.gz
+RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.2.linux-amd64.tar.gz
 
 # Set default command
 CMD ["/usr/bin/bash"]
