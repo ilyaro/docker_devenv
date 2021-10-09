@@ -29,12 +29,12 @@ docker build --build-arg UID=1000 --build-arg GID=1000 --rm -f Dockerfile_ec2-us
 fish/devenv_ec2-user:latest .
 
 ## For amazone linux base image, cloud9 based
-docker build --rm -f Dockerfile_amazonlinux -t gfish/devenv_amazonlinux:$(git show -s --format=%ct-%h) -t gfish/devenv_amazonlinux:latest .
+NAME=amazonlinux
 
 ## For Centos 7 base image with tools 
 NAME=devenv_centos7tools
 
-$ docker build --rm -f Dockerfile_ -t gfish/devenv_:$(git show -s --format=%ct-%h) -t gfish/devenv_:latest .
+$ docker build --rm -f Dockerfile_${NAME} -t gfish/devenv_${NAME}:$(git show -s --format=%ct-%h) -t gfish/devenv_${NAME}:latest
 
 # Pushing to my account
 $ docker login
