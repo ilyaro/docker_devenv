@@ -124,4 +124,4 @@ RUN wget https://golang.org/dl/go1.17.2.linux-amd64.tar.gz
 RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.2.linux-amd64.tar.gz
 
 # Set default command
-ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
+ENTRYPOINT [ "/usr/bin/bash", "-l", "-c" ]
