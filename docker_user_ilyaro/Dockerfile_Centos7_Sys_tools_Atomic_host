@@ -104,6 +104,13 @@ RUN yum install -y sudo \
 RUN yum clean all
 
 RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install pyyaml
+RUN python3 -m pip install redis
+
+RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/$release/hashicorp.repo
+RUN export release=AmazonLinux
+RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/$release/hashicorp.repo
+RUN yum install terraform
 
 
 # Set default command
