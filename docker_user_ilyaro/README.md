@@ -31,6 +31,11 @@ fish/devenv_ec2-user:latest .
 ## For amazone linux base image, cloud9 based
 docker build --rm -f Dockerfile_amazonlinux -t gfish/devenv_amazonlinux:$(git show -s --format=%ct-%h) -t gfish/devenv_amazonlinux:latest .
 
+## For Centos 7 base image with tools 
+NAME=devenv_centos7tools
+
+$ docker build --rm -f Dockerfile_ -t gfish/devenv_:$(git show -s --format=%ct-%h) -t gfish/devenv_:latest .
+
 # Pushing to my account
 $ docker login
 
