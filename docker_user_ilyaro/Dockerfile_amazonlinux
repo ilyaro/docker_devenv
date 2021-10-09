@@ -82,7 +82,8 @@ RUN yum -y install \
 	   sudo \
 	   bash \
 	   tmux \
-	   unzip
+	   unzip \
+	   traceroute 
 
 ## Install meld
 RUN wget https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/m/meld-3.16.4-2.el7.noarch.rpm
