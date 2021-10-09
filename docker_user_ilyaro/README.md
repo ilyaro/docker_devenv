@@ -44,14 +44,13 @@ $ docker push gfish/devenv_user --all-tags
 # Running development environment in Docker container:
 $ docker run --rm -it gfish/devenv_user
 
-# Running with volume mapping, -d daemon, $HOME evn variable. 
-$ cd ~
-$ NAME=devenv_amazonlinux;docker rm -f ${NAME};docker run --restart unless-stopped --name ${NAME} -it -d -v ${HOME}:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/sudoers:/etc/sudoers gfish/${NAME}:latest
-
 # On Windows 10 with WSL2
 # Add aliases to ~/.bash_aliases
-
-$ alias drun='export IMNAME=devenv_amazonlinux;docker rm -f ${IMNAME};docker run --restart unless-stopped --name ${IMNAME} -it -d -v /mnt/d:/mnt/d -v /mnt/c:/mnt/c -v ${HOME}:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/pki/tls/certs:/etc/pki/tls/certs -v /etc/sudoers:/etc/sudoers gfish/${IMNAME}:latest'
+## For amazone linux base image, cloud9 based
+IMNAME=amazonlinux
+## For Centos 7 base image with tools
+IMNAME=centos7tools
+$ alias drun='export IMNAME=devenv_centos7linux;docker rm -f ${IMNAME};docker run --restart unless-stopped --name ${IMNAME} -it -d -v /mnt/d:/mnt/d -v /mnt/c:/mnt/c -v ${HOME}:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/pki/tls/certs:/etc/pki/tls/certs -v /etc/sudoers:/etc/sudoers gfish/${IMNAME}:latest'
 
 $ alias de='docker exec -it devenv_amazonlinux /bin/bash'
 
