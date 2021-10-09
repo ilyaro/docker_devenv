@@ -132,7 +132,7 @@ RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install pyyaml
 RUN python3 -m pip install redis
 
-# Create user and enable root access
+# Create user and enable root access - todo: add these to host system
 RUN useradd --uid 1000 --shell /bin/bash -m --home-dir /home/ubuntu ubuntu && \
     sed -i 's/%wheel\s.*/%wheel ALL=NOPASSWD:ALL/' /etc/sudoers && \
     usermod -a -G wheel ubuntu
