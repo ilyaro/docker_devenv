@@ -88,7 +88,7 @@ RUN yum -y install \
 
 ## Prepare to install meld
 RUN wget https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/m/meld-3.16.4-2.el7.noarch.rpm
-RUN rpm -Uvh meld-3.16.4-2.el7.noarch.rpm
+RUN  yum --nogpgcheck localinstall -y meld-3.16.4-2.el7.noarch.rpm
 
 ## Install Devops tools
 RUN yum install -y nano \
