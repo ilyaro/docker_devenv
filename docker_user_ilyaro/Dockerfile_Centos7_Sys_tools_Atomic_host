@@ -12,8 +12,6 @@ RUN [ -e /etc/yum.conf ] && sed -i '/tsflags=nodocs/d' /etc/yum.conf || true
 # Reinstall all packages to get man pages for them
 RUN yum -y reinstall "*" && yum clean all
 
-# install common tools
-RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 RUN yum update -y
 
 # Swap out the systemd-container package and install all useful packages
@@ -87,7 +85,7 @@ RUN yum -y install \
 ## Yum repository for terraform
 RUN sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 
-## Prepare repo to install go
+## Prepare to install go
 sudo rpm --import https://mirror.go-repo.io/centos/RPM-GPG-KEY-GO-REPO
 curl -s https://mirror.go-repo.io/centos/go-repo.repo | sudo tee /etc/yum.repos.d/go-repo.repo
 ## Install Devops tools
@@ -107,6 +105,9 @@ RUN yum install -y sudo \
 		   nodejs \
 		   terraformi \
 		   golang
+
+## Update yum packages
+RUN yum update -y
 
 ## clean all to clean space
 RUN yum clean all
