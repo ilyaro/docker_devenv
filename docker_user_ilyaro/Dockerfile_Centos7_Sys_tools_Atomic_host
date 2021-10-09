@@ -1,5 +1,8 @@
 FROM centos:centos7
+
 MAINTAINER The CentOS Project <cloud-ops@centos.org> https://hub.docker.com/r/centos/tools/dockerfile
+
+LABEL maintainer="Ilya Rokhkin"
 
 ENV container docker
 LABEL RUN="docker run -it --name NAME --privileged --ipc=host --net=host --pid=host -e HOST=/host -e NAME=NAME -e IMAGE=IMAGE -v /sys/fs/selinux:/sys/fs/selinux:ro -v /run:/run -v /var/log:/var/log -v /etc/localtime:/etc/localtime -v /:/host IMAGE"
@@ -8,6 +11,10 @@ RUN [ -e /etc/yum.conf ] && sed -i '/tsflags=nodocs/d' /etc/yum.conf || true
 
 # Reinstall all packages to get man pages for them
 RUN yum -y reinstall "*" && yum clean all
+
+# install common tools
+RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN yum update -y
 
 # Swap out the systemd-container package and install all useful packages
 RUN yum -y install \
@@ -77,6 +84,31 @@ RUN yum -y install \
            rootfiles \
            yum-utils \
            && yum clean all
+
+RUN yum install -y sudo \
+		   bash \
+		   curl \
+		   wget \
+		   nano \
+		   vim \
+		   tmux \
+		   gcc \
+		   gcc-c++ \
+		   make \
+		   unzip \
+        python3-pip meld
+
+# Enable the Docker container to communicate with AWS Cloud9 by
+# installing SSH.
+RUN yum install -y openssh-server
+
+# Ensure that Node.js is installed.
+RUN yum install -y nodejs
+
+RUN yum clean all
+
+RUN python3 -m pip install --upgrade pip
+
 
 # Set default command
 CMD ["/usr/bin/bash"]
