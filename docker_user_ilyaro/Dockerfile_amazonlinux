@@ -4,24 +4,134 @@ LABEL maintainer="Ilya Rokhkin"
 
 # install common tools
 RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
+RUN [ -e /etc/yum.conf ] && sed -i '/tsflags=nodocs/d' /etc/yum.conf || true
+
+# Reinstall all packages to get man pages for them
+RUN yum -y reinstall "*" && yum clean all
+
+# Swap out the systemd-container package and install all useful packages
+RUN yum -y install \
+           kernel \
+           e2fsprogs \
+           sos \
+           crash \
+           strace \
+           ltrace \
+           tcpdump \
+           abrt \
+           pcp \
+           systemtap \
+           perf \
+           bc \
+           blktrace \
+           btrfs-progs \
+           ethtool \
+           file \
+           findutils \
+           gcc \
+           gdb \
+           git \
+           glibc-common \
+           glibc-utils \
+           hwloc \
+           iotop \
+           iproute \
+           iputils \
+           less \
+           pciutils \
+           ltrace \
+           mailx \
+           man-db \
+           nc \
+           netsniff-ng \
+           net-tools \
+           numactl \
+           numactl-devel \
+           passwd \
+           perf \
+           procps-ng \
+           psmisc \
+           screen \
+           strace \
+           sysstat \
+           systemtap-client \
+           tar \
+           tcpdump \
+           vim-enhanced \
+           xauth \
+           which \
+           ostree \
+           rpm-ostree \
+           docker \
+           python-docker-py \
+           docker-selinux \
+           kubernetes-client \
+           kubernetes-node \
+           kubernetes-devel \
+           kubernetes-master \
+           gdb-gdbserver \
+           vim-minimal \
+           bash-completion \
+           subscription-manager \
+           python-rhsm \
+           rootfiles \
+           yum-utils \
+	   wget \
+	   curl \
+	   sudo \
+	   bash \
+	   tmux \
+	   unzip
+
+## Install meld
+RUN wget https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/m/meld-3.16.4-2.el7.noarch.rpm
+RUN  yum --nogpgcheck localinstall -y meld-3.16.4-2.el7.noarch.rpm
+
+## Install Devops tools
+RUN yum install -y nano \
+		   vim \
+		   gcc \
+		   gcc-c++ \
+		   make \
+        	   python3-pip \
+		   meld \
+		   nodejs 
+
+## Update yum packages
 RUN yum update -y
-RUN yum install -y sudo bash curl wget git man-db nano vim bash-completion tmux  gcc gcc-c++ make tar unzip \
-	python3-pip meld
 
-# Enable the Docker container to communicate with AWS Cloud9 by
-# installing SSH.
-RUN yum install -y openssh-server
-
-# Ensure that Node.js is installed.
-RUN yum install -y nodejs
-
-RUN yum clean all
 
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install pyyaml
 RUN python3 -m pip install redis
 
-RUN yum install -y yum-utils
+## Install aws cli
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
+
+## Install terraform
+RUN wget https://releases.hashicorp.com/terraform/1.0.8/terraform_1.0.8_linux_amd64.zip
+RUN unzip terraform_1.0.8_linux_amd64.zip -d /usr/local/bin/
+
+## Install go
+RUN wget https://golang.org/dl/go1.17.2.linux-amd64.tar.gz
+RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.2.linux-amd64.tar.gz
+ 
+# Enable the Docker container to communicate with AWS Cloud9 by
+# installing SSH.
+RUN yum install -y openssh-server
+
+## clean all to clean space
+RUN yum clean all
+
+## Install python3 modules
+RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install pyyaml
+RUN python3 -m pip install redis
+
+## Install terraform
 RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/$release/hashicorp.repo
 RUN export release=AmazonLinux
 RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/$release/hashicorp.repo
