@@ -103,11 +103,6 @@ RUN yum install -y nano \
 ## Update yum packages
 RUN yum update -y
 
-## install python3 modules
-RUN python3 -m pip install --upgrade pip
-RUN python3 -m pip install pyyaml
-RUN python3 -m pip install redis
-
 ## Install aws cli
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 RUN unzip awscliv2.zip
@@ -122,16 +117,31 @@ RUN wget https://golang.org/dl/go1.17.2.linux-amd64.tar.gz
 RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.2.linux-amd64.tar.gz
  
 # Enable the Docker container to communicate with AWS Cloud9 by
-# installing SSH.
+# installing SSH.pythin
 RUN yum install -y openssh-server
+
+## Install chromium browser
+RUN amazon-linux-extras install epel 
+RUN yum install -y chromium
+
+## postgresql
+RUN yum install -y postgresql-client-common
+
+## Install openssl
+SUDO yum install -y openssl
 
 ## clean all to clean space
 RUN yum clean all
+
+## Install kubectl
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+RUN install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 ## Install python3 modules
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install pyyaml
 RUN python3 -m pip install redis
+RUN python3 -m pip install boto3
 
 # Create user and enable root access - todo: add these to host system
 RUN useradd --uid 1000 --shell /bin/bash -m --home-dir /home/ubuntu ubuntu && \
