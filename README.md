@@ -12,6 +12,7 @@ of tool we use in the team
 
 Need to be run with volume of git repositories attached 
 Based on:
+
 https://www.codemag.com/Article/1811021/Docker-for-Developers
 
 https://docs.microsoft.com/en-us/learn/modules/use-docker-container-dev-env-vs-code/
