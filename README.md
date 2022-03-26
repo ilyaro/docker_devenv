@@ -1,5 +1,14 @@
 # docker_devenv
-Creating and maintain Docker image for development work, keeping development environment the same, on any system Need to be run with volume of git repositories attached 
+Creating and maintain Docker image for development work,
+Docker images are usually used to run software on servers, Kubernetes
+
+Here you can use it for your development environmant, always uptodate 
+and the same on any system and for all team members using the image
+You need to add to Dockerfile whatever you neeed and update its versions regulary
+Here I use several Dockerfiles for Devenv, based on Linux2, Centos7 with full stack
+of tool we use in the team 
+
+Need to be run with volume of git repositories attached 
 Based on:
 https://www.codemag.com/Article/1811021/Docker-for-Developers
 
