@@ -2,8 +2,15 @@
 Creating and maintain Docker image for development work,
 Docker images are usually used to run software on servers, Kubernetes
 
-Here you can use it for your development environmant, always uptodate 
+Here you can use it for your development environmant, always uptodate with all system and developmemt tools you use
 and the same on any system and for all team members using the image.
+
+Imagine you always have the same Python version, go version, all the tools you need
+with all packages installed in correct versions and ready for use.
+
+On all systems you use MAC, Winodws, Linux, cloud based, whereever you have docker you can have your dev environment
+
+Now imagin that your your team members use the same image for develepment environment work
 
 You need to add to Dockerfile whatever you neeed and update its versions regulary
 
