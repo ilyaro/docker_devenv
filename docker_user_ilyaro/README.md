@@ -36,6 +36,10 @@ NAME=centos7tools
 
 $ docker build --rm -f Dockerfile_${NAME} -t gfish/devenv_${NAME}:$(git show -s --format=%ct-%h) -t gfish/devenv_${NAME}:latest .
 
+## For MAC aarch64
+NAME=amazonlinux_mac
+ilyaro-mbp:docker_user_ilyaro ilyaro$ podman build --rm -f Dockerfile_${NAME} -t gfish/devenv_${NAME}:$(git show -s --format=%ct-%h) -t gfish/devenv_${NAME}:latest .
+
 # Pushing to my account
 $ docker login
 
@@ -51,6 +55,10 @@ IMNAME=devenv_amazonlinux
 ## For Centos 7 base image with tools
 IMNAME=devenv_centos7tools
 $ alias drun='export IMNAME=devenv_ centos7tool;docker rm -f ${IMNAME};docker run --restart unless-stopped --name ${IMNAME} -it -d -v /mnt/d:/mnt/d -v /mnt/c:/mnt/c -v ${HOME}:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/pki/tls/certs:/etc/pki/tls/certs -v /etc/sudoers:/etc/sudoers gfish/${IMNAME}:latest'
+
+## On MAC 
+IMNAME=devenv_amazonlinux_mac
+alias drun='export IMNAME=devenv_amazonlinux_mac;podman rm -f ${IMNAME};podman run --restart unless-stopped --name ${IMNAME} -it -d -v /mnt/root:/mnt/root -v /mnt/c:/mnt/c -v ${HOME}:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/pki/tls/certs:/etc/pki/tls/certs -v /etc/sudoers:/etc/sudoers gfish/${IMNAME}:latest'
 
 $ alias de='docker exec -it devenv_centos7tools --user $(id -u) /usr/bin/bash'
 
