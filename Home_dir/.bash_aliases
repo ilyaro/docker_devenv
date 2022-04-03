@@ -5,6 +5,10 @@ alias de='podman exec -it devenv_amazonlinux_mac /bin/bash'
 alias ls='ls -F'
 alias ll='ls -lah'
 
+<<<<<<< HEAD
 alias g=git
 alias k=kubectl
 alias t=terraform
+=======
+alias lt='du -sh * | sort -h'
+>>>>>>> da6dc47 (+alias lt='du -sh * | sort -h')
