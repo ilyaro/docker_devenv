@@ -55,7 +55,7 @@ $ alias drun='export IMNAME=devenv_ centos7tool;docker rm -f ${IMNAME};docker ru
 
 ## On MAC 
 ## init VM Fedora default and mount all MAC drives ---rootful can b eneeded
-$ podman machine init -v /:/mnt/root -v /Volumes/GoogleDrive-107831282205197552172:/mnt/drive --disk-size 50 -m 8192 --cpus 4 --now podman-machine-devenv-mac
+$ podman machine init -v /:/mnt/root --disk-size 50 -m 8192 --cpus 4 --now podman-machine-devenv-mac
 
 ## For MAC aarch64
 NAME=amazonlinux_mac
