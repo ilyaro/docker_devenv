@@ -4,4 +4,4 @@ alias de='docker exec -it devenv_amazonlinux /bin/bash'
 
 alias g=git
 alias k=kubectl
-
+alias t=terraform
