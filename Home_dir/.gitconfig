@@ -1,6 +1,9 @@
 [alias]
 	st = status
-	ts = status
+  s  = status
+  ts = status
+  l  = log
+  p  = push
 [user]
 	name = ilyaro
 	email = ilyaro@checkpoint.com
