@@ -2,13 +2,13 @@ alias drun='export IMNAME=devenv_amazonlinux_mac;podman rm -f ${IMNAME};podman r
 
 alias de='podman exec -it devenv_amazonlinux_mac /bin/bash'
 
+alias l='ls -lah'
 alias ls='ls -F'
 alias ll='ls -lah'
+alias lt='du -sh * | sort -h'
+alias mnt='mount | grep -E ^/dev | column -t'
+alias gh='history|grep'
 
-<<<<<<< HEAD
 alias g=git
 alias k=kubectl
 alias t=terraform
-=======
-alias lt='du -sh * | sort -h'
->>>>>>> da6dc47 (+alias lt='du -sh * | sort -h')
