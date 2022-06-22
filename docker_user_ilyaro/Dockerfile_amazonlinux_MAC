@@ -1,0 +1,154 @@
+FROM amazonlinux:2
+# https://docs.aws.amazon.com/cloud9/latest/user-guide/sample-docker.html
+LABEL maintainer="Ilya Rokhkin"
+# install common tools
+RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN [ -e /etc/yum.conf ] && sed -i '/tsflags=nodocs/d' /etc/yum.conf || true
+# Reinstall all packages to get man pages for them
+#RUN yum -y reinstall "*" && yum clean all
+# Swap out the systemd-container package and install all useful packages
+RUN yum -y install \
+           kernel \
+           e2fsprogs \
+           sos \
+           crash \
+           strace \
+           ltrace \
+           tcpdump \
+           abrt \
+           pcp \
+           systemtap \
+           perf \
+           bc \
+           blktrace \
+           btrfs-progs \
+           ethtool \
+           file \
+           findutils \
+           gcc \
+           gdb \
+           git \
+           glibc-common \
+           glibc-utils \
+           hwloc \
+           iotop \
+           iproute \
+           iputils \
+           less \
+           pciutils \
+           ltrace \
+           mailx \
+           man-db \
+           nc \
+           netsniff-ng \
+           net-tools \
+           numactl \
+           numactl-devel \
+           passwd \
+           perf \
+           procps-ng \
+           psmisc \
+           screen \
+           strace \
+           sysstat \
+           systemtap-client \
+           tar \
+           tcpdump \
+           vim-enhanced \
+           xauth \
+           which \
+           ostree \
+           rpm-ostree \
+           docker \
+           python-docker-py \
+           docker-selinux \
+           kubernetes-client \
+           kubernetes-node \
+           kubernetes-devel \
+           kubernetes-master \
+           gdb-gdbserver \
+           vim-minimal \
+           bash-completion \
+           subscription-manager \
+           python-rhsm \
+           rootfiles \
+           yum-utils \
+	       wget \
+           bind-utils \
+	       curl \
+	       sudo \
+	       bash \
+	       tmux \
+	       unzip \
+           jq \
+           tar \
+           gzip \
+           openssl \
+	       traceroute \
+           lynx 
+## Install meld
+RUN wget https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/m/meld-3.16.4-2.el7.noarch.rpm
+RUN  yum --nogpgcheck localinstall -y meld-3.16.4-2.el7.noarch.rpm
+## Install Devops tools
+RUN yum install -y nano \
+		   vim \
+		   gcc \
+		   gcc-c++ \
+		   make \
+           python3-pip \
+		   meld 
+## Update yum packages
+RUN yum update -y && yum upgrade -y
+## install python3 modules
+RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install pyyaml
+RUN python3 -m pip install redis
+## Install aws cli
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
+## Install terraform
+RUN wget https://releases.hashicorp.com/terraform/1.0.8/terraform_1.0.8_linux_amd64.zip
+RUN unzip terraform_1.0.8_linux_amd64.zip -d /usr/local/bin/
+## Install go
+RUN wget https://golang.org/dl/go1.17.2.linux-amd64.tar.gz
+RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.2.linux-amd64.tar.gz
+ 
+# Enable the Docker container to communicate with AWS Cloud9 by
+# installing SSH.
+RUN yum install -y openssh-server
+## Install nodejs12
+#RUN yum install centos-release-scl-rh
+#RUN yum install rh-nodejs12
+#RUN scl enable rh-nodejs12 bash
+## clean all to clean space
+RUN yum clean all
+# Create user and enable root access - todo: add these to host system
+##RUN useradd --uid 1100 --shell /bin/bash -m --home-dir /home/ubuntu ubuntu && \
+##    sed -i 's/%wheel\s.*/%wheel ALL=NOPASSWD:ALL/' /etc/sudoers && \
+##    usermod -a -G wheel ubuntu
+# Add the AWS Cloud9 SSH public key to the Docker container.
+# This assumes a file named authorized_keys containing the
+# AWS Cloud9 SSH public key already exists in the same
+# directory as the Dockerfile.
+#RUN mkdir -p /home/ubuntu/.ssh
+##ADD ./authorized_keys /home/ubuntu/.ssh/authorized_keys
+##RUN chown -R ubuntu /home/ubuntu/.ssh /home/ubuntu/.ssh/authorized_keys && \
+##chmod 700 /home/ubuntu/.ssh && \
+##chmod 600 /home/ubuntu/.ssh/authorized_keys
+USER root
+# Start SSH in the Docker container.
+CMD ssh-keygen -A && /usr/sbin/sshd -D
+# Update the password to a random one for the user ubuntu.
+##RUN echo "ubuntu:$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)" | chpasswd
+#Install Kubectl
+RUN /usr/bin/curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+#Install CodeFreesh cli
+RUN npm install -g codefresh || true
+#Install helm
+RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+# pre-install Cloud9 dependencies
+##USER ubuntu
+RUN curl https://d2j6vhu5uywtq3.cloudfront.net/static/c9-install.sh | bash
+ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
