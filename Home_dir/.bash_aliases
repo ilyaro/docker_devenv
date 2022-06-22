@@ -4,7 +4,7 @@ alias de='podman exec -it devenv_amazonlinux_mac /bin/bash'
 
 alias left='ls -t -1'
 
-alias ls='ls -F'
+alias ls='ls -Fa'
 alias ll='ls -lah'
 alias l='ls -lah'
 alias lt='du -sh * | sort -h'
