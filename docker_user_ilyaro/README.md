@@ -57,6 +57,9 @@ $ alias drun='export IMNAME=devenv_ centos7tool;docker rm -f ${IMNAME};docker ru
 ## init VM Fedora default and mount all MAC drives ---rootful can b eneeded
 $ podman machine init -v /:/mnt/root --disk-size 50 -m 8192 --cpus 4 --now podman-machine-devenv-mac
 
+## Start the VM
+ilyaro-mbp:Downloads ilyaro$ podman machine start podman-machine-devenv-mac
+
 ## For MAC aarch64
 NAME=amazonlinux_mac
 $ podman build --rm -f Dockerfile_${NAME} -t gfish/devenv_${NAME}:$(git show -s --format=%ct-%h) -t gfish/devenv_${NAME}:latest .
