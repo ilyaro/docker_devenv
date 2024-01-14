@@ -142,6 +142,7 @@ RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install pyyaml
 RUN python3 -m pip install redis
 RUN python3 -m pip install boto3
+RUN python3 -m pip install aws-sso-util
 
 # Create user and enable root access - todo: add these to host system
 RUN useradd --uid 1000 --shell /bin/bash -m --home-dir /home/ubuntu ubuntu && \
