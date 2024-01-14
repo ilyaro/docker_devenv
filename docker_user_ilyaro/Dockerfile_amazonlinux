@@ -11,6 +11,9 @@ RUN [ -e /etc/yum.conf ] && sed -i '/tsflags=nodocs/d' /etc/yum.conf || true
 # Reinstall all packages to get man pages for them
 RUN yum -y reinstall "*" && yum clean all
 
+# Add repo for vault
+RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+
 # Swap out the systemd-container package and install all useful packages
 RUN yum -y install \
            kernel \
@@ -84,7 +87,9 @@ RUN yum -y install \
 	   bash \
 	   tmux \
 	   unzip \
-	   traceroute 
+	   traceroute \
+	   vault 
+	   
 
 ## Install meld
 RUN wget https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/m/meld-3.16.4-2.el7.noarch.rpm
