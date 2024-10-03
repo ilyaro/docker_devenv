@@ -2,7 +2,7 @@ FROM amazonlinux:2
 # https://docs.aws.amazon.com/cloud9/latest/user-guide/sample-docker.html
 LABEL maintainer="Ilya Rokhkin"
 # install common tools
-RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN amazon-linux-extras install epel
 RUN [ -e /etc/yum.conf ] && sed -i '/tsflags=nodocs/d' /etc/yum.conf || true
 # Reinstall all packages to get man pages for them
 #RUN yum -y reinstall "*" && yum clean all
@@ -114,41 +114,17 @@ RUN unzip terraform_1.0.8_linux_amd64.zip -d /usr/local/bin/
 RUN wget https://golang.org/dl/go1.17.2.linux-amd64.tar.gz
 RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.2.linux-amd64.tar.gz
  
-# Enable the Docker container to communicate with AWS Cloud9 by
-# installing SSH.
-RUN yum install -y openssh-server
-## Install nodejs12
-#RUN yum install centos-release-scl-rh
-#RUN yum install rh-nodejs12
-#RUN scl enable rh-nodejs12 bash
 ## clean all to clean space
 RUN yum clean all
 # Create user and enable root access - todo: add these to host system
 ##RUN useradd --uid 1100 --shell /bin/bash -m --home-dir /home/ubuntu ubuntu && \
 ##    sed -i 's/%wheel\s.*/%wheel ALL=NOPASSWD:ALL/' /etc/sudoers && \
 ##    usermod -a -G wheel ubuntu
-# Add the AWS Cloud9 SSH public key to the Docker container.
-# This assumes a file named authorized_keys containing the
-# AWS Cloud9 SSH public key already exists in the same
-# directory as the Dockerfile.
-#RUN mkdir -p /home/ubuntu/.ssh
-##ADD ./authorized_keys /home/ubuntu/.ssh/authorized_keys
-##RUN chown -R ubuntu /home/ubuntu/.ssh /home/ubuntu/.ssh/authorized_keys && \
-##chmod 700 /home/ubuntu/.ssh && \
-##chmod 600 /home/ubuntu/.ssh/authorized_keys
 USER root
-# Start SSH in the Docker container.
-CMD ssh-keygen -A && /usr/sbin/sshd -D
-# Update the password to a random one for the user ubuntu.
-##RUN echo "ubuntu:$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)" | chpasswd
 #Install Kubectl
 RUN /usr/bin/curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
 install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-#Install CodeFreesh cli
-RUN npm install -g codefresh || true
 #Install helm
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-# pre-install Cloud9 dependencies
-##USER ubuntu
-RUN curl https://d2j6vhu5uywtq3.cloudfront.net/static/c9-install.sh | bash
+
 ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
