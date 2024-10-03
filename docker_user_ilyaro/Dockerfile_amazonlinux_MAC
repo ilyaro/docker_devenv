@@ -86,9 +86,7 @@ RUN yum -y install \
            openssl \
 	       traceroute \
            lynx 
-## Install meld
-RUN wget https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/m/meld-3.16.4-2.el7.noarch.rpm
-RUN  yum --nogpgcheck localinstall -y meld-3.16.4-2.el7.noarch.rpm
+
 ## Install Devops tools
 RUN yum install -y nano \
 		   vim \
@@ -116,10 +114,6 @@ RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.2.linux-amd64.tar.gz
  
 ## clean all to clean space
 RUN yum clean all
-# Create user and enable root access - todo: add these to host system
-##RUN useradd --uid 1100 --shell /bin/bash -m --home-dir /home/ubuntu ubuntu && \
-##    sed -i 's/%wheel\s.*/%wheel ALL=NOPASSWD:ALL/' /etc/sudoers && \
-##    usermod -a -G wheel ubuntu
 USER root
 #Install Kubectl
 RUN /usr/bin/curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
