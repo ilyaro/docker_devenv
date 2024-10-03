@@ -121,4 +121,4 @@ install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 #Install helm
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-ENTRYPOINT [ "/bin/bash", "-l", "-c" ]
+ENTRYPOINT [ "/bin/bash" ]
