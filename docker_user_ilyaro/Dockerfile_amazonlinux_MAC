@@ -82,6 +82,7 @@ RUN echo "[kubernetes]" | tee /etc/yum.repos.d/kubernetes.repo && \
 RUN dnf install -y kubectl 
 
 # Install Helm
+RUN curl -fsSL -o /etc/yum.repos.d/helm.repo https://baltocdn.com/helm/stable/rpm/helm.repo
 RUN dnf install -y helm
 
 # Clean up to reduce image size
