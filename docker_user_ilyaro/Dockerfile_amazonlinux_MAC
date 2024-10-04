@@ -3,15 +3,12 @@ FROM amazonlinux:2023
 LABEL maintainer="Ilya Rokhkin"
 
 # Update system and install common tools
-RUN dnf update -y && dnf install -y \
+RUN dnf update -y && \
+    dnf install -y \
     epel-release \
-    kernel \
-    e2fsprogs \
     sos \
     crash \
-    strace \
     ltrace \
-    tcpdump \
     abrt \
     pcp \
     systemtap \
@@ -19,41 +16,25 @@ RUN dnf update -y && dnf install -y \
     bc \
     blktrace \
     btrfs-progs \
-    ethtool \
-    file \
-    findutils \
-    gcc \
-    gdb \
-    git \
     hwloc \
     iotop \
-    iproute \
-    iputils \
-    less \
     pciutils \
     mailx \
     man-db \
     net-tools \
     numactl \
     passwd \
-    procps-ng \
     psmisc \
     screen \
     sysstat \
-    tar \
-    vim-enhanced \
-    which \
-    wget \
-    bind-utils \
-    curl \
-    sudo \
-    tmux \
-    unzip \
-    jq \
-    gzip \
-    openssl \
     traceroute \
-    lynx
+    lynx \
+    unzip \
+    tmux \
+    bind-utils \
+    jq && \
+    dnf clean all
+
 
 # Install Python3 and pip
 RUN dnf install -y python3-pip
