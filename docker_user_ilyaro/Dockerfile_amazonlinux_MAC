@@ -82,7 +82,15 @@ RUN echo "[kubernetes]" | tee /etc/yum.repos.d/kubernetes.repo && \
 RUN dnf install -y kubectl 
 
 # Install Helm
-RUN curl -fsSL -o /etc/yum.repos.d/helm.repo https://baltocdn.com/helm/stable/rpm/helm.repo
+# Add the Helm repository
+RUN echo "[helm]" > /etc/yum.repos.d/helm.repo && \
+    echo "name=Helm Repository" >> /etc/yum.repos.d/helm.repo && \
+    echo "baseurl=https://baltocdn.com/helm/stable/rpm/" >> /etc/yum.repos.d/helm.repo && \
+    echo "enabled=1" >> /etc/yum.repos.d/helm.repo && \
+    echo "gpgcheck=1" >> /etc/yum.repos.d/helm.repo && \
+    echo "gpgkey=https://baltocdn.com/helm/stable/rpm/repodata/repomd.xml.key" >> /etc/yum.repos.d/helm.repo
+
+# Install Helm
 RUN dnf install -y helm
 
 # Clean up to reduce image size
