@@ -73,10 +73,10 @@ ARG KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/
 # This overwrites any existing configuration in /etc/yum.repos.d/kubernetes.repo
 RUN echo "[kubernetes]" | tee /etc/yum.repos.d/kubernetes.repo && \
     echo "name=Kubernetes" | tee -a /etc/yum.repos.d/kubernetes.repo && \
-    echo "baseurl=https://pkgs.k8s.io/core:/stable:/v1.31/rpm/" | tee -a /etc/yum.repos.d/kubernetes.repo && \
+    echo "baseurl=https://pkgs.k8s.io/core:/stable:/${KUBECTL_VERSION}/rpm/" | tee -a /etc/yum.repos.d/kubernetes.repo && \
     echo "enabled=1" | tee -a /etc/yum.repos.d/kubernetes.repo && \
     echo "gpgcheck=1" | tee -a /etc/yum.repos.d/kubernetes.repo && \
-    echo "gpgkey=https://pkgs.k8s.io/core:/stable:/v1.31/rpm/repodata/repomd.xml.key" | tee -a /etc/yum.repos.d/kubernetes.repo
+    echo "gpgkey=https://pkgs.k8s.io/core:/stable:/${KUBECTL_VERSION}/rpm/repodata/repomd.xml.key" | tee -a /etc/yum.repos.d/kubernetes.repo
 
 # Install kubectl using the defined version
 RUN dnf install -y kubectl 
@@ -91,6 +91,7 @@ RUN echo "[helm]" > /etc/yum.repos.d/helm.repo && \
     echo "gpgkey=https://baltocdn.com/helm/stable/rpm/repodata/repomd.xml.key" >> /etc/yum.repos.d/helm.repo
 
 # Download and install the latest Helm version
+ARG VERIFY_CHECKSUM=false
 RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && \
     chmod +x get_helm.sh && \
     ./get_helm.sh && \
