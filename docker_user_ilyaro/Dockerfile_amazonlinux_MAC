@@ -45,8 +45,8 @@ RUN dnf install -y epel-release || echo "EPEL Release failed" && dnf clean all
 RUN dnf install -y python3-pip
 
 # Upgrade pip and install Python modules
-RUN python3 -m ensurepip --upgrade --verbose && \
-    python3 -m pip install --upgrade pip --verbose
+RUN python3 -m ensurepip --upgrade ---ignore-installed -verbose && \
+    python3 -m pip install --upgrade --ignore-installed pip --verbose
 
 RUN python3 -m pip install pyyaml redis
 
