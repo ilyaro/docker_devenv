@@ -14,7 +14,6 @@ RUN dnf install -y epel-release || echo "EPEL Release failed" && dnf clean all
 RUN dnf update -y && dnf clean all
 
 # Install individual packages
-RUN dnf install -y sos || echo "sos not available"
 RUN dnf install -y crash
 RUN dnf install -y ltrace
 RUN dnf install -y systemtap
@@ -46,8 +45,8 @@ RUN dnf clean all
 RUN dnf install -y python3-pip
 
 # Upgrade pip and install Python modules
-RUN python3 -m pip install --upgrade pip && \
-    python3 -m pip install pyyaml redis
+RUN python3 -m pip install --upgrade pip 
+RUN python3 -m pip install pyyaml redis
 
 # Install AWS CLI
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
