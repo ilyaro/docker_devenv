@@ -10,39 +10,37 @@ RUN dnf update -y && dnf clean all
 # Try installing epel-release without the config-manager or crb
 RUN dnf install -y epel-release || echo "EPEL Release failed" && dnf clean all
 
-# Update the package index
-RUN dnf update -y && dnf clean all
-
-/*
-# Install individual packages
-RUN dnf install -y crash
-RUN dnf install -y ltrace
-RUN dnf install -y systemtap
-RUN dnf install -y perf
-RUN dnf install -y bc
-RUN dnf install -y blktrace
-RUN dnf install -y hwloc
-RUN dnf install -y iotop
-RUN dnf install -y pciutils
-RUN dnf install -y mailx
-RUN dnf install -y man-db
-RUN dnf install -y net-tools
-RUN dnf install -y numactl
-RUN dnf install -y passwd
-RUN dnf install -y psmisc
-RUN dnf install -y screen
-RUN dnf install -y sysstat
-RUN dnf install -y traceroute
-RUN dnf install -y lynx
-RUN dnf install -y unzip
-RUN dnf install -y tmux
-RUN dnf install -y bind-utils
-RUN dnf install -y jq
-
-# Clean up after installation
-RUN dnf clean all
-*/
-
+## Update the package index
+#RUN dnf update -y && dnf clean all
+#
+## Install individual packages
+#RUN dnf install -y crash
+#RUN dnf install -y ltrace
+#RUN dnf install -y systemtap
+#RUN dnf install -y perf
+#RUN dnf install -y bc
+#RUN dnf install -y blktrace
+#RUN dnf install -y hwloc
+#RUN dnf install -y iotop
+#RUN dnf install -y pciutils
+#RUN dnf install -y mailx
+#RUN dnf install -y man-db
+#RUN dnf install -y net-tools
+#RUN dnf install -y numactl
+#RUN dnf install -y passwd
+#RUN dnf install -y psmisc
+#RUN dnf install -y screen
+#RUN dnf install -y sysstat
+#RUN dnf install -y traceroute
+#RUN dnf install -y lynx
+#RUN dnf install -y unzip
+#RUN dnf install -y tmux
+#RUN dnf install -y bind-utils
+#RUN dnf install -y jq
+#
+## Clean up after installation
+#RUN dnf clean all
+#
 # Install Python3 and pip
 RUN dnf install -y python3-pip
 
