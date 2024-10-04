@@ -82,14 +82,6 @@ RUN echo "[kubernetes]" | tee /etc/yum.repos.d/kubernetes.repo && \
 RUN dnf install -y kubectl 
 
 # Install Helm
-# Add the Helm repository
-RUN echo "[helm]" > /etc/yum.repos.d/helm.repo && \
-    echo "name=Helm Repository" >> /etc/yum.repos.d/helm.repo && \
-    echo "baseurl=https://baltocdn.com/helm/stable/rpm/" >> /etc/yum.repos.d/helm.repo && \
-    echo "enabled=1" >> /etc/yum.repos.d/helm.repo && \
-    echo "gpgcheck=1" >> /etc/yum.repos.d/helm.repo && \
-    echo "gpgkey=https://baltocdn.com/helm/stable/rpm/repodata/repomd.xml.key" >> /etc/yum.repos.d/helm.repo
-
 # Download and install the latest Helm version
 ARG VERIFY_CHECKSUM=false
 RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && \
