@@ -13,6 +13,7 @@ RUN dnf install -y epel-release || echo "EPEL Release failed" && dnf clean all
 # Update the package index
 RUN dnf update -y && dnf clean all
 
+/*
 # Install individual packages
 RUN dnf install -y crash
 RUN dnf install -y ltrace
@@ -40,12 +41,15 @@ RUN dnf install -y jq
 
 # Clean up after installation
 RUN dnf clean all
+*/
 
 # Install Python3 and pip
 RUN dnf install -y python3-pip
 
 # Upgrade pip and install Python modules
-RUN python3 -m pip install --upgrade pip 
+RUN python3 -m ensurepip --upgrade && \
+    python3 -m pip install --upgrade pip
+
 RUN python3 -m pip install pyyaml redis
 
 # Install AWS CLI
