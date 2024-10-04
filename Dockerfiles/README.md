@@ -54,15 +54,16 @@ IMNAME=devenv_centos7tools
 $ alias drun='export IMNAME=devenv_ centos7tool;docker rm -f ${IMNAME};docker run --restart unless-stopped --name ${IMNAME} -it -d -v /mnt/d:/mnt/d -v /mnt/c:/mnt/c -v ${HOME}:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/pki/tls/certs:/etc/pki/tls/certs -v /etc/sudoers:/etc/sudoers gfish/${IMNAME}:latest'
 
 ## For Amazon Linux 2023 
-NAME=amazonlinux_mac
+NAME=amazonlinux_2023
+$ docker buildx create --name mybuilder --use
+$ docker buildx inspect mybuilder --bootstrap
+$ docker buildx build --platform linux/amd64,linux/arm64 -t gfish/devenv_${NAME} -f Dockerfile_${NAME} . --push
 
-$ docker buildx build --platform linux/amd64,linux/arm64 -t gfish/devenv_amazonlinux_2023 -f Dockerfile_amazonlinux_MAC . --push
 
+IMNAME=devenv_amazonlinux_2023
+alias drun='export IMNAME=devenv_amazonlinux_2023;
 
-IMNAME=devenv_amazonlinux_mac
-alias drun='export IMNAME=devenv_amazonlinux_mac;podman rm -f ${IMNAME};podman run --restart unless-stopped --name ${IMNAME} -it -d -v /mnt/root:/mnt/root -v /mnt/root/Users/ilyaro:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/sudoers:/etc/sudoers gfish/${IMNAME}:latest'
-
-$ alias de='docker exec -it devenv_centos7tools --user $(id -u) /usr/bin/bash'
+$ alias de='docker exec -it devenv_amazonlinux_2023 --user $(id -u) /usr/bin/bash'
 
 ## For ec2-user
 docker run --restart unless-stopped --name devenv_ec2-user -it -d -v /home/ec2-user:/home/ec2-user gfish/devenv_ec2-user:latest
