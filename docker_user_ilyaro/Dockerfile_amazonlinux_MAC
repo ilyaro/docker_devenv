@@ -34,7 +34,8 @@ RUN dnf update -y && dnf clean all
 #RUN dnf install -y sysstat
 #RUN dnf install -y traceroute
 #RUN dnf install -y lynx
-RUN dnf install -y unzip
+RUN dnf install -y gunzip
+RUN dnf install -y gzip
 #RUN dnf install -y tmux
 #RUN dnf install -y bind-utils
 RUN dnf install -y jq
@@ -53,7 +54,7 @@ RUN python3 -m pip install pyyaml redis
 
 # Install AWS CLI
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-unzip awscliv2.zip && ./aws/install && rm -f awscliv2.zip
+gunzip awscliv2.zip && ./aws/install && rm -f awscliv2.zip
 
 # Install Terraform
 RUN curl -fsSL https://raw.githubusercontent.com/hashicorp/setup-terraform/main/setup.sh | bash
