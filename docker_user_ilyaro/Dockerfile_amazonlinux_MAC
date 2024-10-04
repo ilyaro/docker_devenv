@@ -1,124 +1,92 @@
-FROM amazonlinux:2
-# https://docs.aws.amazon.com/cloud9/latest/user-guide/sample-docker.html
+FROM amazonlinux:2023
+# Maintainer information
 LABEL maintainer="Ilya Rokhkin"
-# install common tools
-RUN amazon-linux-extras install epel
-RUN [ -e /etc/yum.conf ] && sed -i '/tsflags=nodocs/d' /etc/yum.conf || true
-# Reinstall all packages to get man pages for them
-#RUN yum -y reinstall "*" && yum clean all
-# Swap out the systemd-container package and install all useful packages
-RUN yum -y install \
-           kernel \
-           e2fsprogs \
-           sos \
-           crash \
-           strace \
-           ltrace \
-           tcpdump \
-           abrt \
-           pcp \
-           systemtap \
-           perf \
-           bc \
-           blktrace \
-           btrfs-progs \
-           ethtool \
-           file \
-           findutils \
-           gcc \
-           gdb \
-           git \
-           glibc-common \
-           glibc-utils \
-           hwloc \
-           iotop \
-           iproute \
-           iputils \
-           less \
-           pciutils \
-           ltrace \
-           mailx \
-           man-db \
-           nc \
-           netsniff-ng \
-           net-tools \
-           numactl \
-           numactl-devel \
-           passwd \
-           perf \
-           procps-ng \
-           psmisc \
-           screen \
-           strace \
-           sysstat \
-           systemtap-client \
-           tar \
-           tcpdump \
-           vim-enhanced \
-           xauth \
-           which \
-           ostree \
-           rpm-ostree \
-           docker \
-           python-docker-py \
-           docker-selinux \
-           kubernetes-client \
-           kubernetes-node \
-           kubernetes-devel \
-           kubernetes-master \
-           gdb-gdbserver \
-           vim-minimal \
-           bash-completion \
-           subscription-manager \
-           python-rhsm \
-           rootfiles \
-           yum-utils \
-	       wget \
-           bind-utils \
-	       curl \
-	       sudo \
-	       bash \
-	       tmux \
-	       unzip \
-           jq \
-           tar \
-           gzip \
-           openssl \
-	       traceroute \
-           lynx 
 
-## Install Devops tools
-RUN yum install -y nano \
-		   vim \
-		   gcc \
-		   gcc-c++ \
-		   make \
-           python3-pip \
-		   meld 
-## Update yum packages
-RUN yum update -y && yum upgrade -y
-## install python3 modules
-RUN python3 -m pip install --upgrade pip
-RUN python3 -m pip install pyyaml
-RUN python3 -m pip install redis
-## Install aws cli
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-RUN unzip awscliv2.zip
-RUN ./aws/install
-## Install terraform
-RUN wget https://releases.hashicorp.com/terraform/1.0.8/terraform_1.0.8_linux_amd64.zip
-RUN unzip terraform_1.0.8_linux_amd64.zip -d /usr/local/bin/
-## Install go
-RUN wget https://golang.org/dl/go1.17.2.linux-amd64.tar.gz
-RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.2.linux-amd64.tar.gz
- 
-## clean all to clean space
-RUN yum clean all
-USER root
-#Install Kubectl
-RUN /usr/bin/curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
-install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-#Install helm
+# Update system and install common tools
+RUN dnf update -y && dnf install -y \
+    epel-release \
+    kernel \
+    e2fsprogs \
+    sos \
+    crash \
+    strace \
+    ltrace \
+    tcpdump \
+    abrt \
+    pcp \
+    systemtap \
+    perf \
+    bc \
+    blktrace \
+    btrfs-progs \
+    ethtool \
+    file \
+    findutils \
+    gcc \
+    gdb \
+    git \
+    hwloc \
+    iotop \
+    iproute \
+    iputils \
+    less \
+    pciutils \
+    mailx \
+    man-db \
+    net-tools \
+    numactl \
+    passwd \
+    procps-ng \
+    psmisc \
+    screen \
+    sysstat \
+    tar \
+    vim-enhanced \
+    which \
+    wget \
+    bind-utils \
+    curl \
+    sudo \
+    tmux \
+    unzip \
+    jq \
+    gzip \
+    openssl \
+    traceroute \
+    lynx
+
+# Install Python3 and pip
+RUN dnf install -y python3-pip
+
+# Upgrade pip and install Python modules
+RUN python3 -m pip install --upgrade pip && \
+    python3 -m pip install pyyaml redis
+
+# Install AWS CLI
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && ./aws/install && rm -f awscliv2.zip
+
+# Install Terraform
+RUN wget https://releases.hashicorp.com/terraform/1.0.8/terraform_1.0.8_linux_amd64.zip && \
+    unzip terraform_1.0.8_linux_amd64.zip -d /usr/local/bin/ && \
+    rm terraform_1.0.8_linux_amd64.zip
+
+# Install Go
+RUN wget https://golang.org/dl/go1.17.2.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go1.17.2.linux-amd64.tar.gz && \
+    rm go1.17.2.linux-amd64.tar.gz
+
+# Install Kubectl
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && rm -f kubectl
+
+# Install Helm
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
+# Clean up to reduce image size
+RUN dnf clean all && rm -rf /var/cache/dnf
+
+USER root
+
+# Default entrypoint
 ENTRYPOINT [ "/bin/bash" ]
