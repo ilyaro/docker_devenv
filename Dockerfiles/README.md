@@ -53,25 +53,7 @@ IMNAME=devenv_amazonlinux
 IMNAME=devenv_centos7tools
 $ alias drun='export IMNAME=devenv_ centos7tool;docker rm -f ${IMNAME};docker run --restart unless-stopped --name ${IMNAME} -it -d -v /mnt/d:/mnt/d -v /mnt/c:/mnt/c -v ${HOME}:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/pki/tls/certs:/etc/pki/tls/certs -v /etc/sudoers:/etc/sudoers gfish/${IMNAME}:latest'
 
-## On MAC 
-## init VM Fedora default and mount all MAC drives ---rootful can b eneeded
-$ podman machine init -v /:/mnt/root --disk-size 50 -m 8192 --cpus 4 --now podman-machine-devenv-mac
-
-## Start the VM
-ilyaro-mbp:Downloads ilyaro$ podman machine start podman-machine-devenv-mac
-
-## ssh to the VM on MAC
-ilyaro-mbp:Downloads ilyaro$ podman machine ssh podman-machine-devenv-mac
-Connecting to vm podman-machine-devenv-mac. To close connection, use `~.` or `exit`
-Warning: Permanently added '[localhost]:57869' (ED25519) to the list of known hosts.
-Fedora CoreOS 36.20220421.dev.0
-Tracker: https://github.com/coreos/fedora-coreos-tracker
-Discuss: https://discussion.fedoraproject.org/tag/coreos
-
-Last login: Mon Apr 25 05:51:15 2022 from 192.168.127.1
-[core@localhost ~]$
-
-## For MAC aarch64
+## For Amazon Linux 2023 
 NAME=amazonlinux_mac
 docker buildx build --platform linux/arm64 -t gfish/docker_devenv_mac -f Dockerfile_amazonlinux_MAC .
 
