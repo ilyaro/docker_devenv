@@ -20,7 +20,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./Dockerfiles
+          file: ./Dockerfiles/Dockerfile_amazonlinux_2023 # Specify your custom Dockerfile name
           push: true
-          tags: gfish/devenv_amazonlinux_2023:latest
+          tags: gfish/devenv_amazonlinux_2023::${{ github.ref }}  # Use the tag that was pushed
           platforms: linux/amd64,linux/arm64  # Specify target platforms
