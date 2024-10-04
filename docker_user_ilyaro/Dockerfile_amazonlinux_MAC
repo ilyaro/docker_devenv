@@ -79,7 +79,7 @@ RUN echo "[kubernetes]" | tee /etc/yum.repos.d/kubernetes.repo && \
     echo "gpgkey=https://pkgs.k8s.io/core:/stable:/v1.31/rpm/repodata/repomd.xml.key" | tee -a /etc/yum.repos.d/kubernetes.repo
 
 # Install kubectl using the defined version
-RUN dnf install -y kubect && dnf clean all
+RUN dnf install -y kubectl 
 
 # Install Helm
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
@@ -87,7 +87,7 @@ RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | b
 # Clean up to reduce image size
 RUN dnf clean all && rm -rf /var/cache/dnf
 
-USER root
+#USER root
 
 # Default entrypoint
 ENTRYPOINT [ "/bin/bash" ]
