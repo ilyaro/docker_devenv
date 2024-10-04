@@ -40,6 +40,7 @@ RUN dnf install -y gzip
 #RUN dnf install -y bind-utils
 RUN dnf install -y jq
 RUN dnf install -y tar
+RUN dnf install -y yum-utils
 ## Clean up after installation
 #RUN dnf clean all
 #
@@ -56,8 +57,9 @@ RUN python3 -m pip install pyyaml redis
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
 unzip awscliv2.zip && ./aws/install && rm -f awscliv2.zip
 
-# Install Terraform
-RUN curl -fsSL https://raw.githubusercontent.com/hashicorp/setup-terraform/main/setup.sh | bash
+# Instaoll Terraform
+RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+RUN dnf -y install terraform
 
 #RUN curl https://releases.hashicorp.com/terraform/1.0.8/terraform_1.0.8_linux_amd64.zip && \
 #    unzip terraform_1.0.8_linux_amd64.zip -d /usr/local/bin/ && \
