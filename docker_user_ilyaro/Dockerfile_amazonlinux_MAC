@@ -69,7 +69,7 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 # Install Kubectl
 # Fetch the latest Kubernetes version
 RUN KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt) && \
-    BASE_VERSION=$(echo $KUBECTL_VERSION | awk -F. '{print $1"."$2}') && \
+    BASE_VERSION=$(echo $KUBECTL_VERSION | awk -F. '{print $1"."$2}') | tr -d '\n' && \
     echo "KUBECTL_VERSION: $KUBECTL_VERSION" && \
     echo "BASE_VERSION: $BASE_VERSION"
 
