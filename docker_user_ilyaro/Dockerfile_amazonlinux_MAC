@@ -33,7 +33,7 @@ RUN dnf install -y epel-release || echo "EPEL Release failed" && dnf clean all
 #RUN dnf install -y sysstat
 #RUN dnf install -y traceroute
 #RUN dnf install -y lynx
-#RUN dnf install -y unzip
+RUN dnf install -y unzip
 #RUN dnf install -y tmux
 #RUN dnf install -y bind-utils
 #RUN dnf install -y jq
@@ -50,11 +50,9 @@ RUN python3 -m ensurepip --upgrade --verbose && \
 
 RUN python3 -m pip install pyyaml redis
 
-RUN aws --version
-
 # Install AWS CLI
-#RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-#U    unzip awscliv2.zip && ./aws/install && rm -f awscliv2.zip
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+RUN  unzip awscliv2.zip && ./aws/install && rm -f awscliv2.zip
 
 # Install Terraform
 RUN wget https://releases.hashicorp.com/terraform/1.0.8/terraform_1.0.8_linux_amd64.zip && \
