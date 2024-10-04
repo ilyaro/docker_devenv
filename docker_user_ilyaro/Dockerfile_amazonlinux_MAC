@@ -82,7 +82,7 @@ RUN echo "[kubernetes]" | tee /etc/yum.repos.d/kubernetes.repo && \
 RUN dnf install -y kubectl 
 
 # Install Helm
-RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+RUN dnf install -y helm
 
 # Clean up to reduce image size
 RUN dnf clean all && rm -rf /var/cache/dnf
