@@ -90,8 +90,12 @@ RUN echo "[helm]" > /etc/yum.repos.d/helm.repo && \
     echo "gpgcheck=1" >> /etc/yum.repos.d/helm.repo && \
     echo "gpgkey=https://baltocdn.com/helm/stable/rpm/repodata/repomd.xml.key" >> /etc/yum.repos.d/helm.repo
 
-# Install Helm
-RUN dnf install -y helm
+# Download and install the latest Helm version
+RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && \
+    chmod +x get_helm.sh && \
+    ./get_helm.sh && \
+    rm get_helm.sh
+
 
 # Clean up to reduce image size
 RUN dnf clean all && rm -rf /var/cache/dnf
