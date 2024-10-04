@@ -23,5 +23,5 @@ jobs:
           context: ./Dockerfiles
           file: ./Dockerfiles/Dockerfile_amazonlinux_2023 # Specify your custom Dockerfile name
           push: true
-          tags: gfish/devenv_amazonlinux_2023::${{ github.ref }}  # Use the tag that was pushed
+          tags: gfish/devenv_amazonlinux_2023::${{ github.ref_name }}  # Use the tag that was pushed
           platforms: linux/amd64,linux/arm64  # Specify target platforms
