@@ -14,7 +14,7 @@ RUN dnf install -y epel-release || echo "EPEL Release failed" && dnf clean all
 RUN dnf update -y && dnf clean all
 
 # Install individual packages
-RUN dnf install -y sos
+RUN dnf install -y sos || echo "sos not available"
 RUN dnf install -y crash
 RUN dnf install -y ltrace
 RUN dnf install -y abrt
