@@ -67,14 +67,11 @@ RUN dnf install -y golang
 ENV PATH="/usr/local/go/bin:${PATH}"
 
 # Install Kubectl
-# Fetch the latest Kubernetes version
-RUN KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt) && \
-    export BASE_VERSION=$(echo $KUBECTL_VERSION | awk -F. '{print $1"."$2}') && \
-    echo "KUBECTL_VERSION: $KUBECTL_VERSION" && \
-    echo "BASE_VERSION: $BASE_VERSION"
 
 # Configure the Kubernetes repo using the BASE_VERSION
-RUN echo "[kubernetes]" | tee /etc/yum.repos.d/kubernetes.repo && \
+RUN KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt) && \
+    BASE_VERSION=$(echo $KUBECTL_VERSION | awk -F. '{print $1"."$2}') && \
+    echo "[kubernetes]" | tee /etc/yum.repos.d/kubernetes.repo && \
     echo "name=Kubernetes" | tee -a /etc/yum.repos.d/kubernetes.repo && \
     echo "baseurl=https://pkgs.k8s.io/core:/stable:/${BASE_VERSION}/rpm/" | tee -a /etc/yum.repos.d/kubernetes.repo && \
     echo "enabled=1" | tee -a /etc/yum.repos.d/kubernetes.repo && \
