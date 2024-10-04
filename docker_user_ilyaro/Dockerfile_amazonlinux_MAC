@@ -63,9 +63,28 @@ curl -fsSL https://raw.githubusercontent.com/hashicorp/setup-terraform/main/setu
 #    rm terraform_1.0.8_linux_amd64.zip
 
 # Install Go
-RUN wget https://golang.org/dl/go1.17.2.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go1.17.2.linux-amd64.tar.gz && \
-    rm go1.17.2.linux-amd64.tar.gz
+# Determine architecture and install the latest version of Go
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "x86_64" ]; then \
+        GO_VERSION=$(curl -s https://golang.org/dl/?mode=json | jq -r '.[0].version') && \
+        curl -s https://dl.google.com/go/$GO_VERSION.linux-amd64.tar.gz -o go.tar.gz; \
+    elif [ "$ARCH" = "aarch64" ]; then \
+        GO_VERSION=$(curl -s https://golang.org/dl/?mode=json | jq -r '.[0].version') && \
+        curl -s https://dl.google.com/go/$GO_VERSION.linux-arm64.tar.gz -o go.tar.gz; \
+    else \
+        echo "Unsupported architecture: $ARCH"; \
+        exit 1; \
+    fi && \
+    tar -C /usr/local -xzf go.tar.gz && \
+    rm go.tar.gz
+
+# Set Go environment variables
+ENV PATH="/usr/local/go/bin:${PATH}"
+
+
+#RUN wget https://golang.org/dl/go1.17.2.linux-amd64.tar.gz && \
+#    tar -C /usr/local -xzf go1.17.2.linux-amd64.tar.gz && \
+#    rm go1.17.2.linux-amd64.tar.gz
 
 # Install Kubectl
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
