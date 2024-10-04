@@ -3,11 +3,12 @@ FROM amazonlinux:2023
 LABEL maintainer="Ilya Rokhkin"
 
 # Update system and install common tools
-RUN dnf update -y && \
-    dnf install -y 'dnf-command(config-manager)' && \
-    dnf config-manager --set-enabled crb && \
-    dnf install -y epel-release && \
-    dnf clean all
+
+# Update system first
+RUN dnf update -y && dnf clean all
+
+# Try installing epel-release without the config-manager or crb
+RUN dnf install -y epel-release || echo "EPEL Release failed" && dnf clean all
 
 
 # Install Python3 and pip
