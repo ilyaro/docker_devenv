@@ -4,35 +4,9 @@ LABEL maintainer="Ilya Rokhkin"
 
 # Update system and install common tools
 RUN dnf update -y && \
-    dnf install -y \
-    epel-release \
-    sos \
-    crash \
-    ltrace \
-    abrt \
-    pcp \
-    systemtap \
-    perf \
-    bc \
-    blktrace \
-    btrfs-progs \
-    hwloc \
-    iotop \
-    pciutils \
-    mailx \
-    man-db \
-    net-tools \
-    numactl \
-    passwd \
-    psmisc \
-    screen \
-    sysstat \
-    traceroute \
-    lynx \
-    unzip \
-    tmux \
-    bind-utils \
-    jq && \
+    dnf install -y 'dnf-command(config-manager)' && \
+    dnf config-manager --set-enabled crb && \
+    dnf install -y epel-release && \
     dnf clean all
 
 
