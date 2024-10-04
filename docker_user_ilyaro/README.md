@@ -73,6 +73,8 @@ Last login: Mon Apr 25 05:51:15 2022 from 192.168.127.1
 
 ## For MAC aarch64
 NAME=amazonlinux_mac
+docker buildx build --platform linux/arm64 -t gfish/docker_devenv_mac -f Dockerfile_amazonlinux_MAC .
+
 $ podman build --rm -f Dockerfile_${NAME} -t gfish/devenv_${NAME}:$(git show -s --format=%ct-%h) -t gfish/devenv_${NAME}:latest .
 
 IMNAME=devenv_amazonlinux_mac
