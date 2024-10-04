@@ -55,9 +55,9 @@ $ alias drun='export IMNAME=devenv_ centos7tool;docker rm -f ${IMNAME};docker ru
 
 ## For Amazon Linux 2023 
 NAME=amazonlinux_mac
-docker buildx build --platform linux/arm64 -t gfish/docker_devenv_mac -f Dockerfile_amazonlinux_MAC .
 
-$ podman build --rm -f Dockerfile_${NAME} -t gfish/devenv_${NAME}:$(git show -s --format=%ct-%h) -t gfish/devenv_${NAME}:latest .
+$ docker buildx build --platform linux/amd64,linux/arm64 -t gfish/devenv_amazonlinux_2023 -f Dockerfile_amazonlinux_MAC . --push
+
 
 IMNAME=devenv_amazonlinux_mac
 alias drun='export IMNAME=devenv_amazonlinux_mac;podman rm -f ${IMNAME};podman run --restart unless-stopped --name ${IMNAME} -it -d -v /mnt/root:/mnt/root -v /mnt/root/Users/ilyaro:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/sudoers:/etc/sudoers gfish/${IMNAME}:latest'
