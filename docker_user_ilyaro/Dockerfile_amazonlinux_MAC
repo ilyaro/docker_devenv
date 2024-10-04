@@ -17,7 +17,6 @@ RUN dnf update -y && dnf clean all
 RUN dnf install -y sos || echo "sos not available"
 RUN dnf install -y crash
 RUN dnf install -y ltrace
-RUN dnf install -y abrt
 RUN dnf install -y pcp
 RUN dnf install -y systemtap
 RUN dnf install -y perf
