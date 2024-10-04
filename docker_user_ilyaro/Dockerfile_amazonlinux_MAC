@@ -21,7 +21,6 @@ RUN dnf install -y systemtap
 RUN dnf install -y perf
 RUN dnf install -y bc
 RUN dnf install -y blktrace
-RUN dnf install -y btrfs-progs
 RUN dnf install -y hwloc
 RUN dnf install -y iotop
 RUN dnf install -y pciutils
