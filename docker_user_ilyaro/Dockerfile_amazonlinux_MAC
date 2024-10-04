@@ -11,7 +11,8 @@ RUN dnf update -y && dnf clean all
 RUN dnf install -y epel-release || echo "EPEL Release failed" && dnf clean all
 
 ## Update the package index
-#RUN dnf update -y && dnf clean all
+RUN dnf update -y && dnf clean all
+
 #
 ## Install individual packages
 #RUN dnf install -y crash
@@ -52,7 +53,7 @@ RUN python3 -m pip install pyyaml redis
 
 # Install AWS CLI
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-RUN  unzip awscliv2.zip && ./aws/install && rm -f awscliv2.zip
+unzip awscliv2.zip && ./aws/install && rm -f awscliv2.zip
 
 # Install Terraform
 RUN wget https://releases.hashicorp.com/terraform/1.0.8/terraform_1.0.8_linux_amd64.zip && \
