@@ -67,17 +67,19 @@ RUN dnf install -y golang
 ENV PATH="/usr/local/go/bin:${PATH}"
 
 # Install Kubectl
-# Fetch the latest version of kubectl
-ARG KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
-
-# Fetch the latest Kubernetes version and set up the repository
+# Fetch the latest Kubernetes version
 RUN KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt) && \
-    echo "[kubernetes]" | tee /etc/yum.repos.d/kubernetes.repo && \
+    BASE_VERSION=$(echo $KUBECTL_VERSION | awk -F. '{print "v"$1"."$2}') && \
+    echo "KUBECTL_VERSION: $KUBECTL_VERSION" && \
+    echo "BASE_VERSION: $BASE_VERSION"
+
+# Configure the Kubernetes repo using the BASE_VERSION
+RUN echo "[kubernetes]" | tee /etc/yum.repos.d/kubernetes.repo && \
     echo "name=Kubernetes" | tee -a /etc/yum.repos.d/kubernetes.repo && \
-    echo "baseurl=https://pkgs.k8s.io/core:/stable:/${KUBECTL_VERSION}/rpm/" | tee -a /etc/yum.repos.d/kubernetes.repo && \
+    echo "baseurl=https://pkgs.k8s.io/core:/stable:/${BASE_VERSION}/rpm/" | tee -a /etc/yum.repos.d/kubernetes.repo && \
     echo "enabled=1" | tee -a /etc/yum.repos.d/kubernetes.repo && \
     echo "gpgcheck=1" | tee -a /etc/yum.repos.d/kubernetes.repo && \
-    echo "gpgkey=https://pkgs.k8s.io/core:/stable:/${KUBECTL_VERSION}/rpm/repodata/repomd.xml.key" | tee -a /etc/yum.repos.d/kubernetes.repo
+    echo "gpgkey=https://pkgs.k8s.io/core:/stable:/${BASE_VERSION}/rpm/repodata/repomd.xml.key" | tee -a /etc/yum.repos.d/kubernetes.repo
 
 # Install kubectl using the defined version
 RUN dnf install -y kubectl 
