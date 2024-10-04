@@ -10,6 +10,37 @@ RUN dnf update -y && dnf clean all
 # Try installing epel-release without the config-manager or crb
 RUN dnf install -y epel-release || echo "EPEL Release failed" && dnf clean all
 
+RUN dnf update -y && \
+    dnf install -y \
+    sos \
+    crash \
+    ltrace \
+    abrt \
+    pcp \
+    systemtap \
+    perf \
+    bc \
+    blktrace \
+    btrfs-progs \
+    hwloc \
+    iotop \
+    pciutils \
+    mailx \
+    man-db \
+    net-tools \
+    numactl \
+    passwd \
+    psmisc \
+    screen \
+    sysstat \
+    traceroute \
+    lynx \
+    unzip \
+    tmux \
+    bind-utils \
+    jq && \
+    dnf clean all
+
 
 # Install Python3 and pip
 RUN dnf install -y python3-pip
