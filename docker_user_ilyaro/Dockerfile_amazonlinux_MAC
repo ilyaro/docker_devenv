@@ -70,8 +70,9 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 # Fetch the latest version of kubectl
 ARG KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)
 
-# This overwrites any existing configuration in /etc/yum.repos.d/kubernetes.repo
-RUN echo "[kubernetes]" | tee /etc/yum.repos.d/kubernetes.repo && \
+# Fetch the latest Kubernetes version and set up the repository
+RUN KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt) && \
+    echo "[kubernetes]" | tee /etc/yum.repos.d/kubernetes.repo && \
     echo "name=Kubernetes" | tee -a /etc/yum.repos.d/kubernetes.repo && \
     echo "baseurl=https://pkgs.k8s.io/core:/stable:/${KUBECTL_VERSION}/rpm/" | tee -a /etc/yum.repos.d/kubernetes.repo && \
     echo "enabled=1" | tee -a /etc/yum.repos.d/kubernetes.repo && \
@@ -83,8 +84,7 @@ RUN dnf install -y kubectl
 
 # Install Helm
 # Download and install the latest Helm version
-ARG VERIFY_CHECKSUM=false
-RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && \
+RUN VERIFY_CHECKSUM=false && curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && \
     chmod +x get_helm.sh && \
     ./get_helm.sh && \
     rm get_helm.sh
