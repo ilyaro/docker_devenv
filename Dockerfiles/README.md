@@ -59,10 +59,11 @@ $ docker buildx create --name mybuilder --use
 $ docker buildx inspect mybuilder --bootstrap
 $ docker buildx build --platform linux/amd64,linux/arm64 -t gfish/devenv_${NAME} -f Dockerfile_${NAME} . --push
 
-## Run the image on MAC and execute and work in it
+################ Run the image on MAC and execute and work in it#########################
 IMNAME=devenv_amazonlinux_2023
-alias drun='export IMNAME=devenv_amazonlinux_2023; docker run --restart unless-stopped --name ${IMNAME} -it -d -v ${HOME}:${HOME} -v /Volumes/RAMDisk:/Volumes/RAMDisk gfish/${IMNAME}:latest
-$ alias de='docker exec -it devenv_amazonlinux_2023 --user $(id -u) /usr/bin/bash'
+$ alias drun='export IMNAME=devenv_amazonlinux_2023; docker run --restart unless-stopped --name ${IMNAME} -it -d -v ${HOME}:${HOME} -v /Volumes:/Volumes gfish/${IMNAME}:latest
+
+$ alias de='docker exec -it ${IMNAME} --user $(id -u) /usr/bin/bash'
 
 ## For ec2-user
 docker run --restart unless-stopped --name devenv_ec2-user -it -d -v /home/ec2-user:/home/ec2-user gfish/devenv_ec2-user:latest
