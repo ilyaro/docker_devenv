@@ -54,12 +54,17 @@ IMNAME=devenv_centos7tools
 $ alias drun='export IMNAME=devenv_ centos7tool;docker rm -f ${IMNAME};docker run --restart unless-stopped --name ${IMNAME} -it -d -v /mnt/d:/mnt/d -v /mnt/c:/mnt/c -v ${HOME}:${HOME} -v /etc/passwd:/etc/passwd -v /etc/shadow:/etc/shadow -v /etc/group:/etc/group -v /etc/ssl/certs:/etc/ssl/certs -v /etc/pki/tls/certs:/etc/pki/tls/certs -v /etc/sudoers:/etc/sudoers gfish/${IMNAME}:latest'
 
 ## For Amazon Linux 2023
+
 NAME=amazonlinux_2023
+
 $ docker buildx create --name mybuilder --use
+
 $ docker buildx inspect mybuilder --bootstrap
+
 $ docker buildx build --platform linux/amd64,linux/arm64 -t gfish/devenv_${NAME} -f Dockerfile_${NAME} . --push
 
 ################ Run the image on MAC and execute and work in it#########################
+
 IMNAME=devenv_amazonlinux_2023
 
 $ alias drun='export IMNAME=devenv_amazonlinux_2023; docker run --restart unless-stopped --name ${IMNAME} -it -d -v ${HOME}:${HOME} -v /Volumes:/Volumes gfish/${IMNAME}:latest'
