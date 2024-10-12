@@ -142,6 +142,7 @@ RUN dnf install -y https://packages.microsoft.com/config/rhel/9.0/packages-micro
 RUN dnf install -y azure-cli
 
 # Install sops: Download the release; untar it; make it
+ENV SOPS_VERSION 3.9.1
 ADD https://github.com/mozilla/sops/archive/v${SOPS_VERSION}.tar.gz /go/src/app/
 RUN tar xzf /go/src/app/v${SOPS_VERSION}.tar.gz -C /go/src/app/
 WORKDIR /go/src/app/sops-${SOPS_VERSION}
