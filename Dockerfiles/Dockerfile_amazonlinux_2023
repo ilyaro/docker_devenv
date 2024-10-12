@@ -86,6 +86,16 @@ RUN dnf install -y which
 RUN dnf install -y xauth
 RUN dnf install -y yum-utils
 
+## Install Devops tools
+RUN dnf install -y nano \
+		   vim \
+		   gcc \
+		   gcc-c++ \
+		   make \
+       	   python3-pip \
+		   meld \
+		   nodejs
+
 # Install Python3 and pip
 RUN dnf install -y python3-pip
 
