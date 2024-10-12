@@ -142,7 +142,7 @@ RUN dnf install -y https://packages.microsoft.com/config/rhel/9.0/packages-micro
 RUN dnf install -y azure-cli
 
 # Install sops
-RUN dnf install -y sops
+##RUN dnf install -y sops
 
 # Install dind (Docker-in-Docker)
 RUN dnf install -y docker
