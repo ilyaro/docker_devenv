@@ -52,7 +52,7 @@ RUN dnf install -y perf
 RUN dnf install -y procps-ng
 RUN dnf install -y psmisc
 ##RUN dnf install -y python-docker-py
-RUN dnf install -y python-rhsm
+##RUN dnf install -y python-rhsm
 RUN dnf install -y python3-pip
 RUN dnf install -y rootfiles
 RUN dnf install -y rpm-ostree
