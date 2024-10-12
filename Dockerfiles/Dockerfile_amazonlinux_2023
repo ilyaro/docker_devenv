@@ -55,7 +55,7 @@ RUN dnf install -y psmisc
 ##RUN dnf install -y python-rhsm
 RUN dnf install -y python3-pip
 RUN dnf install -y rootfiles
-RUN dnf install -y rpm-ostree
+##RUN dnf install -y rpm-ostree
 RUN dnf install -y screen
 RUN dnf install -y sos
 RUN dnf install -y strace
