@@ -90,7 +90,7 @@ RUN dnf install -y python3-pip
 RUN dnf install -y nodejs
 
 # Install Homebrew
-RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+RUN $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)
 
 # Upgrade pip and install Python modules
 RUN python3 -m ensurepip --upgrade --verbose && \
