@@ -67,9 +67,9 @@ $ docker buildx build --platform linux/amd64,linux/arm64 -t gfish/devenv_${NAME}
 
 IMNAME=devenv_amazonlinux_2023
 
-$ alias drun='export IMNAME=devenv_amazonlinux_2023; docker run --restart unless-stopped --name ${IMNAME} -it -d -v ${HOME}:${HOME} -v /Volumes:/Volumes gfish/${IMNAME}:latest'
+alias drun='export IMNAME=devenv_amazonlinux_2023 && docker run --restart unless-stopped --name ${IMNAME} -it -d -v /Volumes:/Volumes -v ${HOME}:${HOME} -u $(id -u):$(id -g) gfish/${IMNAME}:latest'
 
-$ alias de='docker exec -it -u $(id -u):$(id -g) ${IMNAME} /usr/bin/bash'
+alias de='export IMNAME=devenv_amazonlinux_2023 && docker exec -it ${IMNAME} bash -c "export HOME=${HOME} && cd $HOME && bash"'
 
 ## For ec2-user
 docker run --restart unless-stopped --name devenv_ec2-user -it -d -v /home/ec2-user:/home/ec2-user gfish/devenv_ec2-user:latest
