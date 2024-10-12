@@ -18,7 +18,7 @@ RUN dnf install -y bc
 RUN dnf install -y blktrace
 ## RUN dnf install -y btrfs-progs
 RUN dnf install -y crash
-RUN dnf install -y curl
+## Already instaled on AL2023 RUN dnf install -y curl
 RUN dnf install -y docker
 RUN dnf install -y docker-selinux
 RUN dnf install -y e2fsprogs
