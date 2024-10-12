@@ -157,7 +157,8 @@ RUN curl -Lo /usr/local/bin/helmfile https://github.com/roboll/helmfile/releases
     chmod +x /usr/local/bin/helmfile
 
 # Install redis-cli version 8.0 (--branch 8.0)
-RUN git clone --branch 8.0 --depth 1 https://github.com/redis/redis && cd redis
+RUN git clone --branch 8.0 --depth 1 https://github.com/redis/redis.git
+RUN cd redis
 RUN make redis-cli BUILD_TLS=yes
 RUN cp src/redis-cli /usr/local/bin/redis-cli
 RUN cd .. && rm -rf redis
