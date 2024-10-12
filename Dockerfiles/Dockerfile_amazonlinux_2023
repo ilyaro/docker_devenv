@@ -84,6 +84,7 @@ RUN dnf install -y vim
 RUN dnf install -y gcc 
 RUN dnf install -y gcc-c++ 
 RUN dnf install -y make 
+RUN dnf install -y openssl-devel 
 RUN dnf install -y python3-pip 
 ##RUN dnf install -y meld 
 RUN dnf install -y nodejs
