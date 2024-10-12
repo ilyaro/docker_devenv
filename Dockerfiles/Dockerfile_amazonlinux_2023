@@ -59,7 +59,7 @@ RUN dnf install -y rootfiles
 RUN dnf install -y screen
 ##RUN dnf install -y sos
 RUN dnf install -y strace
-RUN dnf install -y subscription-manager
+##RUN dnf install -y subscription-manager
 RUN dnf install -y sudo
 RUN dnf install -y sysstat
 RUN dnf install -y systemtap
