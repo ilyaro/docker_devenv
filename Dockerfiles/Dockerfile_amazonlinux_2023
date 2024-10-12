@@ -141,8 +141,11 @@ RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc
 RUN dnf install -y https://packages.microsoft.com/config/rhel/9.0/packages-microsoft-prod.rpm
 RUN dnf install -y azure-cli
 
-# Install sops
-##RUN dnf install -y sops
+# Install sops: Download the release; untar it; make it
+ADD https://github.com/mozilla/sops/archive/v${SOPS_VERSION}.tar.gz /go/src/app/
+RUN tar xzf /go/src/app/v${SOPS_VERSION}.tar.gz -C /go/src/app/
+WORKDIR /go/src/app/sops-${SOPS_VERSION}
+RUN make install
 
 # Install dind (Docker-in-Docker)
 RUN dnf install -y docker
