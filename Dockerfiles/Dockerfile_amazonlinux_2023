@@ -19,8 +19,6 @@ RUN dnf install -y blktrace
 ## RUN dnf install -y btrfs-progs
 RUN dnf install -y crash
 ## Already instaled on AL2023 RUN dnf install -y curl
-RUN dnf install -y docker
-RUN dnf install -y docker-selinux
 RUN dnf install -y e2fsprogs
 RUN dnf install -y ethtool
 RUN dnf install -y file
@@ -78,6 +76,7 @@ RUN dnf install -y wget
 RUN dnf install -y which
 RUN dnf install -y xauth
 RUN dnf install -y yum-utils
+RUN dnf install -y dos2unix
 
 ## Install Devops tools
 RUN dnf install -y nano \
@@ -116,7 +115,6 @@ RUN dnf install -y golang
 ENV PATH="/usr/local/go/bin:${PATH}"
 
 # Install Kubectl
-
 # Configure the Kubernetes repo using the BASE_VERSION
 RUN KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt) && \
     BASE_VERSION=$(echo $KUBECTL_VERSION | awk -F. '{print $1"."$2}') && \
@@ -147,6 +145,24 @@ RUN export VERIFY_CHECKSUM=false && curl -fsSL -o get_helm.sh https://raw.github
 RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
     dnf install -y https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm && \
     dnf install -y azure-cli
+
+# Install sops
+RUN dnf install -y sops
+
+# Install dind (Docker-in-Docker)
+RUN dnf install -y docker
+RUN dnf install -y docker-selinux
+
+# Install helmfile
+RUN curl -Lo /usr/local/bin/helmfile https://github.com/roboll/helmfile/releases/download/v0.144.0/helmfile_linux_amd64 && \
+    chmod +x /usr/local/bin/helmfile
+
+# Install redis-cli
+RUN dnf install -y redis
+
+# Install eksctl
+RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.70.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp && \
+    mv /tmp/eksctl /usr/local/bin
 
 # Clean up to reduce image size
 RUN dnf clean all && rm -rf /var/cache/dnf
