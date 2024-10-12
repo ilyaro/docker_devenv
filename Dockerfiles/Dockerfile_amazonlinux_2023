@@ -143,14 +143,6 @@ RUN export VERIFY_CHECKSUM=false && curl -fsSL -o get_helm.sh https://raw.github
     ./get_helm.sh && \
     rm get_helm.sh
 
-# Define the build argument
-ARG USER
-
-# Create user and enable root access without specifying home directory
-RUN useradd --uid 1000 --shell /bin/bash $USER && \
-    sed -i 's/%wheel\s.*/%wheel ALL=NOPASSWD:ALL/' /etc/sudoers && \
-    usermod -a -G wheel $USER
-
 # Clean up to reduce image size
 RUN dnf clean all && rm -rf /var/cache/dnf
 
