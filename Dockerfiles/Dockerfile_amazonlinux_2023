@@ -143,11 +143,11 @@ RUN dnf install -y https://packages.microsoft.com/config/rhel/9.0/packages-micro
 RUN dnf install -y azure-cli
 
 # Install sops: Download the release; untar it; make it
-ENV SOPS_VERSION=3.9.1
-ADD https://github.com/mozilla/sops/archive/v${SOPS_VERSION}.tar.gz /go/src/app/
-RUN tar xzf /go/src/app/v${SOPS_VERSION}.tar.gz -C /go/src/app/
-WORKDIR /go/src/app/sops-${SOPS_VERSION}
-RUN make install
+#ENV SOPS_VERSION=3.9.1
+#ADD https://github.com/mozilla/sops/archive/v${SOPS_VERSION}.tar.gz /go/src/app/
+#RUN tar xzf /go/src/app/v${SOPS_VERSION}.tar.gz -C /go/src/app/
+#WORKDIR /go/src/app/sops-${SOPS_VERSION}
+#RUN make install
 
 # Install dind (Docker-in-Docker)
 RUN dnf install -y docker
@@ -158,11 +158,11 @@ RUN curl -Lo /usr/local/bin/helmfile https://github.com/roboll/helmfile/releases
     chmod +x /usr/local/bin/helmfile
 
 # Install redis-cli version 8.0 (--branch 8.0)
-RUN git clone --branch 8.0 --depth 1 https://github.com/redis/redis.git
-RUN cd redis
-RUN make redis-cli BUILD_TLS=yes
-RUN cp src/redis-cli /usr/local/bin/redis-cli
-RUN cd .. && rm -rf redis
+#RUN git clone --branch 8.0 --depth 1 https://github.com/redis/redis.git
+#RUN cd redis
+#RUN make redis-cli BUILD_TLS=yes
+#RUN cp src/redis-cli /usr/local/bin/redis-cli
+#RUN cd .. && rm -rf redis
 
 # Install eksctl
 RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.70.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp && \
