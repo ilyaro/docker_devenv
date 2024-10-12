@@ -37,11 +37,6 @@ RUN dnf install -y iotop
 RUN dnf install -y iproute
 RUN dnf install -y iputils
 RUN dnf install -y kernel
-RUN dnf install -y kubectl
-RUN dnf install -y kubernetes-client
-RUN dnf install -y kubernetes-devel
-RUN dnf install -y kubernetes-master
-RUN dnf install -y kubernetes-node
 RUN dnf install -y less
 RUN dnf install -y ltrace
 RUN dnf install -y mailx
@@ -136,6 +131,10 @@ RUN cat /etc/yum.repos.d/kubernetes.repo
 
 # Install kubectl using the defined version
 RUN dnf install -y kubectl 
+RUN dnf install -y kubernetes-client
+RUN dnf install -y kubernetes-devel
+RUN dnf install -y kubernetes-master
+RUN dnf install -y kubernetes-node
 
 # Install Helm
 # Download and install the latest Helm version
