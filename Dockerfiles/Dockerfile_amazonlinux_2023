@@ -78,18 +78,15 @@ RUN dnf install -y xauth
 RUN dnf install -y yum-utils
 RUN dnf install -y dos2unix
 
-## Install Devops tools
-RUN dnf install -y nano \
-		   vim \
-		   gcc \
-		   gcc-c++ \
-		   make \
-       	   python3-pip \
-		   meld \
-		   nodejs
-
-# Install Python3 and pip
-RUN dnf install -y python3-pip
+##################                  Install Devops tools                          ###########################
+RUN dnf install -y nano 
+RUN dnf install -y vim 
+RUN dnf install -y gcc 
+RUN dnf install -y gcc-c++ 
+RUN dnf install -y make 
+RUN dnf install -y python3-pip 
+RUN dnf install -y meld 
+RUN dnf install -y nodejs
 
 # Upgrade pip and install Python modules
 RUN python3 -m ensurepip --upgrade --verbose && \
@@ -99,9 +96,7 @@ RUN python3 -m pip install pyyaml redis
 RUN python3 -m pip install aws-sso-util awsume
 
 # Install AWS CLI
-
 RUN dnf install -y awscli
-
 #RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
 #unzip awscliv2.zip && ./aws/install && rm -f awscliv2.zip
 
