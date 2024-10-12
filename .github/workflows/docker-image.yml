@@ -32,7 +32,7 @@ jobs:
           platforms: linux/amd64,linux/arm64  # Specify target platforms
 
       - name: Scan image for vulnerabilities
-        uses: aquasecurity/trivy-action@v0.12.1
+        uses: aquasecurity/trivy-action@master
         with:
           image-ref: gfish/devenv_amazonlinux_2023:${{ github.ref_name }}
           format: 'table'
