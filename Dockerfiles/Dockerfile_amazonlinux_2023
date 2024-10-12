@@ -49,7 +49,7 @@ RUN dnf install -y numactl-devel
 RUN dnf install -y ostree
 RUN dnf install -y passwd
 RUN dnf install -y pciutils
-RUN dnf install -y pcp
+##RUN dnf install -y pcp
 RUN dnf install -y perf
 RUN dnf install -y procps-ng
 RUN dnf install -y psmisc
