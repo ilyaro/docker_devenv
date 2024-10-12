@@ -16,7 +16,7 @@ RUN dnf install -y bash
 RUN dnf install -y bash-completion
 RUN dnf install -y bc
 RUN dnf install -y blktrace
-RUN dnf install -y btrfs-progs
+## RUN dnf install -y btrfs-progs
 RUN dnf install -y crash
 RUN dnf install -y curl
 RUN dnf install -y docker
