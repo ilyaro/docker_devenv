@@ -55,7 +55,7 @@ $ alias drun='export IMNAME=devenv_ centos7tool;docker rm -f ${IMNAME};docker ru
 
 ## For Amazon Linux 2023
 
-NAME=amazonlinux_2023
+export NAME=amazonlinux_2023
 
 $ docker buildx create --name mybuilder --use
 
