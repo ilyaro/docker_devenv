@@ -25,18 +25,113 @@ RUN dnf install -y man-db
 RUN dnf install -y net-tools
 RUN dnf install -y numactl
 RUN dnf install -y passwd
+RUN dnf install -y kubernetes-node
+RUN dnf install -y kubernetes-devel
+RUN dnf install -y kubernetes-master
+RUN dnf install -y gdb-gdbserver
+RUN dnf install -y vim-minimal
+RUN dnf install -y bash-completion
+RUN dnf install -y subscription-manager
+RUN dnf install -y python-rhsm
+RUN dnf install -y rootfiles
+RUN dnf install -y yum-utils
+RUN dnf install -y wget
+RUN dnf install -y curl
+RUN dnf install -y sudo
+RUN dnf install -y bash
+RUN dnf install -y tmux
+RUN dnf install -y unzip
+RUN dnf install -y traceroute
+RUN dnf install -y vault
+RUN dnf install -y crash
+RUN dnf install -y ltrace
+RUN dnf install -y systemtap
+RUN dnf install -y perf
+RUN dnf install -y bc
+RUN dnf install -y blktrace
+RUN dnf install -y hwloc
+RUN dnf install -y iotop
+RUN dnf install -y pciutils
+RUN dnf install -y mailx
+RUN dnf install -y man-db
+RUN dnf install -y net-tools
+RUN dnf install -y numactl
+RUN dnf install -y passwd
+RUN dnf install -y kubernetes-node
+RUN dnf install -y kubernetes-devel
+RUN dnf install -y kubernetes-master
+RUN dnf install -y kernel
+RUN dnf install -y e2fsprogs
+RUN dnf install -y sos
+RUN dnf install -y crash
+RUN dnf install -y strace
+RUN dnf install -y ltrace
+RUN dnf install -y tcpdump
+RUN dnf install -y abrt
+RUN dnf install -y pcp
+RUN dnf install -y systemtap
+RUN dnf install -y perf
+RUN dnf install -y bc
+RUN dnf install -y blktrace
+RUN dnf install -y btrfs-progs
+RUN dnf install -y ethtool
+RUN dnf install -y file
+RUN dnf install -y findutils
+RUN dnf install -y gcc
+RUN dnf install -y gdb
+RUN dnf install -y git
+RUN dnf install -y glibc-common
+RUN dnf install -y glibc-utils
+RUN dnf install -y hwloc
+RUN dnf install -y iotop
+RUN dnf install -y iproute
+RUN dnf install -y iputils
+RUN dnf install -y less
+RUN dnf install -y pciutils
+RUN dnf install -y ltrace
+RUN dnf install -y mailx
+RUN dnf install -y man-db
+RUN dnf install -y nc
+RUN dnf install -y netsniff-ng
+RUN dnf install -y net-tools
+RUN dnf install -y numactl
+RUN dnf install -y numactl-devel
+RUN dnf install -y passwd
+RUN dnf install -y perf
+RUN dnf install -y procps-ng
 RUN dnf install -y psmisc
 RUN dnf install -y screen
+RUN dnf install -y strace
 RUN dnf install -y sysstat
-RUN dnf install -y traceroute
-RUN dnf install -y lynx
-RUN dnf install -y unzip
-RUN dnf install -y gzip
-RUN dnf install -y tmux
-RUN dnf install -y bind-utils
-RUN dnf install -y jq
+RUN dnf install -y systemtap-client
 RUN dnf install -y tar
+RUN dnf install -y tcpdump
+RUN dnf install -y vim-enhanced
+RUN dnf install -y xauth
+RUN dnf install -y which
+RUN dnf install -y ostree
+RUN dnf install -y rpm-ostree
+RUN dnf install -y docker
+RUN dnf install -y python-docker-py
+RUN dnf install -y docker-selinux
+RUN dnf install -y kubernetes-client
+RUN dnf install -y kubernetes-node
+RUN dnf install -y kubernetes-devel
+RUN dnf install -y kubernetes-master
+RUN dnf install -y gdb-gdbserver
+RUN dnf install -y vim-minimal
+RUN dnf install -y bash-completion
+RUN dnf install -y subscription-manager
+RUN dnf install -y python-rhsm
+RUN dnf install -y rootfiles
 RUN dnf install -y yum-utils
+RUN dnf install -y wget
+RUN dnf install -y curl
+RUN dnf install -y sudo
+RUN dnf install -y bash
+RUN dnf install -y tmux
+RUN dnf install -y unzip
+RUN dnf install -y traceroute
 
 # Install Python3 and pip
 RUN dnf install -y python3-pip
@@ -54,7 +149,7 @@ RUN dnf install -y awscli
 #RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
 #unzip awscliv2.zip && ./aws/install && rm -f awscliv2.zip
 
-# Instaoll Terraform
+# Install Terraform
 RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 RUN dnf -y install terraform
 
@@ -86,7 +181,6 @@ RUN export VERIFY_CHECKSUM=false && curl -fsSL -o get_helm.sh https://raw.github
     chmod +x get_helm.sh && \
     ./get_helm.sh && \
     rm get_helm.sh
-
 
 # Clean up to reduce image size
 RUN dnf clean all && rm -rf /var/cache/dnf
