@@ -143,6 +143,11 @@ RUN export VERIFY_CHECKSUM=false && curl -fsSL -o get_helm.sh https://raw.github
     ./get_helm.sh && \
     rm get_helm.sh
 
+# Install Azure CLI
+RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
+    dnf install -y https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm && \
+    dnf install -y azure-cli
+
 # Clean up to reduce image size
 RUN dnf clean all && rm -rf /var/cache/dnf
 
