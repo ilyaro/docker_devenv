@@ -43,7 +43,7 @@ RUN dnf install -y mailx
 RUN dnf install -y man-db
 RUN dnf install -y nc
 RUN dnf install -y net-tools
-RUN dnf install -y netsniff-ng
+##RUN dnf install -y netsniff-ng
 RUN dnf install -y numactl
 RUN dnf install -y numactl-devel
 RUN dnf install -y ostree
