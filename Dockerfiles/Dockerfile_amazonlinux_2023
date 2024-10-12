@@ -102,6 +102,7 @@ RUN python3 -m ensurepip --upgrade --verbose && \
     python3 -m pip install --upgrade --ignore-installed pip --verbose
 
 RUN python3 -m pip install pyyaml redis
+RUN python3 -m pip install aws-sso-util awsume
 
 # Install AWS CLI
 
