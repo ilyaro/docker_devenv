@@ -69,7 +69,7 @@ RUN dnf install -y tcpdump
 RUN dnf install -y tmux
 RUN dnf install -y traceroute
 RUN dnf install -y unzip
-RUN dnf install -y vault
+##RUN dnf install -y vault
 RUN dnf install -y vim-enhanced
 RUN dnf install -y vim-minimal
 RUN dnf install -y wget
