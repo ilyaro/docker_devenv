@@ -90,7 +90,7 @@ RUN dnf install -y python3-pip
 RUN dnf install -y nodejs
 
 # Install Homebrew
-RUN $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)
+#RUN $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)
 
 # Upgrade pip and install Python modules
 RUN python3 -m ensurepip --upgrade --verbose && \
@@ -172,6 +172,7 @@ RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/down
     mv /tmp/eksctl /usr/local/bin
 RUN rm -rf /tmp/eksctl
 
+# Install snapd
 RUN dnf install -y snapd
 RUN sudo systemctl enable --now snapd.socket
 RUN sudo ln -s /var/lib/snapd/snap /snap
@@ -180,7 +181,7 @@ RUN sudo snap install terragrunt
 # Clean up to reduce image size
 RUN dnf clean all && rm -rf /var/cache/dnf
 
-#USER root
+USER root
 
 # Default entrypoint
 ENTRYPOINT [ "/bin/bash" ]
