@@ -33,7 +33,7 @@ RUN dnf install -y hwloc
 RUN dnf install -y iotop
 RUN dnf install -y iproute
 RUN dnf install -y iputils
-RUN dnf install -y kernel
+##RUN dnf install -y kernel
 RUN dnf install -y less
 RUN dnf install -y ltrace
 RUN dnf install -y mailx
