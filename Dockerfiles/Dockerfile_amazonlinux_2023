@@ -171,12 +171,6 @@ RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/down
     mv /tmp/eksctl /usr/local/bin
 RUN rm -rf /tmp/eksctl
 
-# Install snapd
-RUN dnf install -y snapd
-RUN sudo systemctl enable --now snapd.socket
-RUN sudo ln -s /var/lib/snapd/snap /snap
-RUN sudo snap install terragrunt
-
 # Clean up to reduce image size
 RUN dnf clean all && rm -rf /var/cache/dnf
 
