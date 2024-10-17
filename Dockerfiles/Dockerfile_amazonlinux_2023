@@ -11,7 +11,7 @@ RUN dnf install -y epel-release || echo "EPEL Release failed" && dnf clean all
 
 ## Install individual packages
 ## RUN dnf install -y abrt
-RUN dnf install -y bash
+#RUN dnf install -y bash
 RUN dnf install -y bash-completion
 RUN dnf install -y bc
 RUN dnf install -y blktrace
