@@ -11,7 +11,6 @@ RUN dnf install -y epel-release || echo "EPEL Release failed" && dnf clean all
 
 ## Install individual packages
 ## RUN dnf install -y abrt
-RUN dnf install -y awscli
 RUN dnf install -y bash
 RUN dnf install -y bash-completion
 RUN dnf install -y bc
