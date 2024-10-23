@@ -177,11 +177,11 @@ RUN dnf clean all && rm -rf /var/cache/dnf
 # Create a working directory in /tmp
 WORKDIR /tmp
 # Copy the local ./src folder into /tmp inside the Docker container
-COPY ./src/build-terragrunt.sh /tmp/
+COPY ./src/build_terragrunt.sh /tmp/
 # Change directory to /tmp/src and make the build script executable
-RUN chmod +x /tmp/build-terragrunt.sh
+RUN chmod +x /tmp/build_terragrunt.sh
 # Run the build script
-CMD ["/bin/sh", "/tmp/build-terragrunt.sh"]
+CMD ["/bin/sh", "/tmp/build_terragrunt.sh"]
 
 USER root
 
