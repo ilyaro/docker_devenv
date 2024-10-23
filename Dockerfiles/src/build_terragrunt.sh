@@ -35,6 +35,8 @@ if [ -n "$TERRAGRUNT_VERSION" ]; then
     git checkout "$TERRAGRUNT_VERSION"
 fi
 
+go clean -modcache
+
 # Build the Terragrunt binary
 echo "Building Terragrunt..."
 go build -o terragrunt
