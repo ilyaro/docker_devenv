@@ -36,7 +36,7 @@ if [ -n "$TERRAGRUNT_VERSION" ]; then
 fi
 
 # Clear Go module cache and download dependencies
-go clean -modcache && go mod tidy
+go clean -modcache && rm -f go.sum && go mod tidy
 
 # Build the Terragrunt binary
 echo "Building Terragrunt..."
