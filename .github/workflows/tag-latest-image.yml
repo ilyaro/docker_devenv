@@ -1,0 +1,54 @@
+name: Get Tags from Latest Commit and Update Docker Tag
+
+on:
+  push:
+    tags:
+      - latest  # Trigger the workflow when the 'latest' tag is pushed
+
+jobs:
+  get-tags-from-latest-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Get the commit that 'latest' points to
+      - name: Get Commit for 'latest' Tag
+        id: get_commit
+        run: |
+          latest_commit=$(git rev-list -n 1 latest)
+          echo "::set-output name=commit::$latest_commit"
+
+      # List all tags associated with the commit and check for v* tags
+      - name: Get v* Tags Associated with Commit
+        id: v_tags
+        run: |
+          v_tags=$(git tag --contains ${{ steps.get_commit.outputs.commit }} | grep '^v[0-9]\.' || true)
+          echo "::set-output name=v_tags::$v_tags"
+
+      # Count how many v* tags are associated with the commit
+      - name: Count v* Tags
+        id: tag_count
+        run: |
+          count=$(echo "${{ steps.v_tags.outputs.v_tags }}" | wc -l)
+          echo "::set-output name=tag_count::$count"
+
+      # Run Docker Hub API call to tag the image as 'latest' if exactly one v* tag is found
+      - name: Tag Docker Image as Latest
+        if: ${{ steps.tag_count.outputs.tag_count == '1' }}
+        run: |
+          token=$(curl -s -X POST "https://hub.docker.com/v2/users/login/" \
+            -d '{"username": "${{ secrets.DOCKER_USERNAME }}", "password": "${{ secrets.DOCKER_PASSWORD }}"}' \
+            -H "Content-Type: application/json" | jq -r .token)
+
+          image_name="mydockerhubuser/myimage"  # Change to your Docker Hub repository
+          v_tag=$(echo "${{ steps.v_tags.outputs.v_tags }}" | head -n 1)
+
+          digest=$(curl -s -H "Authorization: JWT $token" \
+            "https://hub.docker.com/v2/repositories/$image_name/tags/$v_tag/" | jq -r .images[0].digest)
+
+          curl -s -X POST "https://hub.docker.com/v2/repositories/$image_name/tags/" \
+            -H "Authorization: JWT $token" \
+            -H "Content-Type: application/json" \
+            -d '{"tag": "latest", "digest": "'$digest'"}'
