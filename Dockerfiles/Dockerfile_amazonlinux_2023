@@ -179,9 +179,9 @@ WORKDIR /tmp
 # Copy the local ./src folder into /tmp inside the Docker container
 COPY ./src/build-terragrunt.sh /tmp/
 # Change directory to /tmp/src and make the build script executable
-RUN chmod +x /tmp/src/build-terragrunt.sh
+RUN chmod +x /tmp/build-terragrunt.sh
 # Run the build script
-CMD ["/bin/sh", "/tmp/src/build-terragrunt.sh"]
+CMD ["/bin/sh", "/tmp/build-terragrunt.sh"]
 
 USER root
 
