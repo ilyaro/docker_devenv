@@ -181,7 +181,7 @@ COPY ./src/build_terragrunt.sh /tmp/
 # Change directory to /tmp/src and make the build script executable
 RUN chmod +x /tmp/build_terragrunt.sh
 # Run the build script
-CMD ["/bin/sh", "/tmp/build_terragrunt.sh"]
+CMD ["/bin/bash", "/tmp/build_terragrunt.sh"]
 
 USER root
 
