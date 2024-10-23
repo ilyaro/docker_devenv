@@ -35,7 +35,8 @@ if [ -n "$TERRAGRUNT_VERSION" ]; then
     git checkout "$TERRAGRUNT_VERSION"
 fi
 
-go clean -modcache
+# Clear Go module cache and download dependencies
+go clean -modcache && go mod tidy
 
 # Build the Terragrunt binary
 echo "Building Terragrunt..."
