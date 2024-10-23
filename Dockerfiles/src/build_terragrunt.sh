@@ -4,7 +4,7 @@
 set -e
 
 # Define the version or branch of Terragrunt (optional)
-TERRAGRUNT_VERSION="v0.68.4"  # Change to the desired version or branch
+TERRAGRUNT_VERSION="v0.67.12"  # Change to the desired version or branch
 
 # Directory where the Terragrunt repo will be cloned
 BUILD_DIR="$HOME/terragrunt_build"
