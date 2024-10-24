@@ -3,6 +3,8 @@ FROM amazonlinux:2023
 # Maintainer information
 LABEL maintainer="Ilya Rokhkin"
 
+ARG TARGETPLATFORM ## Get platform linux/amd64 linux/arm64
+
 # Update system first
 RUN dnf update -y && dnf clean all
 
@@ -77,7 +79,7 @@ RUN dnf install -y xauth
 RUN dnf install -y yum-utils
 RUN dnf install -y dos2unix
 
-##################                  Install Devops tools                          ###########################
+##################     Install Devops tools        ###########################
 RUN dnf install -y nano 
 RUN dnf install -y vim 
 RUN dnf install -y gcc 
@@ -174,14 +176,14 @@ RUN rm -rf /tmp/eksctl
 # Clean up to reduce image size
 RUN dnf clean all && rm -rf /var/cache/dnf
 
-# Create a working directory in /tmp
-WORKDIR /tmp
-# Copy the local ./src folder into /tmp inside the Docker container
-COPY ./src/build_terragrunt.sh /tmp/
-# Change directory to /tmp/src and make the build script executable
-RUN chmod +x /tmp/build_terragrunt.sh
-# Run the build script
-RUN /tmp/build_terragrunt.sh
+# Set Terragrunt version
+RUN TERRAGRUNT_VERSION=$(curl -s https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest | grep 'tag_name' | cut -d\" -f4)
+ENV TERRAGRUNT_VERSION=${TERRAGRUNT_VERSION}
+
+# Download and install Terragrunt in /usr/local/bin
+RUN ARCH=$(echo ${TARGETPLATFORM} | sed 's/\//_/g') && \
+    curl -L "https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_${TERRAGRUNT_ARCH}" -o /usr/local/bin/terragrunt && \
+    chmod +x /usr/local/bin/terragrunt
 
 USER root
 
