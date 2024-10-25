@@ -1,12 +1,9 @@
 name: Tag Docker Image as Latest
 
-env:
-  TAG_NAME: latest  # Define 'latest' as a variable
-
 on:
   push:
     tags:
-      - "${{ env.TAG_NAME }}"  # Attempt to use TAG_NAME as a variable (note: this may not work directly in 'on')
+      - latest
   workflow_dispatch:
   
 jobs:
