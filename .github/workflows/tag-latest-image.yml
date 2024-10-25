@@ -32,7 +32,7 @@ jobs:
           fi
 
           # Set image name
-          image_name="mydockerhubuser/myimage"  # Replace with your image repo
+          image_name="gfish/devenv_amazonlinux_2023"
           
           # Get tags for the current commit
           v_tags=$(git tag --points-at HEAD | grep "^v[0-9]*\.[0-9]*\.[0-9]*$")
