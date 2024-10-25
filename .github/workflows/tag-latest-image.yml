@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Get git tag name to put docker latest tag on it
-        id: git_tag
+        id: get_tag
         run: |
           set -x
           ## Geting first v* tag on the same commit where latest tag is set   
