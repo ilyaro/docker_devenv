@@ -4,7 +4,8 @@ on:
   push:
     tags:
       - 'latest'  # Triggers when 'latest' tag is pushed
-
+  workflow_dispatch:
+  
 jobs:
   tag-latest:
     runs-on: ubuntu-latest
@@ -19,6 +20,8 @@ jobs:
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
         run: |
           # Authenticate and retrieve token
+          echo "user $DOCKERHUB_USERNAME "
+          
           token=$(curl -s -X POST "https://hub.docker.com/v2/users/login/" \
             -d "{\"username\": \"$DOCKERHUB_USERNAME\", \"password\": \"$DOCKERHUB_PASSWORD\"}" \
             -H "Content-Type: application/json" | jq -r .token)
