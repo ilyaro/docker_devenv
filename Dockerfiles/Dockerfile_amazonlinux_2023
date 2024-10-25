@@ -177,7 +177,7 @@ RUN rm -rf /tmp/eksctl
 RUN dnf clean all && rm -rf /var/cache/dnf
 
 # Set Terragrunt version
-RUN TERRAGRUNT_VERSION=$(curl -s https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest | grep 'tag_name' | cut -d\" -f4)
+RUN TERRAGRUNT_VERSION=$(curl -s https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest | grep 'tag_name' | cut -d\" -f4 | tr -d '\n')
 ENV TERRAGRUNT_VERSION=${TERRAGRUNT_VERSION}
 
 # Download and install Terragrunt in /usr/local/bin
