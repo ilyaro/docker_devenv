@@ -15,7 +15,7 @@ jobs:
         id: git_tag
         run: |
           ## Geting first v* tag on the same commit where latest tag is set   
-          vtag=$(git ls-remote --tags https://github.com/$github_repository.git | awk -F'/' '/refs\/tags\/latest/{latest=$1} !/refs\/tags\/latest/{if($1==latest) {printf "%s", $NF; exit}}')
+          vtag=$(git ls-remote --tags https://github.com/${{ github.repository }}.git | awk -F'/' '/refs\/tags\/latest/{latest=$1} !/refs\/tags\/latest/{if($1==latest) {printf "%s", $NF; exit}}')
           
           if echo $vtag | grep -v '^v' > /dev/null; then 
             echo "Expected exactly one 'v*' tag, Exiting."
