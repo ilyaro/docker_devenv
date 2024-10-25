@@ -184,6 +184,7 @@ ENV TERRAGRUNT_VERSION=${TERRAGRUNT_VERSION}
 RUN ARCH=$(echo ${TARGETPLATFORM} | sed 's/\//_/g') && \
     curl -L "https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_${TERRAGRUNT_ARCH}" -o /usr/local/bin/terragrunt && \
     chmod +x /usr/local/bin/terragrunt
+RUN terragrunt --version
 
 USER root
 
