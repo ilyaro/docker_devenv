@@ -11,24 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
       - name: Get git tag name to put docker latest tag on it
         id: git_tag
         run: |
-          # Get tags for the current commit
-          v_tags=$(git tag --points-at latest | grep "^v[0-9]*\.[0-9]*\.[0-9]*$")
-
-          # Check for exactly one matching version tag
-          tag_count=$(echo "$v_tags" | wc -l)
-          if [ "$tag_count" -ne 1 ]; then
-            echo "Expected exactly one 'v*' tag, found $tag_count. Exiting."
+          ## Geting first v* tag on the same commit where latest tag is set   
+          vtag=$(git ls-remote --tags https://github.com/$github_repository.git | awk -F'/' '/refs\/tags\/latest/{latest=$1} !/refs\/tags\/latest/{if($1==latest) printf "%s", $NF}')
+          
+          if echo $vtag | grep -v '^v' > /dev/null; then 
+            echo "Expected exactly one 'v*' tag, Exiting."
             exit 1
           fi
 
-          v_tag=$(echo "$v_tags" | head -n 1)
-          
-          echo "vtag=$v_tag" >> $GITHUB_OUTPUT
+          echo "vtag=$vtag" >> $GITHUB_OUTPUT
   
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
