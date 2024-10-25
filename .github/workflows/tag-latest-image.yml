@@ -14,6 +14,7 @@ jobs:
       - name: Get git tag name to put docker latest tag on it
         id: git_tag
         run: |
+          set -x
           ## Geting first v* tag on the same commit where latest tag is set   
           vtag=$(git ls-remote --tags https://github.com/${{ github.repository }}.git | awk -F'/' '/refs\/tags\/latest/{latest=$1} !/refs\/tags\/latest/{if($1==latest) {printf "%s", $NF; exit}}')
           
@@ -21,7 +22,7 @@ jobs:
             echo "Expected exactly one 'v*' tag, Exiting."
             exit 1
           fi
-
+          echo "Found tag: ${vtag} where latest tag is"
           echo "vtag=$vtag" >> $GITHUB_OUTPUT
   
       - name: Set up Docker Buildx
