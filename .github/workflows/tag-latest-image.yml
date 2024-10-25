@@ -38,9 +38,9 @@ jobs:
           ## dockerhub repo name
           DOCKERHUB_REPO="gfish/devenv_amazonlinux_2023"
           # get output of step id: get_tag named vtag
-          TAG_NAME=${{ steps.get_tag.outputs.vtag }}
+          TAG_NAME="${{ steps.get_tag.outputs.vtag }}"
           echo "Taging dockerhub tag ${TAG_NAME} with latest tag"
           # Assuming the tag is in the format v0.0.4
           docker buildx imagetools create \
-            --tag ${DOCKERHUB_REPO}:latest \
-            ${DOCKERHUB_REPO}:${TAG_NAME}
+            --tag "${DOCKERHUB_REPO}:latest" \
+            "${DOCKERHUB_REPO}:${TAG_NAME}"
