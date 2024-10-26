@@ -66,11 +66,11 @@ To trigger the Docker image build and tagging workflows, follow these steps:
    - Example:
      ```sh
      git tag latest v.0.0.1
-     git push --tags -f
+     git push origin latest -f
      ```
 
 ## Contact
 
 If you have any questions or need further assistance, please open an issue in the repository.
 
-Thank you for contributing!
+Thank you for contributing!:w
