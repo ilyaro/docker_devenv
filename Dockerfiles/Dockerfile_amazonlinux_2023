@@ -99,6 +99,7 @@ RUN python3 -m ensurepip --upgrade --verbose && \
 
 RUN python3 -m pip install pyyaml redis
 RUN python3 -m pip install aws-sso-util awsume
+RUN python3 -m pip install git-remote-codecommit
 
 # Install AWS CLI
 RUN dnf install -y awscli
@@ -169,8 +170,9 @@ RUN curl -Lo /usr/local/bin/helmfile https://github.com/roboll/helmfile/releases
 #RUN cd .. && rm -rf redis
 
 # Install eksctl
-RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.70.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp && \
-    mv /tmp/eksctl /usr/local/bin
+RUN LATEST_VERSION=$(curl --silent "https://api.github.com/repos/weaveworks/eksctl/releases/latest" | jq -r .tag_name)
+RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/${LATEST_VERSION}/eksctl_Linux_amd64.tar.gz" -o eksctl_Linux_amd64.tar.gz | tar xz -C /tmp && \
+ mv /tmp/eksctl /usr/local/bin
 RUN rm -rf /tmp/eksctl
 
 # Clean up to reduce image size
