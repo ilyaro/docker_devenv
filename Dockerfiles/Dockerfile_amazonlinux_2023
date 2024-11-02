@@ -81,7 +81,6 @@ RUN dnf install -y dos2unix
 RUN dnf install -y jq
 RUN dnf install -y htop
 RUN dnf install -y tree
-RUN dnf install -y yq
 RUN dnf install -y hostname
 
 ##################     Install Devops tools        ###########################
@@ -120,6 +119,7 @@ RUN dnf install -y golang
 # Set Go environment variables
 ENV PATH="/usr/local/go/bin:${PATH}"
 
+RUN GO111MODULE=on go get github.com/mikefarah/yq/v3
 # Install Kubectl
 # Configure the Kubernetes repo using the BASE_VERSION
 RUN KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt) && \
