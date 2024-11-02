@@ -170,7 +170,7 @@ RUN curl -Lo /usr/local/bin/helmfile https://github.com/roboll/helmfile/releases
 #RUN cd .. && rm -rf redis
 
 # Install eksctl
-RUN EKSCTL_LATEST_VERSION=$(curl --silent "https://api.github.com/repositories/134539560/releases/latest" | jq -r .tag_name) && ARCH=$(echo ${TARGETPLATFORM} | awk -F\/ '{print $2}') && curl -Lo eksctl_Linux_${ARCH}.tar.gz https://github.com/eksctl-io/eksctl/releases/download/${EKSCTL_LATEST_VERSION}/eksctl_Linux_${ARCH}.tar.gz | tar xz -C /tmp && mv /tmp/eksctl /usr/local/bin && chmod +x /usr/local/bin/eksctl
+RUN EKSCTL_LATEST_VERSION=$(curl --silent "https://api.github.com/repositories/134539560/releases/latest" | jq -r .tag_name) && ARCH=$(echo ${TARGETPLATFORM} | awk -F\/ '{print $2}') && curl -Lo eksctl_Linux_${ARCH}.tar.gz https://github.com/eksctl-io/eksctl/releases/download/${EKSCTL_LATEST_VERSION}/eksctl_Linux_${ARCH}.tar.gz && tar -xzf eksctl_Linux_${ARCH}.tar.gz && rm eksctl_Linux_${ARCH}.tar.gz && mv eksctl /usr/local/bin && chmod +x /usr/local/bin/eksctl
 
 # Clean up to reduce image size
 RUN dnf clean all && rm -rf /var/cache/dnf
