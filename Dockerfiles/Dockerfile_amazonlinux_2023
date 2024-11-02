@@ -78,6 +78,11 @@ RUN dnf install -y which
 RUN dnf install -y xauth
 RUN dnf install -y yum-utils
 RUN dnf install -y dos2unix
+RUN dnf install -y jq
+RUN dnf install -y htop
+RUN dnf install -y tree
+RUN dnf install -y yq
+RUN dnf install -y hostname
 
 ##################     Install Devops tools        ###########################
 RUN dnf install -y nano 
