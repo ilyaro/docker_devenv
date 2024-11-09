@@ -82,6 +82,7 @@ RUN dnf install -y jq
 RUN dnf install -y htop
 RUN dnf install -y tree
 RUN dnf install -y hostname
+RUN dnf install -y bind-utils
 
 ##################     Install Devops tools        ###########################
 RUN dnf install -y nano 
