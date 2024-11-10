@@ -9,48 +9,46 @@ jobs:
   build:
     runs-on: ubuntu-latest  # Lightweight OS for Docker builds
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-       uses: actions/checkout@v3
+    - name: Get latest Amazon Linux 2023 tag update timestamp
+      id: get_timestamp
+      run: |
+        response=$(curl -s "https://hub.docker.com/v2/repositories/library/amazonlinux/tags/2023")
+        timestamp=$(echo "$response" | jq -r '.last_updated')
+        echo "Latest timestamp: $timestamp"
+        echo "timestamp=$timestamp" >> $GITHUB_ENV
 
-      - name: Get latest Amazon Linux 2023 tag update timestamp
-        id: get_timestamp
-        run: |
-          response=$(curl -s "https://hub.docker.com/v2/repositories/library/amazonlinux/tags/2023")
-          timestamp=$(echo "$response" | jq -r '.last_updated')
-          echo "Latest timestamp: $timestamp"
-          echo "timestamp=$timestamp" >> $GITHUB_ENV
+    - name: Create Git tag
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git tag "$GITHUB_ENV::timestamp"
+        git push origin "$GITHUB_ENV::timestamp" -f
 
-      - name: Create Git tag
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "$GITHUB_ENV::timestamp"
-          git push origin "$GITHUB_ENV::timestamp" -f
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
        
-      - name: Log in to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Log in to DockerHub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./Dockerfiles
-          file: ./Dockerfiles/Dockerfile_amazonlinux_2023 # Specify your custom Dockerfile name
-          push: true
-          tags: gfish/devenv_amazonlinux_2023:${{ github.ref_name }}  # Use the tag that was pushed
-          platforms: linux/amd64,linux/arm64  # Specify target platforms
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v6
+      with:
+        context: ./Dockerfiles
+        file: ./Dockerfiles/Dockerfile_amazonlinux_2023 # Specify your custom Dockerfile name
+        push: true
+        tags: gfish/devenv_amazonlinux_2023:${{ github.ref_name }}  # Use the tag that was pushed
+        platforms: linux/amd64,linux/arm64  # Specify target platforms
 
-      - name: Scan image for vulnerabilities
-        uses: aquasecurity/trivy-action@0.20.0
-        with:
-          image-ref: gfish/devenv_amazonlinux_2023:${{ github.ref_name }}
-          format: 'table'
-          severity: 'HIGH,CRITICAL'
+    - name: Scan image for vulnerabilities
+      uses: aquasecurity/trivy-action@0.20.0
+      with:
+        image-ref: gfish/devenv_amazonlinux_2023:${{ github.ref_name }}
+        format: 'table'
+        severity: 'HIGH,CRITICAL'
