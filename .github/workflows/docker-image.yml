@@ -13,21 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get latest Amazon Linux 2023 tag update timestamp
-        id: get_timestamp
-        run: |
-          response=$(curl -s "https://hub.docker.com/v2/repositories/library/amazonlinux/tags/2023")
-          timestamp=$(echo "$response" | jq -r '.last_updated')
-          echo "Latest timestamp: $timestamp"
-          echo "timestamp=$timestamp" >> $GITHUB_ENV
-
-      - name: Create Git tag
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "$GITHUB_ENV::timestamp"
-          git push origin "$GITHUB_ENV::timestamp" -f
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
        
