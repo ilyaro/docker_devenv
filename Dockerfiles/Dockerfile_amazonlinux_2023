@@ -106,6 +106,8 @@ RUN python3 -m pip install pyyaml redis
 RUN python3 -m pip install aws-sso-util awsume
 RUN python3 -m pip install git-remote-codecommit
 
+RUN curl https://pyenv.run | bash
+
 # Install AWS CLI
 RUN dnf install -y awscli
 #RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
