@@ -1,5 +1,17 @@
-## Check AmazonLinux 2023 dockerhub tag date and save it as tag in git
-- After each successfull v* tag check the al2023 tag date and push it as al2023-<epoch time> tag on same commit as v* tag
-- When running docker buildx workflow check again docker al2023 epoch date and check if the tag al2023-<epoch time> exists
-- If the tag exists build from self latest image
-- If the tag doesn't exits means there is new version of Amazon Linux 2023, build image from new tag as base and addd all tools 
+Creating the image from new base: Algorithm Overview
+Check Amazon Linux 2023 Tag Date:
+
+Fetch the latest tag date from Docker Hub for amazonlinux:2023.
+Save this date (epoch format) as a new Git tag (al2023-<epoch_date>).
+Handle Version Tags (v*):
+
+After successfully creating a v* tag for your image, attach the corresponding al2023-<epoch_date> tag to the same commit.
+Build Decision Logic:
+
+When building a new image, check the amazonlinux:2023 tag date from Docker Hub.
+Determine if the corresponding al2023-<epoch_date> tag exists in your Git repository.
+If it exists: Build from your self-managed latest image.
+If it doesn’t exist: Build a new image using the updated Amazon Linux 2023 tag as the base and add your tools.
+Push Results:
+
+Push new images and tags to your Docker registry and Git repository.
