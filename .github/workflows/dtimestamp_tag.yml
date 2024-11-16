@@ -20,7 +20,7 @@ jobs:
           timestamp=$(echo "$response" | jq -r '.last_updated')
           epoch_timestamp=$(date -d "$timestamp" +%s)
           echo "Latest epoch timestamp: $epoch_timestamp timestamp: $timestamp"
-          echo "epoch_timestamp=$epoch_timestamp" >> $GITHUB_ENV
+          echo "epoch_timestamp=al2023-$epoch_timestamp" >> $GITHUB_ENV
 
       - name: Create Git tag
         run: |
