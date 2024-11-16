@@ -37,3 +37,19 @@ jobs:
           image-ref: gfish/devenv_amazonlinux_2023:${{ github.ref_name }}
           format: 'table'
           severity: 'HIGH,CRITICAL'
+
+      - name: Get latest Amazon Linux 2023 tag update timestamp
+        id: get_timestamp
+        run: |
+          response=$(curl -s "https://hub.docker.com/v2/repositories/library/amazonlinux/tags/2023")
+          timestamp=$(echo "$response" | jq -r '.last_updated')
+          epoch_timestamp=$(date -d "$timestamp" +%s)
+          echo "Latest epoch timestamp: $epoch_timestamp timestamp: $timestamp"
+          echo "epoch_timestamp=al2023-$epoch_timestamp" >> $GITHUB_ENV
+
+      - name: Create Git tag
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "$epoch_timestamp"
+          git push origin "$epoch_timestamp" -f
