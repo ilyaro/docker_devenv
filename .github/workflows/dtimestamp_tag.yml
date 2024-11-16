@@ -26,5 +26,5 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "$GITHUB_ENV::epoch_timestamp"
-          git push origin "$GITHUB_ENV::epoch_timestamp" -f
+          git tag "$epoch_timestamp"
+          git push origin "$epoch_timestamp" -f
