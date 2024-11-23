@@ -105,8 +105,7 @@ RUN python3 -m ensurepip --upgrade --verbose && \
 RUN python3 -m pip install pyyaml redis
 RUN python3 -m pip install aws-sso-util awsume
 RUN python3 -m pip install git-remote-codecommit
-
-RUN curl https://pyenv.run | bash
+RUN python3 -m pip install pyenv
 
 # Install AWS CLI
 RUN dnf install -y awscli
