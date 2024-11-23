@@ -95,8 +95,6 @@ RUN dnf install -y python3-pip
 ##RUN dnf install -y meld 
 RUN dnf install -y nodejs
 
-# Install Homebrew
-#RUN $(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)
 
 # Upgrade pip and install Python modules
 RUN python3 -m ensurepip --upgrade --verbose && \
@@ -106,10 +104,27 @@ RUN python3 -m pip install pyyaml redis
 RUN python3 -m pip install aws-sso-util awsume
 RUN python3 -m pip install git-remote-codecommit
 
+# Install Homebrew
 RUN git clone https://github.com/Homebrew/brew /usr/local/bin/Homebrew \
 && ln -s /usr/local/bin/Homebrew/bin/brew /usr/local/bin \
 && eval brew shellenv \
 && brew --version
+
+# Set environment variables for pyenv
+ENV PYENV_ROOT="/usr/local/pyenv"
+ENV PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
+
+# Install pyenv
+RUN curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash \
+    && chmod -R 777 $PYENV_ROOT
+
+# Ensure pyenv is available system-wide
+RUN echo 'export PYENV_ROOT="/usr/local/pyenv"' >> /etc/profile.d/pyenv.sh \
+    && echo 'export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"' >> /etc/profile.d/pyenv.sh \
+    && chmod +x /etc/profile.d/pyenv.sh
+
+# Verify pyenv installation
+RUN pyenv versions
 
 # Install AWS CLI
 RUN dnf install -y awscli
