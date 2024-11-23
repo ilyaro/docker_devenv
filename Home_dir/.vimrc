@@ -6,3 +6,5 @@ set nofixendofline
 set expandtab
 " 4 chars tab
 set ts=4 sw=4
+" syntax text
+syntax on
