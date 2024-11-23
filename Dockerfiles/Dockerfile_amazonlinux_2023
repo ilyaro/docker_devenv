@@ -105,7 +105,11 @@ RUN python3 -m ensurepip --upgrade --verbose && \
 RUN python3 -m pip install pyyaml redis
 RUN python3 -m pip install aws-sso-util awsume
 RUN python3 -m pip install git-remote-codecommit
-RUN python3 -m pip install pyenv
+
+RUN git clone https://github.com/Homebrew/brew /usr/local/bin/Homebrew \
+&& ln -s /usr/local/bin/Homebrew/bin/brew /usr/local/bin \
+&& eval brew shellenv \
+&& brew --version
 
 # Install AWS CLI
 RUN dnf install -y awscli
