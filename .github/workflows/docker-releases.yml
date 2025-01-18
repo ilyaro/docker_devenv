@@ -1,0 +1,91 @@
+name: Create Docker Image Releases
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g., v1.0.0)'
+        required: true
+      docker_tags:
+        description: 'Docker image references (comma-separated, format: namespace/repository)'
+        required: true
+      dockerhub_username:
+        description: 'DockerHub username'
+        required: true
+
+jobs:
+  create-releases:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ github.event.inputs.dockerhub_username }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Fetch Docker Image Details
+        id: fetch-details
+        run: |
+          IFS=',' read -ra IMAGES <<< "${{ github.event.inputs.docker_tags }}"
+          
+          echo "RELEASE_BODY=" > release_body.txt
+          echo "# Docker Images for Release ${{ github.event.inputs.version }}" >> release_body.txt
+          echo "" >> release_body.txt
+          
+          for image in "${IMAGES[@]}"; do
+            # Remove whitespace
+            image=$(echo "$image" | xargs)
+            
+            echo "Fetching details for $image..."
+            
+            # Get image details using DockerHub API
+            TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "${{ github.event.inputs.dockerhub_username }}", "password": "${{ secrets.DOCKERHUB_TOKEN }}"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
+            
+            NAMESPACE=$(echo $image | cut -d'/' -f1)
+            REPOSITORY=$(echo $image | cut -d'/' -f2)
+            
+            # Fetch repository info
+            REPO_INFO=$(curl -s -H "Authorization: JWT ${TOKEN}" "https://hub.docker.com/v2/repositories/${NAMESPACE}/${REPOSITORY}/")
+            
+            # Fetch latest tag info
+            TAG_INFO=$(curl -s -H "Authorization: JWT ${TOKEN}" "https://hub.docker.com/v2/repositories/${NAMESPACE}/${REPOSITORY}/tags/latest/")
+            
+            # Extract useful information
+            DESCRIPTION=$(echo $REPO_INFO | jq -r '.description')
+            LAST_UPDATED=$(echo $TAG_INFO | jq -r '.last_updated')
+            SIZE=$(echo $TAG_INFO | jq -r '.full_size')
+            SIZE_MB=$(echo "scale=2; $SIZE/1024/1024" | bc)
+            DIGEST=$(echo $TAG_INFO | jq -r '.images[0].digest')
+            
+            # Append to release body
+            echo "## ${image}" >> release_body.txt
+            echo "" >> release_body.txt
+            echo "- **Description:** ${DESCRIPTION}" >> release_body.txt
+            echo "- **Size:** ${SIZE_MB} MB" >> release_body.txt
+            echo "- **Last Updated:** ${LAST_UPDATED}" >> release_body.txt
+            echo "- **Digest:** \`${DIGEST}\`" >> release_body.txt
+            echo "" >> release_body.txt
+            echo "### Image Reference" >> release_body.txt
+            echo "\`\`\`" >> release_body.txt
+            echo "${image}@${DIGEST}" >> release_body.txt
+            echo "\`\`\`" >> release_body.txt
+            echo "" >> release_body.txt
+            echo "View on [Docker Hub](https://hub.docker.com/r/${NAMESPACE}/${REPOSITORY})" >> release_body.txt
+            echo "" >> release_body.txt
+          done
+          
+          echo "release_body=$(cat release_body.txt)" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          name: Release ${{ github.event.inputs.version }}
+          body: ${{ steps.fetch-details.outputs.release_body }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
