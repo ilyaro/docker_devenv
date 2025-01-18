@@ -48,7 +48,6 @@ jobs:
               # Fetch specific tag info
               TAG_INFO=$(curl -s -H "Authorization: JWT ${TOKEN}" "https://hub.docker.com/v2/repositories/${NAMESPACE}/${REPOSITORY}/tags/${VERSION}/")
               
-              # Debug output
               echo "Debug: Full Tag Info for ${image}"
               echo "$TAG_INFO" | jq '.'
               
@@ -58,12 +57,12 @@ jobs:
               
               # Get architectures with improved detection
               ARCHITECTURES=$(echo $TAG_INFO | jq -r '.images[] | . as $img | 
-                if ($img.architecture == "arm64" or ($img.variant | startswith("arm"))) then
+                if ($img.architecture == "arm64") or ($img.os_arch == "arm64") then
                   "\n- **ARM64:** `" + $img.digest + "`"
-                elif ($img.architecture == "amd64" or $img.os_arch == "amd64") then
+                elif ($img.architecture == "amd64") or ($img.os_arch == "amd64") then
                   "\n- **AMD64:** `" + $img.digest + "`"
                 else
-                  "\n- **" + ($img.architecture + "(" + $img.os + "/" + ($img.variant // "unknown") + ")") + ":** `" + $img.digest + "`"
+                  "\n- **" + ($img.architecture // "unknown") + ":** `" + $img.digest + "`"
                 end')
               
               if [ "$SIZE" != "0" ] && [ "$SIZE" != "Unknown" ]; then
@@ -84,12 +83,12 @@ jobs:
               echo "### Image References"
               echo "\`\`\`"
               echo "$TAG_INFO" | jq -r '.images[] | . as $img | 
-                if ($img.architecture == "arm64" or ($img.variant | startswith("arm"))) then
+                if ($img.architecture == "arm64") or ($img.os_arch == "arm64") then
                   "# ARM64\n" + "'${image}'" + "@" + $img.digest + "\n"
-                elif ($img.architecture == "amd64" or $img.os_arch == "amd64") then
+                elif ($img.architecture == "amd64") or ($img.os_arch == "amd64") then
                   "# AMD64\n" + "'${image}'" + "@" + $img.digest + "\n"
                 else
-                  "# " + $img.architecture + "(" + $img.os + "/" + ($img.variant // "unknown") + ")\n" + "'${image}'" + "@" + $img.digest + "\n"
+                  "# " + ($img.architecture // "unknown") + "\n" + "'${image}'" + "@" + $img.digest + "\n"
                 end'
               echo "\`\`\`"
               echo ""
