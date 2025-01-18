@@ -48,12 +48,23 @@ jobs:
               # Fetch specific tag info
               TAG_INFO=$(curl -s -H "Authorization: JWT ${TOKEN}" "https://hub.docker.com/v2/repositories/${NAMESPACE}/${REPOSITORY}/tags/${VERSION}/")
               
+              # Debug output
+              echo "Debug: Full Tag Info for ${image}"
+              echo "$TAG_INFO" | jq '.'
+              
               DESCRIPTION=$(echo $REPO_INFO | jq -r '.description // "No description available"')
               LAST_UPDATED=$(echo $TAG_INFO | jq -r '.last_updated // "Unknown"')
               SIZE=$(echo $TAG_INFO | jq -r '.full_size // "0"')
               
-              # Get all architectures
-              ARCHITECTURES=$(echo $TAG_INFO | jq -r '.images[] | select(.architecture != null) | "\n- **" + .architecture + ":** `" + .digest + "`"')
+              # Get architectures with improved detection
+              ARCHITECTURES=$(echo $TAG_INFO | jq -r '.images[] | . as $img | 
+                if ($img.architecture == "arm64" or ($img.variant | startswith("arm"))) then
+                  "\n- **ARM64:** `" + $img.digest + "`"
+                elif ($img.architecture == "amd64" or $img.os_arch == "amd64") then
+                  "\n- **AMD64:** `" + $img.digest + "`"
+                else
+                  "\n- **" + ($img.architecture + "(" + $img.os + "/" + ($img.variant // "unknown") + ")") + ":** `" + $img.digest + "`"
+                end')
               
               if [ "$SIZE" != "0" ] && [ "$SIZE" != "Unknown" ]; then
                 SIZE_MB=$(echo "scale=2; $SIZE/1024/1024" | bc)
@@ -72,7 +83,14 @@ jobs:
               echo ""
               echo "### Image References"
               echo "\`\`\`"
-              echo $TAG_INFO | jq -r '.images[] | select(.architecture != null) | "# " + .architecture + "\n" + "'${image}'" + "@" + .digest + "\n"'
+              echo "$TAG_INFO" | jq -r '.images[] | . as $img | 
+                if ($img.architecture == "arm64" or ($img.variant | startswith("arm"))) then
+                  "# ARM64\n" + "'${image}'" + "@" + $img.digest + "\n"
+                elif ($img.architecture == "amd64" or $img.os_arch == "amd64") then
+                  "# AMD64\n" + "'${image}'" + "@" + $img.digest + "\n"
+                else
+                  "# " + $img.architecture + "(" + $img.os + "/" + ($img.variant // "unknown") + ")\n" + "'${image}'" + "@" + $img.digest + "\n"
+                end'
               echo "\`\`\`"
               echo ""
               echo "View on [Docker Hub](https://hub.docker.com/r/${NAMESPACE}/${REPOSITORY}/tags?name=${VERSION})"
