@@ -26,62 +26,76 @@ jobs:
       - name: Fetch Docker Image Details
         id: fetch-details
         run: |
-          IFS=',' read -ra IMAGES <<< "${{ github.event.inputs.docker_tags }}"
-          
-          echo "RELEASE_BODY=" > release_body.txt
-          echo "# Docker Images for Release ${{ github.event.inputs.version }}" >> release_body.txt
-          echo "" >> release_body.txt
-          
-          for image in "${IMAGES[@]}"; do
-            # Remove whitespace
-            image=$(echo "$image" | xargs)
+          # Create release body
+          {
+            echo 'RELEASE_BODY<<EOF'
+            echo "# Docker Images for Release ${{ github.event.inputs.version }}"
+            echo ""
             
-            echo "Fetching details for $image..."
-            
-            # Get image details using DockerHub API
-            TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "${{ secrets.DOCKERHUB_USERNAME }}", "password": "${{ secrets.DOCKERHUB_PASSWORD }}"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
-            
-            NAMESPACE=$(echo $image | cut -d'/' -f1)
-            REPOSITORY=$(echo $image | cut -d'/' -f2)
-            
-            # Fetch repository info
-            REPO_INFO=$(curl -s -H "Authorization: JWT ${TOKEN}" "https://hub.docker.com/v2/repositories/${NAMESPACE}/${REPOSITORY}/")
-            
-            # Fetch latest tag info
-            TAG_INFO=$(curl -s -H "Authorization: JWT ${TOKEN}" "https://hub.docker.com/v2/repositories/${NAMESPACE}/${REPOSITORY}/tags/latest/")
-            
-            # Extract useful information
-            DESCRIPTION=$(echo $REPO_INFO | jq -r '.description')
-            LAST_UPDATED=$(echo $TAG_INFO | jq -r '.last_updated')
-            SIZE=$(echo $TAG_INFO | jq -r '.full_size')
-            SIZE_MB=$(echo "scale=2; $SIZE/1024/1024" | bc)
-            DIGEST=$(echo $TAG_INFO | jq -r '.images[0].digest')
-            
-            # Append to release body
-            echo "## ${image}" >> release_body.txt
-            echo "" >> release_body.txt
-            echo "- **Description:** ${DESCRIPTION}" >> release_body.txt
-            echo "- **Size:** ${SIZE_MB} MB" >> release_body.txt
-            echo "- **Last Updated:** ${LAST_UPDATED}" >> release_body.txt
-            echo "- **Digest:** \`${DIGEST}\`" >> release_body.txt
-            echo "" >> release_body.txt
-            echo "### Image Reference" >> release_body.txt
-            echo "\`\`\`" >> release_body.txt
-            echo "${image}@${DIGEST}" >> release_body.txt
-            echo "\`\`\`" >> release_body.txt
-            echo "" >> release_body.txt
-            echo "View on [Docker Hub](https://hub.docker.com/r/${NAMESPACE}/${REPOSITORY})" >> release_body.txt
-            echo "" >> release_body.txt
-          done
-          
-          echo "release_body=$(cat release_body.txt)" >> $GITHUB_OUTPUT
+            IFS=',' read -ra IMAGES <<< "${{ github.event.inputs.docker_tags }}"
+            for image in "${IMAGES[@]}"; do
+              # Remove whitespace
+              image=$(echo "$image" | xargs)
+              
+              echo "Fetching details for $image..."
+              
+              # Get image details using DockerHub API
+              TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d "{\"username\": \"${{ secrets.DOCKERHUB_USERNAME }}\", \"password\": \"${{ secrets.DOCKERHUB_PASSWORD }}\"}" https://hub.docker.com/v2/users/login/ | jq -r .token)
+              
+              NAMESPACE=$(echo $image | cut -d'/' -f1)
+              REPOSITORY=$(echo $image | cut -d'/' -f2)
+              
+              # Fetch repository info with error handling
+              REPO_INFO=$(curl -s -H "Authorization: JWT ${TOKEN}" "https://hub.docker.com/v2/repositories/${NAMESPACE}/${REPOSITORY}/")
+              if [ $? -ne 0 ]; then
+                echo "Error fetching repository info for ${image}"
+                continue
+              fi
+              
+              # Fetch tag info with error handling
+              TAG_INFO=$(curl -s -H "Authorization: JWT ${TOKEN}" "https://hub.docker.com/v2/repositories/${NAMESPACE}/${REPOSITORY}/tags/latest/")
+              if [ $? -ne 0 ]; then
+                echo "Error fetching tag info for ${image}"
+                continue
+              fi
+              
+              # Extract information with null checks
+              DESCRIPTION=$(echo $REPO_INFO | jq -r '.description // "No description available"')
+              LAST_UPDATED=$(echo $TAG_INFO | jq -r '.last_updated // "Unknown"')
+              SIZE=$(echo $TAG_INFO | jq -r '.full_size // "0"')
+              DIGEST=$(echo $TAG_INFO | jq -r '.images[0].digest // "Unknown"')
+              
+              # Calculate size in MB
+              if [ "$SIZE" != "0" ] && [ "$SIZE" != "Unknown" ]; then
+                SIZE_MB=$(echo "scale=2; $SIZE/1024/1024" | bc)
+              else
+                SIZE_MB="Unknown"
+              fi
+              
+              echo "## ${image}"
+              echo ""
+              echo "- **Description:** ${DESCRIPTION}"
+              echo "- **Size:** ${SIZE_MB} MB"
+              echo "- **Last Updated:** ${LAST_UPDATED}"
+              echo "- **Digest:** \`${DIGEST}\`"
+              echo ""
+              echo "### Image Reference"
+              echo "\`\`\`"
+              echo "${image}@${DIGEST}"
+              echo "\`\`\`"
+              echo ""
+              echo "View on [Docker Hub](https://hub.docker.com/r/${NAMESPACE}/${REPOSITORY})"
+              echo ""
+            done
+            echo 'EOF'
+          } >> $GITHUB_ENV
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.event.inputs.version }}
           name: Release ${{ github.event.inputs.version }}
-          body: ${{ steps.fetch-details.outputs.release_body }}
+          body: ${{ env.RELEASE_BODY }}
           draft: false
           prerelease: false
         env:
