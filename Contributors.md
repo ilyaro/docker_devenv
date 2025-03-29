@@ -73,4 +73,4 @@ To trigger the Docker image build and tagging workflows, follow these steps:
 
 If you have any questions or need further assistance, please open an issue in the repository.
 
-Thank you for contributing!:w
+Thank you for contributing!
