@@ -1,6 +1,6 @@
 # Docker devenv image for DevOps
 
-## The toolbox with all latest and validated versions of all the tools you need for work
+## The toolbox with all latest and validated versions of all the tools you need for work, build for ARM and AMD.
 
 ### Example for MAC: 
 Pull the image, map all volumes, and user you need.
