@@ -83,6 +83,7 @@ RUN dnf install -y htop
 RUN dnf install -y tree
 RUN dnf install -y hostname
 RUN dnf install -y bind-utils
+RUN dnf install -y ca-certificates
 
 ##################     Install Devops tools        ###########################
 RUN dnf install -y nano 
