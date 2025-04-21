@@ -1,18 +1,24 @@
 [alias]
-	st = status
-  s  = status
-  ts = status
-  l  = log
-  p  = push
+    st = status
+    s  = status
+    ts = status
+    l  = log
+    p  = push
+    d  = diff
+    pl = pull
+    c  = commit
+    a  = add -u
 [user]
-	name = ilyaro
-	email = ilyaro@checkpoint.com
+        name = ilyaro
+        email = ilyaro@domain.com
 [pull]
-	rebase = true
+        rebase = true
 [push]
-	default = simple
+        default = simple
+        autoSetupRemote = true
 [core]
-	autocrlf=input
+        autocrlf=input
+        editor=vim
 ## store password in cache (Timeout in seconds) for 60*60*24*30=2592000 - 30 days
 [credential]
-	helper = cache --timeout=2592000
+        helper = cache --timeout=2592000
