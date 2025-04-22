@@ -17,3 +17,7 @@ alias de='export IMNAME=devenv_amazonlinux_2023 && docker exec -it ${IMNAME} bas
 [user@7913223cfc84 docker_devenv]$ k help
 kubectl controls the Kubernetes cluster manager.
 ```
+
+### Schema of working with docker DevEnv
+
+![Schema of Docker DevEnv](./schema_devenv.png)
