@@ -1,111 +1,142 @@
-<mxfile host="app.diagrams.net" modified="2025-04-22T13:40:00.000Z" agent="GitHub Copilot" etag="def456" version="21.5.0" type="device">
-  <diagram id="DevOpsContainer" name="DevOps Container Environment">
-    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.8 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.8">
+  <diagram name="DevOps Container Environment" id="mRFWqYN62mNXsYdciQFr">
+    <mxGraphModel dx="1537" dy="1845" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        
-        <!-- Host Machine -->
-        <mxCell id="2" value="Host Machine (macOS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;verticalAlign=top;fontSize=14;fontStyle=1" vertex="1" parent="1">
-          <mxGeometry x="40" y="40" width="800" height="600" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-1" value="Host Machine (macOS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;verticalAlign=top;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="650" height="500" as="geometry" />
         </mxCell>
-        
-        <!-- Docker -->
-        <mxCell id="3" value="Docker" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=top;fontSize=14;fontStyle=1" vertex="1" parent="1">
-          <mxGeometry x="400" y="100" width="420" height="520" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-2" value="Docker" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=top;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="150" y="160" width="550" height="400" as="geometry" />
         </mxCell>
-        
-        <!-- Container -->
-        <mxCell id="4" value="devenv_amazonlinux_2023 Container" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;fontSize=14;fontStyle=1" vertex="1" parent="1">
-          <mxGeometry x="420" y="140" width="380" height="460" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-3" value="devenv_amazonlinux_2023 Container" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="200" y="220" width="450" height="300" as="geometry" />
         </mxCell>
-        
-        <!-- Amazon Linux -->
-        <mxCell id="5" value="Amazon Linux 2023" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="440" y="180" width="340" height="30" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-4" value="Amazon Linux 2023" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="260" width="400" height="30" as="geometry" />
         </mxCell>
-        
-        <!-- Tools Container -->
-        <mxCell id="6" value="DevOps Tools" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
-          <mxGeometry x="440" y="220" width="140" height="150" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-5" value="DevOps Tools" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="225" y="310" width="140" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="7" value="kubectl" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="6">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-6" value="kubectl" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-5">
           <mxGeometry y="30" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="8" value="git" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="6">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-7" value="other DevOps tools..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-5">
           <mxGeometry y="60" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="toolsMore1" value="terraform" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="6">
-          <mxGeometry y="90" width="140" height="30" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-8" value="Volume Mappings" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="400" y="310" width="225" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="toolsMore2" value="other DevOps tools..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="6">
-          <mxGeometry y="120" width="140" height="30" as="geometry" />
-        </mxCell>
-        
-        <!-- Host Volume Directories -->
-        <mxCell id="hostVolumes" value="Host Volumes" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
-          <mxGeometry x="80" y="220" width="225" height="120" as="geometry" />
-        </mxCell>
-        <mxCell id="hostVol1" value="/Volumes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="hostVolumes">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-9" value="/Volumes → /Volumes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-8">
           <mxGeometry y="30" width="225" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="hostVol2" value="/Users/ilyaro_chkpcpIt" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="hostVolumes">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-10" value="${HOME} → ${HOME}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-8">
           <mxGeometry y="60" width="225" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="hostVol3" value="/etc/resolv.conf" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="hostVolumes">
-          <mxGeometry y="90" width="225" height="30" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-12" value="User Configuration" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="225" y="420" width="140" height="60" as="geometry" />
         </mxCell>
-        
-        <!-- Container Volume Mappings -->
-        <mxCell id="9" value="Container Volume Mappings" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
-          <mxGeometry x="600" y="220" width="180" height="120" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-14" value="Workflow" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="100" y="600" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="10" value="/Volumes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="9">
-          <mxGeometry y="30" width="180" height="30" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-15" value="drun alias" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="170" y="600" width="90" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="11" value="/Users/ilyaro_chkpcpIt" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="9">
-          <mxGeometry y="60" width="180" height="30" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-16" value="Creates container with mapped volumes &amp; user" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="600" width="180" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="12" value="/etc/resolv.conf" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="9">
-          <mxGeometry y="90" width="180" height="30" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-17" value="de alias" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="600" width="90" height="30" as="geometry" />
         </mxCell>
-        
-        <!-- Volume Mapping Arrows -->
-        <mxCell id="volArrow1" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#9673a6;strokeWidth=2;" edge="1" parent="1" source="hostVol1" target="10">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-18" value="Work with tools" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="600" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-19" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-15" target="OBFRpq9fA7amm1uZNBog-16">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="400" y="420" as="sourcePoint" />
             <mxPoint x="450" y="370" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="volArrow2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#9673a6;strokeWidth=2;" edge="1" parent="1" source="hostVol2" target="11">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-20" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-16" target="OBFRpq9fA7amm1uZNBog-17">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="315" y="265" as="sourcePoint" />
-            <mxPoint x="600" y="265" as="targetPoint" />
+            <mxPoint x="270" y="615" as="sourcePoint" />
+            <mxPoint x="310" y="615" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="volArrow3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#9673a6;strokeWidth=2;" edge="1" parent="1" source="hostVol3" target="12">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-21" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-17" target="OBFRpq9fA7amm1uZNBog-18">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="315" y="295" as="sourcePoint" />
-            <mxPoint x="600" y="295" as="targetPoint" />
+            <mxPoint x="490" y="615" as="sourcePoint" />
+            <mxPoint x="530" y="615" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        
-        <!-- User Setup -->
-        <mxCell id="hostUser" value="Host User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-22" value="Platform Support: ARM &amp; AMD64" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="225" y="490" width="400" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-23" value="Host Machine (macOS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;verticalAlign=top;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="800" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-24" value="Docker" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=top;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="100" width="420" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-25" value="devenv_amazonlinux_2023 Container" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="420" y="140" width="380" height="460" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-26" value="Amazon Linux 2023" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="440" y="170" width="340" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-27" value="DevOps Tools" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="660" y="350" width="140" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-28" value="kubectl" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-27">
+          <mxGeometry y="30" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-29" value="git" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-27">
+          <mxGeometry y="60" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-30" value="terraform" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-27">
+          <mxGeometry y="90" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-31" value="other DevOps tools..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-27">
+          <mxGeometry y="120" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-32" value="Host Volumes" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="50" y="240" width="225" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-33" value="/Volumes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-32">
+          <mxGeometry y="30" width="225" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-34" value="/Users/ilyaro" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-32">
+          <mxGeometry y="60" width="225" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-36" value="Container Volume Mappings" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="600" y="240" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-37" value="/Volumes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-36">
+          <mxGeometry y="30" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-38" value="/Users/ilyaro" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-36">
+          <mxGeometry y="60" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-40" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#9673a6;strokeWidth=2;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-34" target="OBFRpq9fA7amm1uZNBog-38">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="420" as="sourcePoint" />
+            <mxPoint x="450" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-43" value="Host User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
           <mxGeometry x="80" y="380" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="hostUserID" value="User: ilyaro_chkpcpIt&#xa;UID: $(id -u)&#xa;GID: $(id -g)" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f8cecc;strokeColor=#b85450;align=left;size=15;" vertex="1" parent="1">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-44" value="User: ilyaro&lt;br&gt;UID: $(id -u)&lt;br&gt;GID: $(id -g)" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f8cecc;strokeColor=#b85450;align=left;size=15;" vertex="1" parent="1">
           <mxGeometry x="120" y="380" width="160" height="60" as="geometry" />
         </mxCell>
-        
-        <mxCell id="containerUser" value="Container User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-45" value="Container User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
           <mxGeometry x="440" y="380" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="containerUserID" value="User: ilyaro_chkpcpIt&#xa;UID: Same as host&#xa;GID: Same as host&#xa;+ sudo permissions" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f8cecc;strokeColor=#b85450;align=left;size=15;" vertex="1" parent="1">
-          <mxGeometry x="480" y="380" width="160" height="70" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-46" value="User: ilyaro&lt;br&gt;UID: Same as host&lt;br&gt;GID: Same as host&lt;br&gt;+ sudo permissions" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f8cecc;strokeColor=#b85450;align=left;size=15;" vertex="1" parent="1">
+          <mxGeometry x="485" y="370" width="160" height="70" as="geometry" />
         </mxCell>
-        
-        <mxCell id="userArrow" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#b85450;strokeWidth=2;dashed=1;" edge="1" parent="1">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-47" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#b85450;strokeWidth=2;dashed=1;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="280" y="410" as="sourcePoint" />
             <mxPoint x="440" y="410" as="targetPoint" />
@@ -114,171 +145,149 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="userArrowLabel" value="Same identity" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="userArrow">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-48" value="Same identity" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="OBFRpq9fA7amm1uZNBog-47">
           <mxGeometry x="-0.0909" y="1" relative="1" as="geometry">
-            <mxPoint as="offset" />
+            <mxPoint x="-3" y="-14" as="offset" />
           </mxGeometry>
         </mxCell>
-        
-        <!-- GitHub Server -->
-        <mxCell id="githubServer" value="GitHub Server" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#f0a30a;fontColor=#000000;strokeColor=#BD7000;" vertex="1" parent="1">
-          <mxGeometry x="130" y="80" width="120" height="80" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-49" value="Git Server" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#f0a30a;fontColor=#000000;strokeColor=#BD7000;" vertex="1" parent="1">
+          <mxGeometry x="132.5" y="-170" width="120" height="80" as="geometry" />
         </mxCell>
-        
-        <!-- Git Repository -->
-        <mxCell id="gitRepoHost" value="Git Repository&#xa;(Host)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" vertex="1" parent="1">
-          <mxGeometry x="150" y="170" width="80" height="80" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-50" value="Git Repository&#xa;(Host)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" vertex="1" parent="1">
+          <mxGeometry x="152.5" y="80" width="80" height="80" as="geometry" />
         </mxCell>
-        
-        <mxCell id="gitRepoContainer" value="Git Repository&#xa;(Container)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" vertex="1" parent="1">
-          <mxGeometry x="600" y="360" width="80" height="80" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-51" value="Git Repository&#xa;(Container)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" vertex="1" parent="1">
+          <mxGeometry x="450" y="210" width="80" height="80" as="geometry" />
         </mxCell>
-        
-        <mxCell id="gitCloneArrow" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=#2D7600;strokeWidth=2;" edge="1" parent="1" source="githubServer" target="gitRepoHost">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-52" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=#2D7600;strokeWidth=2;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-49" target="OBFRpq9fA7amm1uZNBog-50">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="400" y="420" as="sourcePoint" />
             <mxPoint x="450" y="370" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="gitCloneLabel" value="clone" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="gitCloneArrow">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-53" value="clone" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="OBFRpq9fA7amm1uZNBog-52">
           <mxGeometry x="-0.2" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        
-        <mxCell id="gitSameRepoArrow" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0;entryDx=0;entryDy=52.5;entryPerimeter=0;strokeColor=#2D7600;strokeWidth=2;dashed=1;" edge="1" parent="1" source="gitRepoHost" target="gitRepoContainer">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-54" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0;entryDx=0;entryDy=52.5;entryPerimeter=0;strokeColor=#2D7600;strokeWidth=2;dashed=1;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-50" target="OBFRpq9fA7amm1uZNBog-51">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="400" y="420" as="sourcePoint" />
             <mxPoint x="450" y="370" as="targetPoint" />
             <Array as="points">
               <mxPoint x="360" y="210" />
-              <mxPoint x="360" y="413" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="gitSameLabel" value="Same repo via volume mapping" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="gitSameRepoArrow">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-55" value="Same repo via volume mapping" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="OBFRpq9fA7amm1uZNBog-54">
           <mxGeometry x="0.0706" y="1" relative="1" as="geometry">
-            <mxPoint as="offset" />
+            <mxPoint x="-42" y="-19" as="offset" />
           </mxGeometry>
         </mxCell>
-        
-        <!-- VS Code -->
-        <mxCell id="vsCode" value="VS Code" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" vertex="1" parent="1">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-56" value="VS Code" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" vertex="1" parent="1">
           <mxGeometry x="80" y="480" width="120" height="40" as="geometry" />
         </mxCell>
-        
-        <mxCell id="vsCodeTerminal" value="Terminal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" vertex="1" parent="1">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-57" value="Terminal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" vertex="1" parent="1">
           <mxGeometry x="80" y="530" width="120" height="30" as="geometry" />
         </mxCell>
-        
-        <mxCell id="terminalConnection" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.079;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=#314354;strokeWidth=2;" edge="1" parent="1" source="vsCodeTerminal" target="4">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-58" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.079;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=#314354;strokeWidth=2;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-57">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="400" y="420" as="sourcePoint" />
-            <mxPoint x="450" y="370" as="targetPoint" />
+            <mxPoint x="200" y="535" as="sourcePoint" />
+            <mxPoint x="450.02" y="590" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="240" y="545" />
-              <mxPoint x="240" y="630" />
-              <mxPoint x="450" y="630" />
+              <mxPoint x="140" y="620" />
+              <mxPoint x="240" y="620" />
+              <mxPoint x="450" y="620" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="terminalLabel" value="de alias: exec into container" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="terminalConnection">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-59" value="docker exec into container" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="OBFRpq9fA7amm1uZNBog-58">
           <mxGeometry x="0.1806" y="-2" relative="1" as="geometry">
-            <mxPoint as="offset" />
+            <mxPoint y="-17" as="offset" />
           </mxGeometry>
         </mxCell>
-        
-        <mxCell id="fileAccess" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;strokeColor=#006EAF;strokeWidth=2;dashed=1;" edge="1" parent="1" source="vsCode" target="4">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-63" value="Certificates / Keys / Secrets" style="shape=card;whiteSpace=wrap;html=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;size=20;" vertex="1" parent="1">
+          <mxGeometry x="280" y="480" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-65" value="Certificates / Keys / Secrets" style="shape=card;whiteSpace=wrap;html=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;size=20;" vertex="1" parent="1">
+          <mxGeometry x="515" y="480" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-66" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=32;entryPerimeter=0;strokeColor=#B20000;strokeWidth=2;dashed=1;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-63" target="OBFRpq9fA7amm1uZNBog-65">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="400" y="420" as="sourcePoint" />
             <mxPoint x="450" y="370" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="280" y="500" />
-              <mxPoint x="280" y="610" />
-              <mxPoint x="515" y="610" />
+              <mxPoint x="420" y="510" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="fileAccessLabel" value="Edit files in container" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="fileAccess">
-          <mxGeometry x="0.218" relative="1" as="geometry">
-            <mxPoint as="offset" />
-          </mxGeometry>
-        </mxCell>
-        
-        <!-- Home Directory with Secrets -->
-        <mxCell id="homeDir" value="Home Directory" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#fad7ac;strokeColor=#b46504;" vertex="1" parent="1">
-          <mxGeometry x="220" y="500" width="120" height="70" as="geometry" />
-        </mxCell>
-        
-        <mxCell id="secrets" value="Certificates / Keys / Secrets" style="shape=card;whiteSpace=wrap;html=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;size=20;" vertex="1" parent="1">
-          <mxGeometry x="230" y="540" width="100" height="60" as="geometry" />
-        </mxCell>
-        
-        <mxCell id="containerHomeDir" value="Home Directory" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=40;tabHeight=14;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#fad7ac;strokeColor=#b46504;" vertex="1" parent="1">
-          <mxGeometry x="450" y="470" width="120" height="70" as="geometry" />
-        </mxCell>
-        
-        <mxCell id="containerSecrets" value="Certificates / Keys / Secrets" style="shape=card;whiteSpace=wrap;html=1;fillColor=#e51400;fontColor=#ffffff;strokeColor=#B20000;size=20;" vertex="1" parent="1">
-          <mxGeometry x="460" y="510" width="100" height="60" as="geometry" />
-        </mxCell>
-        
-        <mxCell id="secretsArrow" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=32;entryPerimeter=0;strokeColor=#B20000;strokeWidth=2;dashed=1;" edge="1" parent="1" source="secrets" target="containerSecrets">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="400" y="420" as="sourcePoint" />
-            <mxPoint x="450" y="370" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="370" y="558" />
-              <mxPoint x="370" y="542" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="secretsLabel" value="Same secrets" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="secretsArrow">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-67" value="Same secrets" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="OBFRpq9fA7amm1uZNBog-66">
           <mxGeometry x="-0.0375" y="-2" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        
-        <!-- Architecture Support -->
-        <mxCell id="23" value="Platform Support: ARM &amp; AMD64" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#333333;" vertex="1" parent="1">
-          <mxGeometry x="600" y="470" width="180" height="20" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-68" value="Platform Support: ARM &amp; AMD64" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="520" y="580" width="180" height="20" as="geometry" />
         </mxCell>
-        
-        <!-- Container Access Label -->
-        <mxCell id="containerAccess" value="DEVENV Container Access Flow" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
-          <mxGeometry x="40" y="650" width="200" height="30" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-69" value="DEVENV Container Access Flow" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="60" y="660" width="200" height="30" as="geometry" />
         </mxCell>
-        
-        <!-- Workflow Steps -->
-        <mxCell id="16" value="drun alias" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="50" y="690" width="90" height="30" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-70" value="drun alias" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="710" width="90" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="17" value="Creates container with mapped volumes &amp; user" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="210" y="690" width="180" height="30" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-71" value="Creates container with mapped volumes &amp; user" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="710" width="180" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="18" value="de alias" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="460" y="690" width="90" height="30" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-72" value="de alias" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="710" width="90" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="19" value="Work with tools" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="620" y="690" width="140" height="30" as="geometry" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-73" value="Work with tools" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="630" y="710" width="140" height="30" as="geometry" />
         </mxCell>
-        
-        <!-- Workflow Arrows -->
-        <mxCell id="20" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="16" target="17">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-74" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-70" target="OBFRpq9fA7amm1uZNBog-71">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="400" y="420" as="sourcePoint" />
-            <mxPoint x="450" y="370" as="targetPoint" />
+            <mxPoint x="410" y="440" as="sourcePoint" />
+            <mxPoint x="460" y="390" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="21" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="17" target="18">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-75" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-71" target="OBFRpq9fA7amm1uZNBog-72">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="270" y="615" as="sourcePoint" />
-            <mxPoint x="310" y="615" as="targetPoint" />
+            <mxPoint x="280" y="635" as="sourcePoint" />
+            <mxPoint x="320" y="635" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="22" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="18" target="19">
+        <mxCell id="OBFRpq9fA7amm1uZNBog-76" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-72" target="OBFRpq9fA7amm1uZNBog-73">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="490" y="615" as="sourcePoint" />
-            <mxPoint x="530" y="615" as="targetPoint" />
+            <mxPoint x="500" y="635" as="sourcePoint" />
+            <mxPoint x="540" y="635" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-78" value="Host Volumes mounted&lt;br&gt;in container" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="340" y="390" as="geometry">
+            <mxPoint x="-2" y="-96" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-79" value="" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.github" vertex="1" parent="1">
+          <mxGeometry x="535" y="-120" width="75" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-80" value="" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Docker.svg;" vertex="1" parent="1">
+          <mxGeometry x="840" y="-103" width="50" height="41" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-81" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.007;entryY=0.407;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-79" target="OBFRpq9fA7amm1uZNBog-80">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="860" y="-82" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-82" value="&amp;nbsp;GH Actions:&lt;br&gt;The image is buill with latest tools versions&lt;br&gt;And validated on CVEs" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="620" y="-69" width="150" height="69" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-83" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.893;entryY=0.019;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-80" target="OBFRpq9fA7amm1uZNBog-24">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="885" y="110" />
+            </Array>
           </mxGeometry>
         </mxCell>
       </root>
