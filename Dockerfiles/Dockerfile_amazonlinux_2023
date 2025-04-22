@@ -52,8 +52,6 @@ RUN dnf install -y pciutils
 RUN dnf install -y perf
 RUN dnf install -y procps-ng
 RUN dnf install -y psmisc
-##RUN dnf install -y python-docker-py
-##RUN dnf install -y python-rhsm
 RUN dnf install -y python3-pip
 RUN dnf install -y rootfiles
 ##RUN dnf install -y rpm-ostree
@@ -91,8 +89,9 @@ RUN dnf install -y vim
 RUN dnf install -y gcc 
 RUN dnf install -y gcc-c++ 
 RUN dnf install -y make 
-RUN dnf install -y openssl-devel 
-RUN dnf install -y python3-pip 
+RUN dnf install -y openssl-devel
+RUN dnf install -y python3-devel
+RUN dnf install -y libffi-devel
 ##RUN dnf install -y meld 
 RUN dnf install -y nodejs
 
@@ -171,9 +170,7 @@ RUN export VERIFY_CHECKSUM=false && curl -fsSL -o get_helm.sh https://raw.github
     rm get_helm.sh
 
 # Install Azure CLI
-RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc
-RUN dnf install -y https://packages.microsoft.com/config/rhel/9.0/packages-microsoft-prod.rpm
-RUN dnf install -y azure-cli
+RUN pip3 install -y azure-cli
 
 # Install sops: Download the release; untar it; make it
 #ENV SOPS_VERSION=3.9.1
