@@ -1,0 +1,79 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.8 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.8">
+  <diagram name="DevOps Container Environment" id="mRFWqYN62mNXsYdciQFr">
+    <mxGraphModel dx="913" dy="525" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="OBFRpq9fA7amm1uZNBog-1" value="Host Machine (macOS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;verticalAlign=top;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="650" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-2" value="Docker" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=top;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="150" y="160" width="550" height="400" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-3" value="devenv_amazonlinux_2023 Container" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="200" y="220" width="450" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-4" value="Amazon Linux 2023" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="260" width="400" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-5" value="DevOps Tools" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="225" y="310" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-6" value="kubectl" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-5">
+          <mxGeometry y="30" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-7" value="other DevOps tools..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-5">
+          <mxGeometry y="60" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-8" value="Volume Mappings" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="400" y="310" width="225" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-9" value="/Volumes → /Volumes" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-8">
+          <mxGeometry y="30" width="225" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-10" value="${HOME} → ${HOME}" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="OBFRpq9fA7amm1uZNBog-8">
+          <mxGeometry y="60" width="225" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-12" value="User Configuration" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="225" y="420" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-14" value="Workflow" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="100" y="600" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-15" value="drun alias" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="170" y="600" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-16" value="Creates container with mapped volumes &amp; user" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="600" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-17" value="de alias" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="600" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-18" value="Work with tools" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="600" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-19" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-15" target="OBFRpq9fA7amm1uZNBog-16">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="420" as="sourcePoint" />
+            <mxPoint x="450" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-20" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-16" target="OBFRpq9fA7amm1uZNBog-17">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="270" y="615" as="sourcePoint" />
+            <mxPoint x="310" y="615" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-21" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OBFRpq9fA7amm1uZNBog-17" target="OBFRpq9fA7amm1uZNBog-18">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="490" y="615" as="sourcePoint" />
+            <mxPoint x="530" y="615" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OBFRpq9fA7amm1uZNBog-22" value="Platform Support: ARM &amp; AMD64" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="225" y="490" width="400" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
