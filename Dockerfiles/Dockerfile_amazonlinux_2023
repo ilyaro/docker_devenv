@@ -170,7 +170,7 @@ RUN export VERIFY_CHECKSUM=false && curl -fsSL -o get_helm.sh https://raw.github
     rm get_helm.sh
 
 # Install Azure CLI
-RUN pip3 install -y azure-cli
+python3 -m pip install azure-cli
 
 # Install sops: Download the release; untar it; make it
 #ENV SOPS_VERSION=3.9.1
