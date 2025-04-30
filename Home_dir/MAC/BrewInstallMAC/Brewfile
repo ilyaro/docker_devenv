@@ -1,0 +1,131 @@
+# Define application directory for casks
+cask_args appdir: '/Applications'
+
+# Shell and utilities
+brew "coreutils"
+brew "bash"
+brew "bash-completion"
+brew 'bashish'
+brew "brew-cask-completion"
+brew "cheat"
+brew "cmake"
+brew "make"
+brew "pidof"
+brew "proctools"
+brew 'wget'
+brew 'rsync'
+brew "tldr"
+brew 'autoenv'
+
+# Version control
+brew "git"
+brew "git-cal"
+brew "git-crypt"
+brew "git-flow"
+brew "git-lfs"
+brew "git-plus"
+brew "git-secret"
+brew "git-secrets"
+
+# Configuration management and cloud
+brew "ansible"
+brew "ansible-cmdb"
+brew "ansible-lint"
+brew "awscli"
+brew "azure-cli"
+brew "terraform"
+brew "terraform-inventory"
+brew "terraform_landscape"
+brew "terraforming"
+brew "terragrunt"
+
+# Container and orchestration
+cask "docker"
+brew "docker-gen"
+brew "docker-machine"
+brew "docker-machine-completion"
+brew "docker-slim"
+brew "dockviz"
+brew "podman"
+brew "kompose"
+
+# Kubernetes
+brew "kubectl"
+brew "kubectx"
+brew "kubecfg"
+brew "kubeless"
+brew "kubespy"
+brew "kustomize"
+cask "kubecontext"
+cask "kubernetic"
+cask 'lens'
+brew "ktmpl"
+
+# Programming languages and frameworks
+# Go
+brew "go"
+brew "dep"
+brew "goenv"
+
+# Python
+brew "python"
+brew 'jython'
+brew "pipenv"
+brew "pyenv"
+brew "pip-completion"
+
+# Ruby
+brew "ruby"
+brew "ruby-completion"
+brew "ruby-install"
+brew "ruby-build"
+brew "rbenv"
+
+# Rust
+brew 'rust'
+
+# Others
+brew "perl"
+brew "node"
+brew "node-build"
+brew "nodenv"
+brew "groovy"
+brew "gcc"
+brew "gcutil"
+brew "gdrive"
+brew "googler"
+
+# Network and Hardware utilities
+brew "telnet"
+brew 'netcat'
+brew 'nmap'
+brew "tcptraceroute"
+brew 'certbot'
+brew "dfu-util"
+brew "ioping"
+brew "jq"
+brew 'yq'
+brew 'xsv'
+brew "lsusb"
+brew "openhmd"
+brew "nuttcp"
+
+# Applications
+cask 'tad'
+cask "dotnet-sdk"
+cask "drawio"
+cask "gitnote"
+cask "github"
+cask "grammarly"
+cask "iterm2"
+sudo cask "powershell"
+cask "vagrant-manager"
+cask "vagrant"
+cask "vagrant-vmware-utility"
+cask "visual-studio-code"
+cask "pycharm-ce"
+cask 'microsoft-edge'
+cask "firefox"
+
+## Optional Maccy - Clipboard manager https://maccy.app/ 
+cask "maccy"
