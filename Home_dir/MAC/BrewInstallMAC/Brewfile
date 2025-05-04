@@ -26,6 +26,7 @@ brew "git-lfs"
 brew "git-plus"
 brew "git-secret"
 brew "git-secrets"
+brew "git-remote-codecommit"
 
 # Configuration management and cloud
 brew "ansible"
@@ -38,6 +39,7 @@ brew "terraform-inventory"
 brew "terraform_landscape"
 brew "cf-terraforming"
 brew "terragrunt"
+brew "aws-sso-util" 
 
 # Container and orchestration
 cask "docker"
@@ -70,7 +72,6 @@ brew 'jython'
 brew "pipenv"
 brew "pyenv"
 brew "pip-completion"
-brew "git-remote-codecommit"
 
 # Ruby
 brew "ruby"
