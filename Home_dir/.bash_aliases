@@ -2,6 +2,8 @@ alias drun='export IMNAME=devenv_amazonlinux_2023 && docker run -it -d --restart
 
 alias de='export IMNAME=devenv_amazonlinux_2023 && docker exec -it ${IMNAME} bash -c "export HOME=${HOME} && cd $HOME && sudo su - ${USER}"'
 
+alias awsg='aws-sso-util configure populate --sso-start-url https://start.us-gov-west-1.us-gov-home.awsapps.com/directory/d-986716f394\# --sso-region us-gov-west-1 --region us-gov-east-1 --config-default output=json --config-default cli_pager="" --trim-account-name chkp-aws-rnd- --safe-account-names --components account_name,role_name --separator "." && awsume chkp-aws-gov-mis-devops-management.Admin'
+
 alias ls='ls -Fa'
 alias ll='ls -lah'
 alias l='ls -lah'
