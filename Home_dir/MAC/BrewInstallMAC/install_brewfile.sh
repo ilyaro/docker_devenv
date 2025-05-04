@@ -136,6 +136,14 @@ if [ -f "$HOME/.zshrc" ] && command -v zsh &> /dev/null; then
     fi
 fi
 
+# Set Finder to show hidden files
+if [ -d "/Applications/Utilities" ]; then
+    echo "Setting Finder to show hidden files..."
+    defaults write com.apple.finder AppleShowAllFiles YES
+else
+    echo "Finder not found. Skipping Finder settings."
+fi
+
 echo "=========================================================="
 echo "Environment setup complete"
 echo "=========================================================="
