@@ -70,6 +70,7 @@ brew 'jython'
 brew "pipenv"
 brew "pyenv"
 brew "pip-completion"
+brew "git-remote-codecommit"
 
 # Ruby
 brew "ruby"
