@@ -73,6 +73,7 @@ brew 'jython'
 brew "pipenv"
 brew "pyenv"
 brew "pip-completion"
+brew "python-setuptools"
 
 # Ruby
 brew "ruby"
