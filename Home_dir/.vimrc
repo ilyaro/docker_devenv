@@ -1,5 +1,5 @@
 " Commit on each save :w 
-" if in git repository, if the being saved file is part of the repo, commit with comment of last changed line, if current branch is not default branch - push it  
+" Only if in git repository, if the being saved file is part of the repo, commit with comment of last changed line, if current branch is not default branch - push it  
 autocmd BufWritePost * !git rev-parse --is-inside-work-tree >/dev/null 2>&1 && 
 \ git ls-files --error-unmatch % && 
 \ git commit -m "`git diff -U0 % | tail -1`" % &&
