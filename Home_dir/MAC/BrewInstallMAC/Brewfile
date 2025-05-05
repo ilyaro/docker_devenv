@@ -61,6 +61,7 @@ cask "kubecontext"
 cask "kubernetic"
 cask 'lens'
 brew "ktmpl"
+brew "helm"
 brew "helmfile"
 
 # Programming languages and frameworks
