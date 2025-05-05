@@ -144,6 +144,9 @@ else
     echo "Finder not found. Skipping Finder settings."
 fi
 
+# Google crane to copy docker images from registry to registry
+go install github.com/google/go-containerregistry/cmd/crane@latest
+
 echo "=========================================================="
 echo "Environment setup complete"
 echo "=========================================================="
