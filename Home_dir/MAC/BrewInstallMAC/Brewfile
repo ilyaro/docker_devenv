@@ -62,7 +62,8 @@ cask "kubernetic"
 cask 'lens'
 brew "ktmpl"
 brew "helm"
-brew "helmfile"
+## installs latest version 1.0 which doesn't suport our helmfiles, see bash file to install helmfile
+##brew "helmfile"
 
 # Programming languages and frameworks
 # Go
