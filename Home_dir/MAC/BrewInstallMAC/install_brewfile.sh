@@ -147,6 +147,9 @@ fi
 # Google crane to copy docker images from registry to registry
 go install github.com/google/go-containerregistry/cmd/crane@latest
 
+## Install helm plugins
+helm plugin install https://github.com/databus23/helm-diff
+
 ## Install version 0.155 of helmfile that is we use 
 curl -L https://github.com/helmfile/helmfile/releases/download/v0.155.0/helmfile_0.155.0_darwin_arm64.tar.gz | tar xz && sudo mv helmfile /usr/local/bin/ && sudo chmod +x /usr/local/bin/helmfile
 
