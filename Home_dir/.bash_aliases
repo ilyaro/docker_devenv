@@ -20,3 +20,12 @@ alias d=docker
 alias v=vim
 alias c='code -r' 
 alias git-bd='git checkout origin/HEAD;git remote prune origin;git branch --merged | grep -v HEAD | xargs -I{} git branch -d {}'
+
+
+alias sso='aws-sso-util configure populate --sso-start-url https://domain-sso.awsapps.com/start --sso-region eu-west-1 --region eu-west-1 --config-default output=json --config-default cli_pager="" --trim-account-name chkp-aws-rnd- --safe-account-names --components account_name,role_name --separator "."'
+
+alias builder="awsume --role-arn arn:aws:iam::\$(aws sts get-caller-identity --query Account --output text ):role/builder"
+
+## eval $(aws sts assume-role --role-arn arn:aws:iam::471XXXXXXXX:role/builder --role-session-name=terraform --query 'join(``, [`export `, `AWS_ACCESS_KEY_ID=`, Credentials.AccessKeyId,`; export `, `AWS_SECRET_ACCESS_KEY=`, Credentials.SecretAccessKey, `; export `, `AWS_SESSION_TOKEN=`, Credentials.SessionToken])' --output text)
+
+alias ad='dscl "/Active Directory/AD/All Domains" read /Users/ilyaro | grep -i lockouttime'
