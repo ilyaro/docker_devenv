@@ -5,96 +5,86 @@ LABEL maintainer="Ilya Rokhkin"
 
 ARG TARGETPLATFORM ## Get platform linux/amd64 linux/arm64
 
-# Update system first
-RUN dnf update -y && dnf clean all
+# Update system and install EPEL repository
+RUN dnf update -y && \
+    dnf install -y epel-release || echo "EPEL Release failed" && \
+    dnf clean all
 
-# Try installing epel-release without the config-manager or crb
-RUN dnf install -y epel-release || echo "EPEL Release failed" && dnf clean all
-
-## Install individual packages
-## RUN dnf install -y abrt
-#RUN dnf install -y bash
-RUN dnf install -y bash-completion
-RUN dnf install -y bc
-RUN dnf install -y blktrace
-## RUN dnf install -y btrfs-progs
-RUN dnf install -y crash
-## Already instaled on AL2023 RUN dnf install -y curl
-RUN dnf install -y e2fsprogs
-RUN dnf install -y ethtool
-RUN dnf install -y file
-RUN dnf install -y findutils
-RUN dnf install -y gcc
-RUN dnf install -y gdb
-RUN dnf install -y gdb-gdbserver
-RUN dnf install -y git
-RUN dnf install -y glibc-common
-RUN dnf install -y glibc-utils
-RUN dnf install -y golang
-RUN dnf install -y hwloc
-RUN dnf install -y iotop
-RUN dnf install -y iproute
-RUN dnf install -y iputils
-##RUN dnf install -y kernel
-RUN dnf install -y less
-RUN dnf install -y ltrace
-RUN dnf install -y mailx
-RUN dnf install -y man-db
-RUN dnf install -y nc
-RUN dnf install -y net-tools
-##RUN dnf install -y netsniff-ng
-RUN dnf install -y numactl
-RUN dnf install -y numactl-devel
-RUN dnf install -y ostree
-RUN dnf install -y passwd
-RUN dnf install -y pciutils
-##RUN dnf install -y pcp
-RUN dnf install -y perf
-RUN dnf install -y procps-ng
-RUN dnf install -y psmisc
-RUN dnf install -y python3-pip
-RUN dnf install -y rootfiles
-##RUN dnf install -y rpm-ostree
-RUN dnf install -y screen
-##RUN dnf install -y sos
-RUN dnf install -y strace
-##RUN dnf install -y subscription-manager
-RUN dnf install -y sudo
-RUN dnf install -y sysstat
-RUN dnf install -y systemtap
-RUN dnf install -y systemtap-client
-RUN dnf install -y tar
-RUN dnf install -y tcpdump
-RUN dnf install -y tmux
-RUN dnf install -y traceroute
-RUN dnf install -y unzip
-##RUN dnf install -y vault
-RUN dnf install -y vim-enhanced
-RUN dnf install -y vim-minimal
-RUN dnf install -y wget
-RUN dnf install -y which
-RUN dnf install -y xauth
-RUN dnf install -y yum-utils
-RUN dnf install -y dos2unix
-RUN dnf install -y jq
-RUN dnf install -y htop
-RUN dnf install -y tree
-RUN dnf install -y hostname
-RUN dnf install -y bind-utils
-RUN dnf install -y ca-certificates
-
-##################     Install Devops tools        ###########################
-RUN dnf install -y nano 
-RUN dnf install -y vim 
-RUN dnf install -y gcc 
-RUN dnf install -y gcc-c++ 
-RUN dnf install -y make 
-RUN dnf install -y openssl-devel
-RUN dnf install -y python3-devel
-RUN dnf install -y libffi-devel
-##RUN dnf install -y meld 
-RUN dnf install -y nodejs
-
+# Install all system packages, development tools, and DevOps tools in a single layer
+RUN dnf install -y \
+        bash-completion \
+        bc \
+        blktrace \
+        crash \
+        e2fsprogs \
+        ethtool \
+        file \
+        findutils \
+        gcc \
+        gcc-c++ \
+        gdb \
+        gdb-gdbserver \
+        git \
+        glibc-common \
+        glibc-utils \
+        golang \
+        hwloc \
+        iotop \
+        iproute \
+        iputils \
+        less \
+        ltrace \
+        mailx \
+        man-db \
+        nc \
+        net-tools \
+        numactl \
+        numactl-devel \
+        ostree \
+        passwd \
+        pciutils \
+        perf \
+        procps-ng \
+        psmisc \
+        python3-pip \
+        rootfiles \
+        screen \
+        strace \
+        sudo \
+        sysstat \
+        systemtap \
+        systemtap-client \
+        tar \
+        tcpdump \
+        tmux \
+        traceroute \
+        unzip \
+        vim-enhanced \
+        vim-minimal \
+        wget \
+        which \
+        xauth \
+        yum-utils \
+        dos2unix \
+        jq \
+        htop \
+        tree \
+        hostname \
+        bind-utils \
+        ca-certificates \
+        nano \
+        vim \
+        make \
+        openssl-devel \
+        python3-devel \
+        libffi-devel \
+        nodejs \
+        awscli \
+        docker \
+        docker-selinux && \
+    # Clean up package cache to reduce image size
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 # Upgrade pip and install Python modules
 RUN python3 -m ensurepip --upgrade --verbose && \
@@ -126,24 +116,17 @@ RUN echo 'export PYENV_ROOT="/usr/local/pyenv"' >> /etc/profile.d/pyenv.sh \
 # Verify pyenv installation
 RUN pyenv versions
 
-# Install AWS CLI
-RUN dnf install -y awscli
-#RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-#unzip awscliv2.zip && ./aws/install && rm -f awscliv2.zip
+# Install Terraform with repository configuration
+RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo && \
+    dnf install -y terraform && \
+    dnf clean all
 
-# Install Terraform
-RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
-RUN dnf -y install terraform
-
-# Install Go
-RUN dnf install -y golang
 # Set Go environment variables
 ENV PATH="/usr/local/go/bin:${PATH}"
 
 RUN go install github.com/mikefarah/yq/v4@latest
 
-# Install Kubectl
-# Configure the Kubernetes repo using the BASE_VERSION
+# Install Kubectl with repository configuration
 RUN KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt) && \
     BASE_VERSION=$(echo $KUBECTL_VERSION | awk -F. '{print $1"."$2}') && \
     echo "[kubernetes]" | tee /etc/yum.repos.d/kubernetes.repo && \
@@ -156,11 +139,8 @@ RUN KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/
 RUN cat /etc/yum.repos.d/kubernetes.repo
 
 # Install kubectl using the defined version
-RUN dnf install -y kubectl 
-##RUN dnf install -y kubernetes-client
-#RUN dnf install -y kubernetes-devel
-#RUN dnf install -y kubernetes-master
-#RUN dnf install -y kubernetes-node
+RUN dnf install -y kubectl && \
+    dnf clean all
 
 # Install Helm
 # Download and install the latest Helm version
@@ -172,33 +152,12 @@ RUN export VERIFY_CHECKSUM=false && curl -fsSL -o get_helm.sh https://raw.github
 # Install Azure CLI
 RUN python3 -m pip install azure-cli
 
-# Install sops: Download the release; untar it; make it
-#ENV SOPS_VERSION=3.9.1
-#ADD https://github.com/mozilla/sops/archive/v${SOPS_VERSION}.tar.gz /go/src/app/
-#RUN tar xzf /go/src/app/v${SOPS_VERSION}.tar.gz -C /go/src/app/
-#WORKDIR /go/src/app/sops-${SOPS_VERSION}
-#RUN make install
-
-# Install dind (Docker-in-Docker)
-RUN dnf install -y docker
-RUN dnf install -y docker-selinux
-
 # Install helmfile
 RUN curl -Lo /usr/local/bin/helmfile https://github.com/roboll/helmfile/releases/download/v0.144.0/helmfile_linux_amd64 && \
     chmod +x /usr/local/bin/helmfile
 
-# Install redis-cli version 8.0 (--branch 8.0)
-#RUN git clone --branch 8.0 --depth 1 https://github.com/redis/redis.git
-#RUN cd redis
-#RUN make redis-cli BUILD_TLS=yes
-#RUN cp src/redis-cli /usr/local/bin/redis-cli
-#RUN cd .. && rm -rf redis
-
 # Install eksctl
 RUN EKSCTL_LATEST_VERSION=$(curl --silent "https://api.github.com/repositories/134539560/releases/latest" | jq -r .tag_name) && ARCH=$(echo ${TARGETPLATFORM} | awk -F\/ '{print $2}') && curl -Lo eksctl_Linux_${ARCH}.tar.gz https://github.com/eksctl-io/eksctl/releases/download/${EKSCTL_LATEST_VERSION}/eksctl_Linux_${ARCH}.tar.gz && tar -xzf eksctl_Linux_${ARCH}.tar.gz && rm eksctl_Linux_${ARCH}.tar.gz && mv eksctl /usr/local/bin && chmod +x /usr/local/bin/eksctl
-
-# Clean up to reduce image size
-RUN dnf clean all && rm -rf /var/cache/dnf
 
 RUN TERRAGRUNT_VERSION=$(curl -s https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest | grep 'tag_name' | cut -d\" -f4 | tr -d '\n') && \
     ARCH=$(echo ${TARGETPLATFORM} | sed 's/\//_/g') && \
