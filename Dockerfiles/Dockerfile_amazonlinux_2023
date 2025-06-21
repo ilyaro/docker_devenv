@@ -81,7 +81,15 @@ RUN dnf install -y \
         nodejs \
         awscli \
         docker \
-        docker-selinux && \
+        docker-selinux \ 
+        # Install certificates and update certificate store for Amazon Linux 2023
+        ca-certificates && \ 
+    update-ca-trust extract && \
+    # Create symlinks for common certificate paths if they don't exist
+    mkdir -p /etc/pki/tls/certs /etc/ssl/certs && \
+    # Link the system CA bundle to common locations
+    ln -sf /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/pki/tls/certs/ca-bundle.crt && \
+    ln -sf /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/ssl/certs/ca-certificates.crt && \    
     # Clean up package cache to reduce image size
     dnf clean all && \
     rm -rf /var/cache/dnf
