@@ -160,9 +160,13 @@ RUN export VERIFY_CHECKSUM=false && curl -fsSL -o get_helm.sh https://raw.github
 # Install Azure CLI
 RUN python3 -m pip install azure-cli
 
-# Install helmfile
-RUN curl -Lo /usr/local/bin/helmfile https://github.com/roboll/helmfile/releases/download/v0.144.0/helmfile_linux_amd64 && \
-    chmod +x /usr/local/bin/helmfile
+# Get latest version from GitHub API
+RUN VERSION=$(curl -s https://api.github.com/repos/helmfile/helmfile/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//') &&\
+    ARCH=$(echo ${TARGETPLATFORM} | sed 's/\//_/g') && \
+    curl -LO "https://github.com/helmfile/helmfile/releases/download/v${VERSION}/helmfile_${VERSION}_${ARCH}.tar.gz" &&\
+    tar -xzf "helmfile_${VERSION}_${ARCH}.tar.gz" && \
+    chmod +x helmfile && \
+    mv helmfile /usr/local/bin/
 
 # Install eksctl
 RUN EKSCTL_LATEST_VERSION=$(curl --silent "https://api.github.com/repositories/134539560/releases/latest" | jq -r .tag_name) && ARCH=$(echo ${TARGETPLATFORM} | awk -F\/ '{print $2}') && curl -Lo eksctl_Linux_${ARCH}.tar.gz https://github.com/eksctl-io/eksctl/releases/download/${EKSCTL_LATEST_VERSION}/eksctl_Linux_${ARCH}.tar.gz && tar -xzf eksctl_Linux_${ARCH}.tar.gz && rm eksctl_Linux_${ARCH}.tar.gz && mv eksctl /usr/local/bin && chmod +x /usr/local/bin/eksctl
@@ -173,6 +177,7 @@ RUN TERRAGRUNT_VERSION=$(curl -s https://api.github.com/repos/gruntwork-io/terra
     echo "Architecture: ${ARCH}" && \
     curl -L "https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_${ARCH}" -o /usr/local/bin/terragrunt && \
     chmod +x /usr/local/bin/terragrunt
+
 
 USER root
 
