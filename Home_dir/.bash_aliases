@@ -34,3 +34,5 @@ alias builder="awsume --role-arn arn:aws:iam::\$(aws sts get-caller-identity --q
 ## eval $(aws sts assume-role --role-arn arn:aws:iam::47XXXXXXX:role/builder --role-session-name=terraform --query 'join(``, [`export `, `AWS_ACCESS_KEY_ID=`, Credentials.AccessKeyId,`; export `, `AWS_SECRET_ACCESS_KEY=`, Credentials.SecretAccessKey, `; export `, `AWS_SESSION_TOKEN=`, Credentials.SessionToken])' --output text) 
 
 alias ad='dscl "/Active Directory/AD/All Domains" read /Users/$USERNAME | grep -i lockouttime'
+
+alias kb='kustomize build . --load-restrictor=LoadRestrictionsNone --enable-helm'
