@@ -204,6 +204,27 @@ RUN SOPS_VERSION=$(curl -s https://api.github.com/repos/getsops/sops/releases/la
     # Verify installation
     sops --version
 
+# Install regctl for container registry management and image manipulation
+RUN REGCTL_VERSION=$(curl -s https://api.github.com/repos/regclient/regclient/releases/latest | jq -r .tag_name | sed 's/^v//') && \
+    ARCH=$(echo ${TARGETPLATFORM} | awk -F\/ '{print $2}') && \
+    echo "Installing regctl version: ${REGCTL_VERSION} for architecture: ${ARCH}" && \
+    # Download the latest regctl binary for the target architecture
+    curl -LO "https://github.com/regclient/regclient/releases/download/v${REGCTL_VERSION}/regctl-linux-${ARCH}" && \
+    # Move to system binary directory and make executable
+    mv "regctl-linux-${ARCH}" /usr/local/bin/regctl && \
+    chmod +x /usr/local/bin/regctl && \
+    # Verify installation by checking version
+    regctl version
+
+# Install crane for copying container images between registries
+# Also install yq YAML processor tool using Go
+RUN go install github.com/google/go-containerregistry/cmd/crane@latest && \
+    go install github.com/mikefarah/yq/v4@latest && \
+    # Clean up Go build cache and module cache to reduce image size
+    go clean -cache -modcache -testcache && \
+    # Remove Go temporary files and build artifacts
+    rm -rf /tmp/go-* /root/.cache/go-build /root/go/pkg/mod/cache
+
 USER root
 
 # Default entrypoint

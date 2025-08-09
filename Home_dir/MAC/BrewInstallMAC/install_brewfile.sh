@@ -147,6 +147,10 @@ fi
 # Google crane to copy docker images from registry to registry
 go install github.com/google/go-containerregistry/cmd/crane@latest
 
+# Add this line to your Brewfile
+tap "regclient/tap"
+brew "regclient/tap/regctl"
+
 ## Install helm plugins
 helm plugin install https://github.com/databus23/helm-diff
 
