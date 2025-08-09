@@ -81,7 +81,8 @@ RUN dnf install -y \
         nodejs \
         awscli \
         docker \
-        docker-selinux \ 
+        docker-selinux \
+        zsh \
         # Install certificates and update certificate store for Amazon Linux 2023
         ca-certificates && \ 
     update-ca-trust extract && \
