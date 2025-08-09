@@ -192,6 +192,17 @@ RUN TERRAGRUNT_VERSION=$(curl -s https://api.github.com/repos/gruntwork-io/terra
     curl -L "https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_${ARCH}" -o /usr/local/bin/terragrunt && \
     chmod +x /usr/local/bin/terragrunt
 
+# Install SOPS (Secrets OPerationS) for encrypting/decrypting files
+RUN SOPS_VERSION=$(curl -s https://api.github.com/repos/getsops/sops/releases/latest | jq -r .tag_name | sed 's/^v//') && \
+    ARCH=$(echo ${TARGETPLATFORM} | awk -F\/ '{print $2}') && \
+    echo "Installing SOPS version: ${SOPS_VERSION} for architecture: ${ARCH}" && \
+    # Download the latest SOPS binary
+    curl -LO "https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux.${ARCH}" && \
+    # Move to system binary directory and make executable
+    mv "sops-v${SOPS_VERSION}.linux.${ARCH}" /usr/local/bin/sops && \
+    chmod +x /usr/local/bin/sops && \
+    # Verify installation
+    sops --version
 
 USER root
 
