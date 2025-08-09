@@ -125,10 +125,23 @@ RUN echo 'export PYENV_ROOT="/usr/local/pyenv"' >> /etc/profile.d/pyenv.sh \
 # Verify pyenv installation
 RUN pyenv versions
 
-# Install Terraform with repository configuration
-RUN yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo && \
-    dnf install -y terraform && \
-    dnf clean all
+# Install Terraform from source compilation
+RUN TERRAFORM_VERSION=$(curl -s https://api.github.com/repos/hashicorp/terraform/releases/latest | jq -r .tag_name | sed 's/^v//') && \
+    ARCH=$(echo ${TARGETPLATFORM} | awk -F\/ '{print $2}') && \
+    # Map architecture names to Terraform's naming convention
+    if [ "$ARCH" = "amd64" ]; then TERRAFORM_ARCH="amd64"; elif [ "$ARCH" = "arm64" ]; then TERRAFORM_ARCH="arm64"; else TERRAFORM_ARCH="amd64"; fi && \
+    echo "Installing Terraform version: ${TERRAFORM_VERSION} for architecture: ${TERRAFORM_ARCH}" && \
+    # Download the latest Terraform binary
+    curl -LO "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_${TERRAFORM_ARCH}.zip" && \
+    # Verify the download and extract
+    unzip "terraform_${TERRAFORM_VERSION}_linux_${TERRAFORM_ARCH}.zip" && \
+    # Move to system binary directory and make executable
+    chmod +x terraform && \
+    mv terraform /usr/local/bin/ && \
+    # Clean up downloaded files
+    rm -f "terraform_${TERRAFORM_VERSION}_linux_${TERRAFORM_ARCH}.zip" && \
+    # Verify installation
+    terraform version
 
 # Set Go environment variables
 ENV PATH="/usr/local/go/bin:${PATH}"
