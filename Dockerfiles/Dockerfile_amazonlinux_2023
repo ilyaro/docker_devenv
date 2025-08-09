@@ -217,14 +217,20 @@ RUN REGCTL_VERSION=$(curl -s https://api.github.com/repos/regclient/regclient/re
     regctl version
 
 # Install crane for copying container images between registries
-# Also install yq YAML processor tool using Go
+# Also install yq YAML processor tool using Go with dynamic major version detection
 RUN go install github.com/google/go-containerregistry/cmd/crane@latest && \
-    go install github.com/mikefarah/yq/v4@latest && \
+    # Fetch the latest yq version from GitHub API and extract major version
+    LATEST=$(curl -s https://api.github.com/repos/mikefarah/yq/releases/latest | grep -o '"tag_name": "v[^"]*"' | cut -d'"' -f4) && \
+    MAJOR=$(echo $LATEST | cut -d. -f1) && \
+    echo "Installing yq version: ${LATEST} using major version path: ${MAJOR}" && \
+    # Install yq using the dynamically determined major version instead of hardcoded v4
+    go install github.com/mikefarah/yq/${MAJOR}@${LATEST} && \
     # Clean up Go build cache and module cache to reduce image size
     go clean -cache -modcache -testcache && \
     # Remove Go temporary files and build artifacts
     rm -rf /tmp/go-* /root/.cache/go-build /root/go/pkg/mod/cache
 
+# Switch to root user
 USER root
 
 # Default entrypoint
