@@ -183,4 +183,4 @@ RUN TERRAGRUNT_VERSION=$(curl -s https://api.github.com/repos/gruntwork-io/terra
 USER root
 
 # Default entrypoint
-ENTRYPOINT [ "/bin/bash" ]
+ENTRYPOINT [ "/bin/zsh" ]
