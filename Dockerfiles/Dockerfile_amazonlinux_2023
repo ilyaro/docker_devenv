@@ -95,16 +95,18 @@ RUN dnf install -y \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
-# Upgrade pip and install Python modules
+# Upgrade pip and install all Python modules in a single command
 RUN python3 -m ensurepip --upgrade --verbose && \
-    python3 -m pip install --upgrade --ignore-installed pip --verbose
-
-# Install cryptography dependency first (required for AWS CLI)
-RUN python3 -m pip install cryptography
-
-RUN python3 -m pip install pyyaml redis
-RUN python3 -m pip install aws-sso-util awsume
-RUN python3 -m pip install git-remote-codecommit
+    python3 -m pip install --upgrade --ignore-installed pip --verbose && \
+    # Install all Python packages including AWS CLI dependencies and DevOps tools
+    python3 -m pip install \
+        cryptography \
+        pyyaml \
+        redis \
+        aws-sso-util \
+        awsume \
+        git-remote-codecommit \
+        azure-cli
 
 # Install Homebrew
 RUN git clone https://github.com/Homebrew/brew /usr/local/bin/Homebrew \
