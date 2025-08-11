@@ -20,7 +20,7 @@ extract_dockerfile_tools() {
         exit 1
     fi
     
-    # Extract DNF packages from RUN dnf install commands
+    # Extract DNF packages from RUN dnf install commands with better filtering
     echo "Extracting DNF packages..."
     grep -E "^\s*RUN\s+dnf\s+install.*-y" "$dockerfile_path" | \
         sed 's/RUN dnf install -y//' | \
@@ -32,27 +32,42 @@ extract_dockerfile_tools() {
         grep -v "dnf" | \
         grep -v "clean" | \
         grep -v "all" | \
+        grep -v "upgrade" | \
+        grep -v '${.*}' | \
+        grep -v "^-" | \
+        grep -E '^[a-zA-Z][a-zA-Z0-9_-]*$' | \
         sort -u > /tmp/dnf_packages.txt
     
-    # Extract Python packages from pip install commands
+    # Extract Python packages from pip install commands with better filtering
     echo "Extracting Python packages..."
     grep -E "pip install" "$dockerfile_path" | \
         sed 's/.*pip install[^a-zA-Z]*//' | \
         sed 's/--[a-zA-Z-]*//g' | \
+        sed 's/&&.*//' | \
         tr ' ' '\n' | \
         grep -v "^$" | \
+        grep -v '${.*}' | \
+        grep -v "^-" | \
+        grep -E '^[a-zA-Z][a-zA-Z0-9_-]*$' | \
         sort -u > /tmp/pip_packages.txt
     
-    # Extract Go-installed tools
+    # Extract Go-installed tools with better filtering
     echo "Extracting Go tools..."
     grep -E "go install" "$dockerfile_path" | \
         sed 's/.*go install //' | \
         sed 's/@latest//' | \
         sed 's/@.*//' | \
+        sed 's/&&.*//' | \
         awk -F'/' '{print $NF}' | \
+        grep -v "^$" | \
+        grep -v '${.*}' | \
+        grep -v "upgrade" | \
+        grep -v "^v[0-9]" | \
+        grep -E '^[a-zA-Z][a-zA-Z0-9_-]*$' | \
         sort -u > /tmp/go_tools.txt
     
     # Extract manually installed binaries (like terraform, kubectl, etc.)
+    # Only include known tools to avoid parsing artifacts
     echo "Extracting manually installed tools..."
     {
         echo "terraform"
