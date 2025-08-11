@@ -235,6 +235,22 @@ RUN go install github.com/google/go-containerregistry/cmd/crane@latest && \
     # Remove Go temporary files and build artifacts
     rm -rf /tmp/go-* /root/.cache/go-build /root/go/pkg/mod/cache
 
+# Install kustomize for Kubernetes configuration management
+RUN KUSTOMIZE_VERSION=$(curl -s https://api.github.com/repos/kubernetes-sigs/kustomize/releases/latest | jq -r .tag_name | sed 's/kustomize\///') && \
+    ARCH=$(echo ${TARGETPLATFORM} | awk -F\/ '{print $2}') && \
+    echo "Installing kustomize version: ${KUSTOMIZE_VERSION} for architecture: ${ARCH}" && \
+    # Download the latest kustomize binary for the target architecture
+    curl -LO "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_${ARCH}.tar.gz" && \
+    # Extract the binary
+    tar -xzf "kustomize_${KUSTOMIZE_VERSION}_linux_${ARCH}.tar.gz" && \
+    # Move to system binary directory and make executable
+    chmod +x kustomize && \
+    mv kustomize /usr/local/bin/ && \
+    # Clean up downloaded files
+    rm -f "kustomize_${KUSTOMIZE_VERSION}_linux_${ARCH}.tar.gz" && \
+    # Verify installation
+    kustomize version
+
 # Switch to root user
 USER root
 
