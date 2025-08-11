@@ -84,6 +84,7 @@ extract_dockerfile_tools() {
         echo "pyenv"
         echo "aws"
         echo "az"
+        echo "kustomize"
     } > /tmp/manual_tools.txt
 }
 
