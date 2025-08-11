@@ -10,8 +10,8 @@ FAILED_TOOLS=()
 
 # Function to extract tools from Dockerfile and generate test commands
 extract_dockerfile_tools() {
-    local dockerfile_path="Dockerfiles/Dockerfile_amazonlinux_2023"
-    
+    local dockerfile_path="../Dockerfiles/Dockerfile_amazonlinux_2023"
+
     echo "=== Extracting tools from Dockerfile ==="
     
     # Check if Dockerfile exists
