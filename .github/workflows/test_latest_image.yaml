@@ -10,6 +10,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          # Fetch all history and tags to ensure complete repository state
+          fetch-depth: 0
+          # Download all refs including tags and branches
+          ref: ${{ github.ref }}
 
       # Get the latest v* tag from the repository
       - name: Get Latest v* Tag
