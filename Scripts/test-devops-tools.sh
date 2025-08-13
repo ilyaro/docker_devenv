@@ -39,7 +39,7 @@ extract_dockerfile_tools() {
         sort -u > /tmp/dnf_packages.txt
     
     # Extract Python packages from pip install commands with better filtering
-    # Fix: Use POSIX character classes and properly escape regex patterns
+    # Filter out Python packaging/build dependencies that don't need testing
     echo "Extracting Python packages..."
     grep -E "pip install" "$dockerfile_path" | \
         sed 's/.*pip install[^a-zA-Z]*//' | \
@@ -50,6 +50,11 @@ extract_dockerfile_tools() {
         grep -v '\${.*}' | \
         grep -v "^-" | \
         grep -v "upgrade" | \
+        grep -v "wheel" | \
+        grep -v "setuptools" | \
+        grep -v "pip" | \
+        grep -v "build" | \
+        grep -v "packaging" | \
         grep -E "^[a-zA-Z][a-zA-Z0-9_-]*$" | \
         sort -u > /tmp/pip_packages.txt
     
