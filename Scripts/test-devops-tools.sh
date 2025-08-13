@@ -1,5 +1,4 @@
 #!/bin/bash
-# filepath: /Users/ilyaro/GitHub/docker_devenv/Scripts/test-devops-tools.sh
 
 echo "=== Starting DevOps Tools Test Suite ==="
 
@@ -67,8 +66,7 @@ extract_dockerfile_tools() {
         grep -E '^[a-zA-Z][a-zA-Z0-9_-]*$' | \
         sort -u > /tmp/go_tools.txt
     
-    # Extract manually installed binaries (like terraform, kubectl, etc.)
-    # Only include known tools to avoid parsing artifacts
+    # Extract manually installed binaries - predefined list of known tools
     echo "Extracting manually installed tools..."
     {
         echo "terraform"
@@ -89,7 +87,7 @@ extract_dockerfile_tools() {
     } > /tmp/manual_tools.txt
 }
 
-# Function to test a tool with error capture and no immediate exit
+# Function to test a tool with comprehensive error handling
 test_tool() {
     local tool_name="$1"
     local command="$2"
@@ -98,7 +96,7 @@ test_tool() {
     TOTAL_TESTS=$((TOTAL_TESTS + 1))
     echo "Testing [$category] $tool_name..."
     
-    # Capture both stdout and stderr from the command
+    # Capture both stdout and stderr from the command execution
     local output
     if output=$(eval "$command" 2>&1); then
         echo "✅ $tool_name: PASSED"
@@ -112,24 +110,26 @@ test_tool() {
     fi
 }
 
-# Function to generate appropriate test command for a tool
+# Function to generate appropriate test command for each tool type
 get_test_command() {
     local tool="$1"
     
     case "$tool" in
-        # System tools with --version flag
+        # System tools - use 'which' to check if binary exists in PATH
         bash-completion|bc|git|gcc|gcc-c++|gdb|golang|less|make|nc|passwd|screen|sudo|tar|tmux|unzip|vim*|wget|which|dos2unix|jq|htop|tree|hostname|nano|vim|openssl*|nodejs|docker*|zsh)
             echo "which $tool"
             ;;
-        # Tools with specific version commands
+        # AWS CLI with specific version command
         awscli|aws) echo "aws --version" ;;
+        # Python pip package manager
         python3-pip|pip*) echo "pip3 --version" ;;
+        # SSL certificates - check file existence
         ca-certificates) echo "ls /etc/pki/tls/certs/ca-bundle.crt" ;;
-        # Development tools
+        # Development libraries - use RPM package manager to verify
         python3-devel|libffi-devel|openssl-devel) echo "rpm -q $tool" ;;
-        # Network tools
+        # DNS utilities
         bind-utils) echo "nslookup --version || which nslookup" ;;
-        # Manually installed tools
+        # Infrastructure tools with version commands
         terraform) echo "terraform version" ;;
         kubectl) echo "kubectl version --client" ;;
         helm) echo "helm version" ;;
@@ -143,22 +143,22 @@ get_test_command() {
         brew) echo "brew --version" ;;
         pyenv) echo "pyenv --version" ;;
         az) echo "az --version" ;;
-        # Python packages
+        # Python packages - import test to verify installation
         pyyaml) echo "python3 -c 'import yaml; print(yaml.__version__)'" ;;
         redis) echo "python3 -c 'import redis; print(\"Redis client available\")'" ;;
         aws-sso-util) echo "aws-sso-util --version" ;;
         awsume) echo "awsume --version" ;;
         git-remote-codecommit) echo "python3 -c 'import git_remote_codecommit; print(\"git-remote-codecommit available\")'" ;;
         azure-cli) echo "az --version" ;;
-        # Default fallback
+        # Default fallback - try both 'which' and RPM package check
         *) echo "which $tool || rpm -q $tool" ;;
     esac
 }
 
-# Extract tools from Dockerfile
+# Main execution flow starts here
 extract_dockerfile_tools
 
-# Test DNF packages
+# Test DNF packages extracted from Dockerfile
 echo ""
 echo "=== Testing DNF Packages ==="
 if [[ -f /tmp/dnf_packages.txt ]]; then
@@ -169,7 +169,7 @@ if [[ -f /tmp/dnf_packages.txt ]]; then
     done < /tmp/dnf_packages.txt
 fi
 
-# Test Python packages
+# Test Python packages installed via pip
 echo ""
 echo "=== Testing Python Packages ==="
 if [[ -f /tmp/pip_packages.txt ]]; then
@@ -180,7 +180,7 @@ if [[ -f /tmp/pip_packages.txt ]]; then
     done < /tmp/pip_packages.txt
 fi
 
-# Test Go tools
+# Test Go tools installed via 'go install'
 echo ""
 echo "=== Testing Go Tools ==="
 if [[ -f /tmp/go_tools.txt ]]; then
@@ -191,7 +191,7 @@ if [[ -f /tmp/go_tools.txt ]]; then
     done < /tmp/go_tools.txt
 fi
 
-# Test manually installed tools
+# Test manually installed binary tools
 echo ""
 echo "=== Testing Manually Installed Tools ==="
 if [[ -f /tmp/manual_tools.txt ]]; then
@@ -202,16 +202,17 @@ if [[ -f /tmp/manual_tools.txt ]]; then
     done < /tmp/manual_tools.txt
 fi
 
-# Clean up temporary files
+# Clean up temporary files created during extraction
 rm -f /tmp/dnf_packages.txt /tmp/pip_packages.txt /tmp/go_tools.txt /tmp/manual_tools.txt
 
-# Final summary report
+# Display comprehensive test results summary
 echo ""
 echo "=== Test Suite Summary ==="
 echo "Total tests run: $TOTAL_TESTS"
 echo "Passed: $((TOTAL_TESTS - FAILED_TESTS))"
 echo "Failed: $FAILED_TESTS"
 
+# Exit with appropriate status code based on test results
 if [ $FAILED_TESTS -eq 0 ]; then
     echo "✅ All tools from Dockerfile tested successfully!"
     echo "✅ Test Suite: COMPLETED"
