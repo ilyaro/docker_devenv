@@ -66,10 +66,10 @@ jobs:
           chmod +x "$TEST_SCRIPT"
           
           # Copy test script into container and run it against the specified tagged image
-          docker run --rm \
-            -v ${{ github.workspace }}:/tmp:ro \
+          docker run --rm --entrypoint /bin/bash \
+            -v ${{ github.workspace }}:/tmp \
             $image_tag \
-            /bin/bash -c "cd /tmp/Scripts && ./test-devops-tools.sh"
+            -c "cd /tmp/Scripts && ./test-devops-tools.sh"
 
       # Display test results summary
       - name: Test Results Summary
