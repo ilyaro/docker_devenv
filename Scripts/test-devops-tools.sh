@@ -160,13 +160,17 @@ get_test_command() {
         pyenv) echo "pyenv --version" ;;
         az) echo "az --version" ;;
         kustomize) echo "kustomize version" ;;
-        # Python packages - import test to verify installation
+        # Python packages - use import test to verify installation
         pyyaml) echo "python3 -c 'import yaml; print(yaml.__version__)'" ;;
         redis) echo "python3 -c 'import redis; print(\"Redis client available\")'" ;;
         aws-sso-util) echo "aws-sso-util --version" ;;
         awsume) echo "awsume --version" ;;
         git-remote-codecommit) echo "python3 -c 'import git_remote_codecommit; print(\"git-remote-codecommit available\")'" ;;
         azure-cli) echo "az --version" ;;
+        # Python dependencies/libraries - test import availability only
+        cryptography) echo "python3 -c 'import cryptography; print(\"cryptography version:\", cryptography.__version__)'" ;;
+        setuptools) echo "python3 -c 'import setuptools; print(\"setuptools version:\", setuptools.__version__)'" ;;
+        wheel) echo "python3 -c 'import wheel; print(\"wheel version:\", wheel.__version__)'" ;;
         # Default fallback - try both 'which' and RPM package check
         *) echo "which $tool || rpm -q $tool" ;;
     esac
