@@ -1,0 +1,65 @@
+name: Manual Test Latest Docker Image
+
+on:
+  workflow_dispatch:  # Allows manual triggering from GitHub UI
+
+jobs:
+  test-latest-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Get the latest v* tag from the repository
+      - name: Get Latest v* Tag
+        id: get_latest_tag
+        run: |
+          # Fetch all tags, filter for v* pattern with numeric versions (v0.1, v1.2.3, etc.)
+          # This regex matches v followed by digits and dots only
+          latest_tag=$(git tag -l "v*" | grep -E '^v[0-9]+(\.[0-9]+)*$' | sort -V | tail -n 1)
+          
+          # Check if we found a valid numeric version tag
+          if [ -z "$latest_tag" ]; then
+            echo "Error: No numeric v* tags found in repository (e.g., v0.1, v1.2.3)"
+            echo "Available v* tags:"
+            git tag -l "v*" || echo "No v* tags found"
+            exit 1
+          fi
+          
+          echo "Latest numeric v* tag found: $latest_tag"
+          echo "tag=$latest_tag" >> $GITHUB_OUTPUT
+
+      # Test all DevOps tools in the existing Docker image
+      - name: Test DevOps Tools in Latest Docker Image
+        run: |
+          # Use the latest tag to reference the Docker image
+          image_tag="gfish/devenv_amazonlinux_2023:${{ steps.get_latest_tag.outputs.tag }}"
+          echo "Testing Docker image: $image_tag"
+          
+          # Verify the test script exists before running
+          if [ ! -f "./test-devops-tools.sh" ]; then
+            echo "Error: test-devops-tools.sh not found in workspace"
+            exit 1
+          fi
+          
+          # Make sure test script is executable
+          chmod +x ./test-devops-tools.sh
+          
+          # Copy test script into container and run it against the latest tagged image
+          docker run --rm \
+            -v ${{ github.workspace }}:/tmp:ro \
+            $image_tag \
+            /bin/bash -c "cd /tmp && ./test-devops-tools.sh"
+
+      # Display test results summary
+      - name: Test Results Summary
+        if: always()  # Run even if previous steps fail
+        run: |
+          echo "=== Test Summary ==="
+          echo "Tested image: gfish/devenv_amazonlinux_2023:${{ steps.get_latest_tag.outputs.tag }}"
+          if [ $? -eq 0 ]; then
+            echo "✅ All DevOps tools tests passed successfully"
+          else
+            echo "❌ Some DevOps tools tests failed"
+          fi
