@@ -20,8 +20,9 @@ extract_dockerfile_tools() {
     fi
     
     # Extract DNF packages from RUN dnf install commands with better filtering
+    # Fix: Escape the regex pattern properly and simplify the extraction logic
     echo "Extracting DNF packages..."
-    grep -E "^\s*RUN\s+dnf\s+install.*-y" "$dockerfile_path" | \
+    grep -E "^[[:space:]]*RUN[[:space:]]+dnf[[:space:]]+install.*-y" "$dockerfile_path" | \
         sed 's/RUN dnf install -y//' | \
         sed 's/\\$//' | \
         tr ' ' '\n' | \
@@ -32,12 +33,13 @@ extract_dockerfile_tools() {
         grep -v "clean" | \
         grep -v "all" | \
         grep -v "upgrade" | \
-        grep -v '${.*}' | \
+        grep -v '\${.*}' | \
         grep -v "^-" | \
-        grep -E '^[a-zA-Z][a-zA-Z0-9_-]*$' | \
+        grep -E "^[a-zA-Z][a-zA-Z0-9_-]*$" | \
         sort -u > /tmp/dnf_packages.txt
     
     # Extract Python packages from pip install commands with better filtering
+    # Fix: Use POSIX character classes and properly escape regex patterns
     echo "Extracting Python packages..."
     grep -E "pip install" "$dockerfile_path" | \
         sed 's/.*pip install[^a-zA-Z]*//' | \
@@ -45,13 +47,14 @@ extract_dockerfile_tools() {
         sed 's/&&.*//' | \
         tr ' ' '\n' | \
         grep -v "^$" | \
-        grep -v '${.*}' | \
+        grep -v '\${.*}' | \
         grep -v "^-" | \
         grep -v "upgrade" | \
-        grep -E '^[a-zA-Z][a-zA-Z0-9_-]*$' | \
+        grep -E "^[a-zA-Z][a-zA-Z0-9_-]*$" | \
         sort -u > /tmp/pip_packages.txt
     
     # Extract Go-installed tools with better filtering
+    # Fix: Simplify regex patterns and avoid complex character classes
     echo "Extracting Go tools..."
     grep -E "go install" "$dockerfile_path" | \
         sed 's/.*go install //' | \
@@ -60,10 +63,10 @@ extract_dockerfile_tools() {
         sed 's/&&.*//' | \
         awk -F'/' '{print $NF}' | \
         grep -v "^$" | \
-        grep -v '${.*}' | \
+        grep -v '\${.*}' | \
         grep -v "upgrade" | \
         grep -v "^v[0-9]" | \
-        grep -E '^[a-zA-Z][a-zA-Z0-9_-]*$' | \
+        grep -E "^[a-zA-Z][a-zA-Z0-9_-]*$" | \
         sort -u > /tmp/go_tools.txt
     
     # Extract manually installed binaries - predefined list of known tools
@@ -116,13 +119,26 @@ get_test_command() {
     
     case "$tool" in
         # System tools - use 'which' to check if binary exists in PATH
-        bash-completion|bc|git|gcc|gcc-c++|gdb|golang|less|make|nc|passwd|screen|sudo|tar|tmux|unzip|vim*|wget|which|dos2unix|jq|htop|tree|hostname|nano|vim|openssl*|nodejs|docker*|zsh)
+        bash-completion|bc|git|gcc|gcc-c++|gdb|golang|less|make|nc|passwd|screen|sudo|tar|tmux|unzip|vim|wget|which|dos2unix|jq|htop|tree|hostname|nano|openssl|nodejs|docker|zsh)
             echo "which $tool"
+            ;;
+        # Fix: Remove wildcard patterns that can cause parsing issues
+        vim-*)
+            echo "which vim"
+            ;;
+        openssl-*)
+            echo "which openssl"
+            ;;
+        docker-*)
+            echo "which docker"
+            ;;
+        pip*)
+            echo "pip3 --version"
             ;;
         # AWS CLI with specific version command
         awscli|aws) echo "aws --version" ;;
         # Python pip package manager
-        python3-pip|pip*) echo "pip3 --version" ;;
+        python3-pip) echo "pip3 --version" ;;
         # SSL certificates - check file existence
         ca-certificates) echo "ls /etc/pki/tls/certs/ca-bundle.crt" ;;
         # Development libraries - use RPM package manager to verify
@@ -143,6 +159,7 @@ get_test_command() {
         brew) echo "brew --version" ;;
         pyenv) echo "pyenv --version" ;;
         az) echo "az --version" ;;
+        kustomize) echo "kustomize version" ;;
         # Python packages - import test to verify installation
         pyyaml) echo "python3 -c 'import yaml; print(yaml.__version__)'" ;;
         redis) echo "python3 -c 'import redis; print(\"Redis client available\")'" ;;
