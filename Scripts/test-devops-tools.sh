@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -xeuo pipefail
 echo "=== Starting DevOps Tools Test Suite ==="
 
 # Global variables for tracking test results
