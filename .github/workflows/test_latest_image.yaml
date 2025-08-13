@@ -56,7 +56,7 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}:/tmp:ro \
             $image_tag \
-            /bin/bash -c "cd /tmp && $TEST_SCRIPT"
+            /bin/bash -c "cd /tmp/Scripts && ./test-devops-tools.sh"
 
       # Display test results summary
       - name: Test Results Summary
