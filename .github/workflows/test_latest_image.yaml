@@ -2,6 +2,11 @@ name: Manual Test Latest Docker Image
 
 on:
   workflow_dispatch:  # Allows manual triggering from GitHub UI
+    inputs:
+      tag:
+        description: 'Docker image tag to test (leave empty to use latest v* tag)'
+        required: false
+        type: string
 
 jobs:
   test-latest-image:
@@ -16,30 +21,38 @@ jobs:
           # Download all refs including tags and branches
           ref: ${{ github.ref }}
 
-      # Get the latest v* tag from the repository
-      - name: Get Latest v* Tag
-        id: get_latest_tag
+      # Get the latest v* tag from the repository or use manual input
+      - name: Get Docker Tag
+        id: get_tag
         run: |
-          # Fetch all tags, filter for v* pattern with numeric versions (v0.1, v1.2.3, etc.)
-          # This regex matches v followed by digits and dots only
-          latest_tag=$(git tag -l "v*" | grep -E '^v[0-9]+(\.[0-9]+)*$' | sort -V | tail -n 1)
-          
-          # Check if we found a valid numeric version tag
-          if [ -z "$latest_tag" ]; then
-            echo "Error: No numeric v* tags found in repository (e.g., v0.1, v1.2.3)"
-            echo "Available v* tags:"
-            git tag -l "v*" || echo "No v* tags found"
-            exit 1
+          # Use manual input tag if provided, otherwise find latest v* tag
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            tag="${{ github.event.inputs.tag }}"
+            echo "Using manually provided tag: $tag"
+          else
+            # Fetch all tags, filter for v* pattern with numeric versions (v0.1, v1.2.3, etc.)
+            # This regex matches v followed by digits and dots only
+            latest_tag=$(git tag -l "v*" | grep -E '^v[0-9]+(\.[0-9]+)*$' | sort -V | tail -n 1)
+            
+            # Check if we found a valid numeric version tag
+            if [ -z "$latest_tag" ]; then
+              echo "Error: No numeric v* tags found in repository (e.g., v0.1, v1.2.3)"
+              echo "Available v* tags:"
+              git tag -l "v*" || echo "No v* tags found"
+              exit 1
+            fi
+            
+            tag="$latest_tag"
+            echo "Latest numeric v* tag found: $tag"
           fi
           
-          echo "Latest numeric v* tag found: $latest_tag"
-          echo "tag=$latest_tag" >> $GITHUB_OUTPUT
+          echo "tag=$tag" >> $GITHUB_OUTPUT
 
-      # Test all DevOps tools in the existing Docker image
-      - name: Test DevOps Tools in Latest Docker Image
+      # Test all DevOps tools in the specified Docker image
+      - name: Test DevOps Tools in Docker Image
         run: |
-          # Use the latest tag to reference the Docker image
-          image_tag="gfish/devenv_amazonlinux_2023:${{ steps.get_latest_tag.outputs.tag }}"
+          # Use the determined tag to reference the Docker image
+          image_tag="gfish/devenv_amazonlinux_2023:${{ steps.get_tag.outputs.tag }}"
           echo "Testing Docker image: $image_tag"
 
           TEST_SCRIPT="./Scripts/test-devops-tools.sh"
@@ -52,7 +65,7 @@ jobs:
           # Make sure test script is executable
           chmod +x "$TEST_SCRIPT"
           
-          # Copy test script into container and run it against the latest tagged image
+          # Copy test script into container and run it against the specified tagged image
           docker run --rm \
             -v ${{ github.workspace }}:/tmp:ro \
             $image_tag \
@@ -63,7 +76,7 @@ jobs:
         if: always()  # Run even if previous steps fail
         run: |
           echo "=== Test Summary ==="
-          echo "Tested image: gfish/devenv_amazonlinux_2023:${{ steps.get_latest_tag.outputs.tag }}"
+          echo "Tested image: gfish/devenv_amazonlinux_2023:${{ steps.get_tag.outputs.tag }}"
           if [ $? -eq 0 ]; then
             echo "✅ All DevOps tools tests passed successfully"
           else
