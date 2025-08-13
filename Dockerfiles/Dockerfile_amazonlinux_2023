@@ -151,8 +151,6 @@ RUN TERRAFORM_VERSION=$(curl -s https://api.github.com/repos/hashicorp/terraform
 # Set Go environment variables
 ENV PATH="/usr/local/go/bin:${PATH}"
 
-RUN go install github.com/mikefarah/yq/v4@latest
-
 # Install Kubectl with repository configuration
 RUN KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt) && \
     BASE_VERSION=$(echo $KUBECTL_VERSION | awk -F. '{print $1"."$2}') && \
@@ -230,6 +228,8 @@ RUN go install github.com/google/go-containerregistry/cmd/crane@latest && \
     echo "Installing yq version: ${LATEST} using major version path: ${MAJOR}" && \
     # Install yq using the dynamically determined major version instead of hardcoded v4
     go install github.com/mikefarah/yq/${MAJOR}@${LATEST} && \
+    # Copy Go-installed binaries to system PATH for global access
+    cp /root/go/bin/* /usr/local/bin/ 2>/dev/null || true && \
     # Clean up Go build cache and module cache to reduce image size
     go clean -cache -modcache -testcache && \
     # Remove Go temporary files and build artifacts
