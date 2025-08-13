@@ -34,12 +34,20 @@ jobs:
       # Test all DevOps tools in the built image before vulnerability scanning
       - name: Test DevOps Tools in Docker Image
         run: |
+          # Verify the test script exists before running
+          if [ ! -f "./test-devops-tools.sh" ]; then
+            echo "Error: test-devops-tools.sh not found in workspace"
+            exit 1
+          fi
+          
+          # Make sure test script is executable
+          chmod +x ./test-devops-tools.sh
           
           # Copy test script into container and run it
           docker run --rm \
-            -v ${{ github.workspace }}/Scripts/test-devops-tools.sh:/tmp/test-devops-tools.sh:ro \
+            -v ${{ github.workspace }}:/tmp:ro \
             gfish/devenv_amazonlinux_2023:${{ github.ref_name }} \
-            /bin/bash /tmp/test-devops-tools.sh
+            /bin/bash -c "cd /tmp && ./test-devops-tools.sh"
 
       - name: Scan image for vulnerabilities
         uses: aquasecurity/trivy-action@0.20.0
