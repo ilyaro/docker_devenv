@@ -41,21 +41,22 @@ jobs:
           # Use the latest tag to reference the Docker image
           image_tag="gfish/devenv_amazonlinux_2023:${{ steps.get_latest_tag.outputs.tag }}"
           echo "Testing Docker image: $image_tag"
-          
+
+          TEST_SCRIPT="./Scripts/test-devops-tools.sh"
           # Verify the test script exists before running
-          if [ ! -f "./test-devops-tools.sh" ]; then
-            echo "Error: test-devops-tools.sh not found in workspace"
+          if [ ! -f "$TEST_SCRIPT" ]; then
+            echo "Error: $TEST_SCRIPT not found in workspace"
             exit 1
           fi
           
           # Make sure test script is executable
-          chmod +x ./test-devops-tools.sh
+          chmod +x "$TEST_SCRIPT"
           
           # Copy test script into container and run it against the latest tagged image
           docker run --rm \
             -v ${{ github.workspace }}:/tmp:ro \
             $image_tag \
-            /bin/bash -c "cd /tmp && ./test-devops-tools.sh"
+            /bin/bash -c "cd /tmp && $TEST_SCRIPT"
 
       # Display test results summary
       - name: Test Results Summary
