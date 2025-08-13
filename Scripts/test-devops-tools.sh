@@ -48,6 +48,7 @@ extract_dockerfile_tools() {
         grep -v "^$" | \
         grep -v '${.*}' | \
         grep -v "^-" | \
+        grep -v "upgrade" | \
         grep -E '^[a-zA-Z][a-zA-Z0-9_-]*$' | \
         sort -u > /tmp/pip_packages.txt
     
