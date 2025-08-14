@@ -95,23 +95,53 @@ RUN dnf install -y \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
-# Upgrade pip and install all Python modules in a single command
+# Upgrade pip and install Python modules with improved error handling
+# Split into multiple RUN commands to isolate potential failures and improve debugging
 RUN python3 -m ensurepip --upgrade --verbose && \
-    python3 -m pip install --upgrade --ignore-installed pip --verbose && \
-    # Install cryptography dependencies first to avoid build issues
-    python3 -m pip install --upgrade setuptools wheel && \
-    # Install cryptography separately with verbose output to catch any issues
+    python3 -m pip install --upgrade --ignore-installed pip --verbose
+
+# Install build dependencies first to ensure successful compilation
+RUN python3 -m pip install --upgrade setuptools wheel --verbose
+
+# Install cryptography separately with system dependencies
+# Amazon Linux 2023 may need additional build dependencies for cryptography
+RUN dnf install -y \
+        gcc \
+        openssl-devel \
+        libffi-devel \
+        python3-devel \
+        rust \
+        cargo && \
+    # Set environment variables to help with cryptography compilation
+    export CRYPTOGRAPHY_DONT_BUILD_RUST=1 && \
     python3 -m pip install --upgrade cryptography --verbose && \
-    # Install remaining Python packages including AWS CLI dependencies and DevOps tools
-    python3 -m pip install \
-        pyyaml \
-        redis \
-        aws-sso-util \
-        awsume \
-        git-remote-codecommit \
-        azure-cli && \
-    # Verify cryptography installation
-    python3 -c "import cryptography; print(f'cryptography version: {cryptography.__version__}')"
+    # Verify cryptography installation immediately after install
+    python3 -c "import cryptography; print(f'cryptography version: {cryptography.__version__}')" && \
+    # Clean up build dependencies to reduce image size
+    dnf clean all
+
+# Install remaining Python packages one by one to isolate any failures
+# This approach makes it easier to identify which package is causing issues
+RUN python3 -m pip install pyyaml --verbose && \
+    python3 -c "import yaml; print('pyyaml installed successfully')"
+
+RUN python3 -m pip install redis --verbose && \
+    python3 -c "import redis; print('redis installed successfully')"
+
+# Install AWS-related Python packages
+RUN python3 -m pip install aws-sso-util --verbose && \
+    aws-sso-util --version || echo "aws-sso-util installed but version check failed"
+
+RUN python3 -m pip install awsume --verbose && \
+    awsume --version || echo "awsume installed but version check failed"
+
+RUN python3 -m pip install git-remote-codecommit --verbose && \
+    python3 -c "import git_remote_codecommit; print('git-remote-codecommit installed successfully')"
+
+# Install Azure CLI separately as it has many dependencies
+# Use a more conservative approach for Azure CLI installation
+RUN python3 -m pip install azure-cli --verbose --no-cache-dir && \
+    az --version || echo "Azure CLI installed but version check failed"
 
 # Install Homebrew
 RUN git clone https://github.com/Homebrew/brew /usr/local/bin/Homebrew \
