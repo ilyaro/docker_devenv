@@ -121,7 +121,6 @@ test_tool() {
 # Function to generate appropriate test command for each tool type
 get_test_command() {
     local tool="$1"
-    
     case "$tool" in
         # System tools - use 'which' to check if binary exists in PATH
         bash-completion|bc|git|gcc|gcc-c++|gdb|golang|less|make|nc|passwd|screen|sudo|tar|tmux|unzip|vim|wget|which|dos2unix|jq|htop|tree|hostname|nano|openssl|nodejs|docker|zsh)
@@ -169,7 +168,7 @@ get_test_command() {
         pyyaml) echo "python3 -c 'import yaml; print(yaml.__version__)'" ;;
         redis) echo "python3 -c 'import redis; print(\"Redis client available\")'" ;;
         aws-sso-util) echo "aws-sso-util --version" ;;
-        awsume) awsume-configure && echo "awsume --version" ;;
+        awsume) echo "source awsume --version" ;;
         git-remote-codecommit) echo "python3 -c 'import git_remote_codecommit; print(\"git-remote-codecommit available\")'" ;;
         azure-cli) echo "az --version" ;;
         # Python dependencies/libraries - test import availability only
