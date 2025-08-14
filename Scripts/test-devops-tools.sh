@@ -169,7 +169,7 @@ get_test_command() {
         pyyaml) echo "python3 -c 'import yaml; print(yaml.__version__)'" ;;
         redis) echo "python3 -c 'import redis; print(\"Redis client available\")'" ;;
         aws-sso-util) echo "aws-sso-util --version" ;;
-        awsume) echo "awsume --version" ;;
+        awsume) awsume-configure && echo "awsume --version" ;;
         git-remote-codecommit) echo "python3 -c 'import git_remote_codecommit; print(\"git-remote-codecommit available\")'" ;;
         azure-cli) echo "az --version" ;;
         # Python dependencies/libraries - test import availability only
