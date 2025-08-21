@@ -107,9 +107,11 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
+
+          ## Create Tag of latest AL_2023 tag timestamp
+          git tag -f "$epoch_timestamp"
           # Create an annotated tag with all image information
-          git tag -a "$epoch_timestamp" -m "Docker Image Information:
+          git tag -a "${{ github.ref_name }}-SBOM" -m "Docker Image Information:
           AMD64 Image: ${{ env.AMD64_IMAGE }}
           ARM64 Image: ${{ env.ARM64_IMAGE }}
           
