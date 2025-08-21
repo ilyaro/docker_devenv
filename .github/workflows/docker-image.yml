@@ -38,10 +38,23 @@ jobs:
           outputs: type=image,name=${{ env.DOCKER_IMAGE }}:${{ github.ref_name }},push-by-digest=true
           # This will output the digests before pushing the final tag
 
-      - name: Output Image Digest
+      - name: Output Image Digests
         run: |
+          # Get all metadata from build
           echo "Image digest: ${{ steps.build.outputs.digest }}"
           echo "IMAGE_DIGEST=${{ steps.build.outputs.digest }}" >> $GITHUB_ENV
+          
+          # Get platform-specific digests from build outputs
+          echo "AMD64 digest: ${{ steps.build.outputs.digest-amd64 }}"
+          echo "ARM64 digest: ${{ steps.build.outputs.digest-arm64 }}"
+          
+          # Store platform-specific SHAs in environment variables
+          echo "SHA_AMD64=${{ steps.build.outputs.digest-amd64 }}" >> $GITHUB_ENV
+          echo "SHA_ARM64=${{ steps.build.outputs.digest-arm64 }}" >> $GITHUB_ENV
+          
+          # Create full image references with digests
+          echo "AMD64_IMAGE=${{ env.DOCKER_IMAGE }}@${{ steps.build.outputs.digest-amd64 }}" >> $GITHUB_ENV
+          echo "ARM64_IMAGE=${{ env.DOCKER_IMAGE }}@${{ steps.build.outputs.digest-arm64 }}" >> $GITHUB_ENV
 
       # Test all DevOps tools in the built image before vulnerability scanning
       - name: Test DevOps Tools in Docker Image
@@ -78,9 +91,19 @@ jobs:
           echo "Latest epoch timestamp: $epoch_timestamp timestamp: $timestamp"
           echo "epoch_timestamp=al2023-$epoch_timestamp" >> $GITHUB_ENV
 
-      - name: Create Git tag
+      - name: Create Git tag with Image Information
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "$epoch_timestamp"
+          
+          # Create an annotated tag with all image information
+          git tag -a "$epoch_timestamp" -m "Docker Image Information:
+          AMD64 Image: ${{ env.AMD64_IMAGE }}
+          ARM64 Image: ${{ env.ARM64_IMAGE }}
+          
+          SHA256 Digests:
+          AMD64: ${{ env.SHA_AMD64 }}
+          ARM64: ${{ env.SHA_ARM64 }}
+          Manifest: ${{ env.IMAGE_DIGEST }}"
+          
           git push origin "$epoch_timestamp" -f
