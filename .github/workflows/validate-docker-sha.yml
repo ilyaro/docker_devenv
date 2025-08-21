@@ -38,6 +38,7 @@ jobs:
           echo "sha256=$DIGEST" >> $GITHUB_OUTPUT
 
       - name: Validate SHA256
+        id: validate_sha
         run: |
           RELEASE_SHA="${{fromJson(steps.get_release.outputs.result).sha256}}"
           DOCKER_SHA="${{steps.get_docker_sha.outputs.sha256}}"
@@ -45,6 +46,25 @@ jobs:
           echo "Docker Hub sha256: $DOCKER_SHA"
           if [ "$RELEASE_SHA" != "$DOCKER_SHA" ]; then
             echo "ERROR: SHA256 values do not match"
+            echo "valid=false" >> $GITHUB_OUTPUT
             exit 1
           fi
           echo "SHA256 values match."
+          echo "valid=true" >> $GITHUB_OUTPUT
+
+      - name: Send email to repo owner if SHA256 is not valid
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Docker SHA256 validation failed for ${{fromJson(steps.get_release.outputs.result).tag}}"
+          to: ${{ github.repository_owner }}
+          from: ${{ secrets.SMTP_FROM }}
+          body: |
+            The SHA256 value in the latest release does not match the SHA256 value in Docker Hub for tag ${{fromJson(steps.get_release.outputs.result).tag}}.
+            Release SHA256: ${{fromJson(steps.get_release.outputs.result).sha256}}
+            Docker Hub SHA256: ${{steps.get_docker_sha.outputs.sha256}}
+            Please investigate and update the release or Docker image accordingly.
