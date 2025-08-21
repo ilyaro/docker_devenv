@@ -121,3 +121,4 @@ jobs:
           Manifest: ${{ env.IMAGE_DIGEST }}"
           
           git push origin "$epoch_timestamp" -f
+          git push origin "${{ github.ref_name }}-SBOM" -f  
