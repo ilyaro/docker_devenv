@@ -25,15 +25,42 @@ jobs:
             const release = releases.data[0];
             const tag = release.tag_name;
             // Parse the release body to find both AMD64 and ARM64 SHA256 values
-            // Example format in release:
-            // Docker Images:
-            // AMD64: sha256:009496b08ae91c54bf6a2a8b9f70dd8ce20e05a782d1d606c20ba41a5204c406
-            // ARM64: sha256:fbef5807566cb8daff39753700f266beb35c1ca9013adcce70d7489d8ed54319
-            const amdMatch = release.body.match(/AMD64:\s*sha256:([a-fA-F0-9]{64})/);
-            const armMatch = release.body.match(/ARM64:\s*sha256:([a-fA-F0-9]{64})/);
+            console.log('Release body:', release.body); // Debug log
+            
+            // Try multiple patterns for SHA256 values
+            const patterns = {
+              amd64: [
+                /AMD64:\s*sha256:([a-fA-F0-9]{64})/i,
+                /amd64.*sha256:([a-fA-F0-9]{64})/i,
+                /"architecture":\s*"amd64"[^}]*"digest":\s*"sha256:([a-fA-F0-9]{64})"/i
+              ],
+              arm64: [
+                /ARM64:\s*sha256:([a-fA-F0-9]{64})/i,
+                /arm64.*sha256:([a-fA-F0-9]{64})/i,
+                /"architecture":\s*"arm64"[^}]*"digest":\s*"sha256:([a-fA-F0-9]{64})"/i
+              ]
+            };
+            
+            let amdMatch = null;
+            let armMatch = null;
+            
+            // Try each pattern for AMD64
+            for (const pattern of patterns.amd64) {
+              amdMatch = release.body.match(pattern);
+              if (amdMatch) break;
+            }
+            
+            // Try each pattern for ARM64
+            for (const pattern of patterns.arm64) {
+              armMatch = release.body.match(pattern);
+              if (armMatch) break;
+            }
             
             if (!amdMatch) throw new Error('AMD64 sha256 not found in release body');
             if (!armMatch) throw new Error('ARM64 sha256 not found in release body');
+            
+            console.log('Found AMD64 SHA:', amdMatch[1]); // Debug log
+            console.log('Found ARM64 SHA:', armMatch[1]); // Debug log
             
             return { 
               tag, 
