@@ -24,22 +24,46 @@ jobs:
             if (releases.data.length === 0) throw new Error('No releases found');
             const release = releases.data[0];
             const tag = release.tag_name;
-            // Extract AMD and ARM sha256 from release body
-            const amdMatch = release.body.match(/amd64_sha256:([a-fA-F0-9]{64})/);
-            const armMatch = release.body.match(/arm64_sha256:([a-fA-F0-9]{64})/);
-            if (!amdMatch) throw new Error('amd64_sha256 not found in release');
-            if (!armMatch) throw new Error('arm64_sha256 not found in release');
-            return { tag, amd_sha256: amdMatch[1], arm_sha256: armMatch[1] };
+            // Parse the release body to find both AMD64 and ARM64 SHA256 values
+            // Example format in release:
+            // Docker Images:
+            // AMD64: sha256:009496b08ae91c54bf6a2a8b9f70dd8ce20e05a782d1d606c20ba41a5204c406
+            // ARM64: sha256:fbef5807566cb8daff39753700f266beb35c1ca9013adcce70d7489d8ed54319
+            const amdMatch = release.body.match(/AMD64:\s*sha256:([a-fA-F0-9]{64})/);
+            const armMatch = release.body.match(/ARM64:\s*sha256:([a-fA-F0-9]{64})/);
+            
+            if (!amdMatch) throw new Error('AMD64 sha256 not found in release body');
+            if (!armMatch) throw new Error('ARM64 sha256 not found in release body');
+            
+            return { 
+              tag, 
+              amd_sha256: amdMatch[1], 
+              arm_sha256: armMatch[1] 
+            };
 
       - name: Get SHA256 for AMD64 and ARM64 from Docker Hub
         id: get_docker_sha
         run: |
           TAG="${{fromJson(steps.get_release.outputs.result).tag}}"
           REPO="$DOCKER_REPO"
-          MANIFEST=$(curl -s -H "Accept: application/vnd.docker.distribution.manifest.list.v2+json" \
-            "https://registry.hub.docker.com/v2/repositories/${REPO}/tags/${TAG}")
-          AMD_SHA=$(echo "$MANIFEST" | jq -r '.images[] | select(.architecture=="amd64") | .digest' | sed 's/sha256://')
-          ARM_SHA=$(echo "$MANIFEST" | jq -r '.images[] | select(.architecture=="arm64") | .digest' | sed 's/sha256://')
+          # Get the full tag info from Docker Hub API
+          RESPONSE=$(curl -s -H "Accept: application/json" \
+            "https://hub.docker.com/v2/repositories/${REPO}/tags/${TAG}")
+          
+          # Extract SHA256 for AMD64 and ARM64 using jq
+          AMD_SHA=$(echo "$RESPONSE" | jq -r '.images[] | select(.architecture=="amd64") | .digest | split(":")[1]')
+          ARM_SHA=$(echo "$RESPONSE" | jq -r '.images[] | select(.architecture=="arm64") | .digest | split(":")[1]')
+          
+          # Validate both SHAs were found
+          if [ -z "$AMD_SHA" ]; then
+            echo "Error: Could not find AMD64 SHA in Docker Hub response"
+            exit 1
+          fi
+          if [ -z "$ARM_SHA" ]; then
+            echo "Error: Could not find ARM64 SHA in Docker Hub response"
+            exit 1
+          fi
+          
           echo "amd_sha=$AMD_SHA" >> $GITHUB_OUTPUT
           echo "arm_sha=$ARM_SHA" >> $GITHUB_OUTPUT
 
