@@ -23,6 +23,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and push Docker image
+        id: build
         uses: docker/build-push-action@v6
         with:
           context: ./Dockerfiles
@@ -30,6 +31,15 @@ jobs:
           push: true
           tags: gfish/devenv_amazonlinux_2023:${{ github.ref_name }}  # Use the tag that was pushed
           platforms: linux/amd64,linux/arm64  # Specify target platforms
+          provenance: true  # Enable SLSA provenance
+          sbom: true       # Generate Software Bill of Materials
+          outputs: type=image,name=gfish/devenv_amazonlinux_2023:${{ github.ref_name }},push-by-digest=true
+          # This will output the digests before pushing the final tag
+
+      - name: Output Image Digest
+        run: |
+          echo "Image digest: ${{ steps.build.outputs.digest }}"
+          echo "IMAGE_DIGEST=${{ steps.build.outputs.digest }}" >> $GITHUB_ENV
 
       # Test all DevOps tools in the built image before vulnerability scanning
       - name: Test DevOps Tools in Docker Image
