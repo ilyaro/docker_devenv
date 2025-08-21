@@ -33,7 +33,7 @@ jobs:
           TAG="${{fromJson(steps.get_release.outputs.result).tag}}"
           IMAGE="ilyaro/docker_devenv:${TAG}"
           DIGEST=$(curl -s -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
-            https://registry.hub.docker.com/v2/repositories/ilyaro/docker_devenv/tags/${TAG} \
+            https://registry.hub.docker.com/v2/repositories/gfish/docker_devenv/tags/${TAG} \
             | grep -o '"digest":"sha256:[a-fA-F0-9]\{64\}"' | head -n1 | cut -d'"' -f4 | cut -d: -f2)
           echo "sha256=$DIGEST" >> $GITHUB_OUTPUT
 
