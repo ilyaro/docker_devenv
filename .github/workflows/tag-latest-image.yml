@@ -9,6 +9,8 @@ on:
 jobs:
   tag-latest:
     runs-on: ubuntu-latest
+    env:
+      DOCKERHUB_REPO: gfish/devenv_amazonlinux_2023
 
     steps:
       - name: Get git tag name to put docker latest tag on it
@@ -36,8 +38,6 @@ jobs:
 
       - name: Create latest tag
         run: |
-          ## dockerhub repo name
-          DOCKERHUB_REPO="gfish/devenv_amazonlinux_2023"
           # get output of step id: get_tag named vtag
           TAG_NAME="${{ steps.get_tag.outputs.vtag }}"
           echo "Taging dockerhub tag ${TAG_NAME} with latest tag"
@@ -45,3 +45,14 @@ jobs:
           docker buildx imagetools create \
             --tag "${DOCKERHUB_REPO}:latest" \
             "${DOCKERHUB_REPO}:${TAG_NAME}"
+
+      - name: Issue Docker Release
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          workflow: docker-releases.yml
+          ref: ${{ github.ref }}
+          inputs: |
+            version: ${{ steps.get_tag.outputs.vtag }}
+            docker_tags: ${{ env.DOCKERHUB_REPO }}
