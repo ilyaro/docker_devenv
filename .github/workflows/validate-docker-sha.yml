@@ -3,74 +3,62 @@ name: Validate Docker Hub SHA256
 on:
   schedule:
     - cron: '0 0 * * 0' # Runs every Sunday at midnight UTC
-  jobs:
-    validate-sha:
-      runs-on: ubuntu-latest
-      env:
-        DOCKER_REPO: gfish/devenv_amazonlinux_2023
-      steps:
-        - name: Get latest release info
-          id: get_release
-          uses: actions/github-script@v7
-          with:
-            script: |
-              const releases = await github.rest.repos.listReleases({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                per_page: 1
-              });
-              if (releases.data.length === 0) throw new Error('No releases found');
-              const release = releases.data[0];
-              const tag = release.tag_name;
-              // Search for sha256 in the release body
-              const match = release.body.match(/sha256:([a-fA-F0-9]{64})/);
-              if (!match) throw new Error('sha256 not found in release');
-              return { tag, sha256: match[1] };
 
-        - name: Get SHA256 for AMD64 and ARM64 from Docker Hub
-          id: get_docker_sha
-          run: |
-            TAG="${{fromJson(steps.get_release.outputs.result).tag}}"
-            REPO="$DOCKER_REPO"
-            MANIFEST=$(curl -s -H "Accept: application/vnd.docker.distribution.manifest.list.v2+json" \
-              "https://registry.hub.docker.com/v2/repositories/${REPO}/tags/${TAG}")
-            AMD_SHA=$(echo "$MANIFEST" | jq -r '.images[] | select(.architecture=="amd64") | .digest' | sed 's/sha256://')
-            ARM_SHA=$(echo "$MANIFEST" | jq -r '.images[] | select(.architecture=="arm64") | .digest' | sed 's/sha256://')
-            echo "amd_sha=$AMD_SHA" >> $GITHUB_OUTPUT
-            echo "arm_sha=$ARM_SHA" >> $GITHUB_OUTPUT
-
-        - name: Validate SHA256
-          id: validate_sha
-          run: |
-            RELEASE_SHA="${{fromJson(steps.get_release.outputs.result).sha256}}"
-            AMD_SHA="${{steps.get_docker_sha.outputs.amd_sha}}"
-            ARM_SHA="${{steps.get_docker_sha.outputs.arm_sha}}"
-            echo "Release sha256: $RELEASE_SHA"
-            echo "Docker Hub AMD64 sha256: $AMD_SHA"
-            echo "Docker Hub ARM64 sha256: $ARM_SHA"
-            if [ "$RELEASE_SHA" != "$AMD_SHA" ] && [ "$RELEASE_SHA" != "$ARM_SHA" ]; then
-              echo "valid=false" >> $GITHUB_OUTPUT
-              echo "ERROR: SHA256 values do not match for either AMD64 or ARM64"
-              exit 1
-            fi
-            echo "valid=true" >> $GITHUB_OUTPUT
-            echo "SHA256 value matches for at least one architecture."
-            echo "SHA256 values match."
-            echo "valid=true" >> $GITHUB_OUTPUT
-
-      - name: Send email to repo owner if SHA256 is not valid
-        if: failure()
-        uses: dawidd6/action-send-mail@v3
+jobs:
+  validate-sha:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_REPO: gfish/devenv_amazonlinux_2023
+    steps:
+      - name: Get latest release info
+        id: get_release
+        uses: actions/github-script@v7
         with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.SMTP_USERNAME }}
-          password: ${{ secrets.SMTP_PASSWORD }}
-          subject: "Docker SHA256 validation failed for ${{fromJson(steps.get_release.outputs.result).tag}}"
-          to: ${{ github.repository_owner }}
-          from: ${{ secrets.SMTP_FROM }}
-          body: |
-            The SHA256 value in the latest release does not match the SHA256 value in Docker Hub for tag ${{fromJson(steps.get_release.outputs.result).tag}}.
-            Release SHA256: ${{fromJson(steps.get_release.outputs.result).sha256}}
-            Docker Hub SHA256: ${{steps.get_docker_sha.outputs.sha256}}
-            Please investigate and update the release or Docker image accordingly.
+          script: |
+            const releases = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 1
+            });
+            if (releases.data.length === 0) throw new Error('No releases found');
+            const release = releases.data[0];
+            const tag = release.tag_name;
+            // Extract AMD and ARM sha256 from release body
+            const amdMatch = release.body.match(/amd64_sha256:([a-fA-F0-9]{64})/);
+            const armMatch = release.body.match(/arm64_sha256:([a-fA-F0-9]{64})/);
+            if (!amdMatch) throw new Error('amd64_sha256 not found in release');
+            if (!armMatch) throw new Error('arm64_sha256 not found in release');
+            return { tag, amd_sha256: amdMatch[1], arm_sha256: armMatch[1] };
+
+      - name: Get SHA256 for AMD64 and ARM64 from Docker Hub
+        id: get_docker_sha
+        run: |
+          TAG="${{fromJson(steps.get_release.outputs.result).tag}}"
+          REPO="$DOCKER_REPO"
+          MANIFEST=$(curl -s -H "Accept: application/vnd.docker.distribution.manifest.list.v2+json" \
+            "https://registry.hub.docker.com/v2/repositories/${REPO}/tags/${TAG}")
+          AMD_SHA=$(echo "$MANIFEST" | jq -r '.images[] | select(.architecture=="amd64") | .digest' | sed 's/sha256://')
+          ARM_SHA=$(echo "$MANIFEST" | jq -r '.images[] | select(.architecture=="arm64") | .digest' | sed 's/sha256://')
+          echo "amd_sha=$AMD_SHA" >> $GITHUB_OUTPUT
+          echo "arm_sha=$ARM_SHA" >> $GITHUB_OUTPUT
+
+      - name: Validate SHA256
+        id: validate_sha
+        run: |
+          RELEASE_AMD_SHA="${{fromJson(steps.get_release.outputs.result).amd_sha256}}"
+          RELEASE_ARM_SHA="${{fromJson(steps.get_release.outputs.result).arm_sha256}}"
+          AMD_SHA="${{steps.get_docker_sha.outputs.amd_sha}}"
+          ARM_SHA="${{steps.get_docker_sha.outputs.arm_sha}}"
+          echo "Release amd64 sha256: $RELEASE_AMD_SHA"
+          echo "Release arm64 sha256: $RELEASE_ARM_SHA"
+          echo "Docker Hub AMD64 sha256: $AMD_SHA"
+          echo "Docker Hub ARM64 sha256: $ARM_SHA"
+          if [ "$RELEASE_AMD_SHA" != "$AMD_SHA" ]; then
+            echo "ERROR: SHA256 value does not match for AMD64"
+            exit 1
+          fi
+          if [ "$RELEASE_ARM_SHA" != "$ARM_SHA" ]; then
+            echo "ERROR: SHA256 value does not match for ARM64"
+            exit 1
+          fi
+          echo "SHA256 values match for both AMD64 and ARM64."
