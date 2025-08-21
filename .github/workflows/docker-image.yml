@@ -17,6 +17,16 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_IMAGE }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix=sha-
        
       - name: Log in to DockerHub
         uses: docker/login-action@v3
@@ -31,9 +41,11 @@ jobs:
           context: ./Dockerfiles
           file: ./Dockerfiles/Dockerfile_amazonlinux_2023 # Specify your custom Dockerfile name
           push: true
-          tags: ${{ env.DOCKER_IMAGE }}:${{ github.ref_name }}  # Use the tag that was pushed
+          tags: |
+            ${{ env.DOCKER_IMAGE }}:${{ github.ref_name }}
+            ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64,linux/arm64  # Specify target platforms
-          provenance: true  # Enable SLSA provenance
+          provenance: mode=max  # Enable SLSA provenance
           sbom: true       # Generate Software Bill of Materials
           outputs: type=image,name=${{ env.DOCKER_IMAGE }}:${{ github.ref_name }},push-by-digest=true
           # This will output the digests before pushing the final tag
