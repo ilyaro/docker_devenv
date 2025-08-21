@@ -2,6 +2,11 @@ alias drun='export IMNAME=devenv_amazonlinux_2023 && docker run -it -d --restart
 
 alias de='export IMNAME=devenv_amazonlinux_2023 && docker exec -it ${IMNAME} bash -c "export HOME=${HOME} && cd $HOME && sudo su - ${USER}"'
 
+export TIMNAME=devenv_amazonlinux_2023:v0.0.18
+alias drunt='export CNAME=$(echo $TIMNAME | sed 's#:#_#') && docker run -it -d --restart unless-stopped --name "$CNAME" -v /Volumes:/Volumes -v "${HOME}:${HOME}" -v /etc/resolv.conf:/etc/resolv.conf  --user root --env HOME="${HOME}" --env USER="${USER}" --env UID="$(id -u)" --env GID="$(id -g)" --entrypoint /bin/bash gfish/${TIMNAME} -c "getent group \$GID || groupadd -g \$GID \$USER; id -u \$UID || useradd -m -u \$UID -g \$GID -d \$HOME -s /bin/bash \$USER; echo \"\$USER ALL=(ALL) NOPASSWD: ALL\" > /etc/sudoers.d/\$USER; chmod 0440 /etc/sudoers.d/\$USER; tail -f /dev/null"'
+
+alias det='export CNAME=$(echo $TIMNAME | sed 's#:#_#') && docker exec -it ${CNAME} /bin/bash -c "export HOME=${HOME} && cd $HOME && sudo su - ${USER}"'
+
 #aws-sso-util configure populate --sso-start-url https://start.us-gov-west-1.us-gov-home.awsapps.com/directory/d-986716f394\# --sso-region us-gov-west-1 --region us-gov-east-1 --config-default output=json --config-default cli_pager="" --trim-account-name chkp-aws-rnd- --safe-account-names --components account_name,role_name --separator "." 
 
 alias awsg='aws-sso-util login --all && awsume chkp-aws-gov-mis-devops-management.Admin'
