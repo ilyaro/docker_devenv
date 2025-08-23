@@ -47,8 +47,8 @@ jobs:
           platforms: linux/amd64,linux/arm64  # Specify target platforms
           provenance: mode=max  # Enable SLSA provenance
           sbom: true       # Generate Software Bill of Materials
-          outputs: type=image,name=${{ env.DOCKER_IMAGE }}:${{ github.ref_name }},push-by-digest=true
-          # This will output the digests before pushing the final tag
+          # Remove push-by-digest to allow normal tag pushing
+          outputs: type=image,name=${{ env.DOCKER_IMAGE }}:${{ github.ref_name }}
 
       - name: Output Image Digests
         run: |
