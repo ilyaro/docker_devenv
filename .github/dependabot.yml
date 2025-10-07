@@ -9,3 +9,8 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+      
+  - package-ecosystem: "docker" # Monitor Dockerfile dependencies
+    directory: "/" # Location of Dockerfiles
+    schedule:
+      interval: "weekly"
