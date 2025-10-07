@@ -15,14 +15,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get latest v0.0.X tag
+      - name: Get latest v* tag
         id: get_tag
         run: |
-          # Find most recent v0.0.X tag
-          latest_tag=$(git tag -l "v0.0.*" | sort -V | tail -1)
+          # Find most recent v*.*.* tag (semantic versioning)
+          latest_tag=$(git tag -l "v*.*.*" | sort -V | tail -1)
           
           if [ -z "$latest_tag" ]; then
-            echo "No v0.0.X tags found"
+            echo "No v*.*.* tags found"
             exit 1
           fi
           
@@ -88,27 +88,6 @@ jobs:
             **Workflow Run:** [View Details](${context.payload.repository.html_url}/actions/runs/${context.runId})`,
               labels: ['security', 'critical', 'vulnerability']
             });
-
-      - name: Update tag with CVE info
-        if: steps.process_cves.outputs.create_issue == 'true'
-        run: |
-          # Configure git for tagging
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Create security info tag with CVE count
-          security_tag="${{ env.LATEST_TAG }}-security-cve${{ steps.process_cves.outputs.cve_count }}"
-          
-          git tag -a "$security_tag" -m "Security Scan Results for ${{ env.LATEST_TAG }}
-          Critical CVEs Found: ${{ steps.process_cves.outputs.cve_count }}
-          Scan Date: $(date -u +%Y-%m-%d)
-          
-          Image: ${{ env.DOCKER_IMAGE }}:${{ env.LATEST_TAG }}
-          
-          This tag indicates security vulnerabilities were found.
-          See related GitHub issue for details and remediation steps."
-          
-          git push origin "$security_tag"
 
       - name: Display scan summary
         run: |
