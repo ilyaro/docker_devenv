@@ -84,7 +84,7 @@ jobs:
           # Copy test script into container and run it
           docker run --rm --entrypoint /bin/bash \
             -v ${{ github.workspace }}:/tmp \
-            $image_tag \
+            ${{ env.DOCKER_IMAGE }}:${{ github.ref_name }} \
             -c "cd /tmp/Scripts && ./test-devops-tools.sh"
 
       - name: Scan image for vulnerabilities
@@ -119,6 +119,3 @@ jobs:
           AMD64: ${{ env.SHA_AMD64 }}
           ARM64: ${{ env.SHA_ARM64 }}
           Manifest: ${{ env.IMAGE_DIGEST }}"
-          
-          git push origin "$epoch_timestamp" -f
-          git push origin "${{ github.ref_name }}-SBOM" -f  
