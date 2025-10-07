@@ -25,15 +25,16 @@ jobs:
       - name: Get latest version tag and increment
         id: version
         run: |
-          # Get all version tags (v*) and sort them using version sort
-          LATEST_TAG=$(git tag -l "v*" | sort -V | tail -n1)
+          # Get only numeric version tags (v*.*.*) and sort them using version sort
+          # Filter out tags with words like "test", "alpha", "beta", etc.
+          LATEST_TAG=$(git tag -l "v*" | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n1)
           
           if [ -z "$LATEST_TAG" ]; then
-            # No version tags exist, start with v1.0.0
+            # No numeric version tags exist, start with v1.0.0
             NEW_TAG="v1.0.0"
-            echo "No existing version tags found. Starting with $NEW_TAG"
+            echo "No existing numeric version tags found. Starting with $NEW_TAG"
           else
-            echo "Latest tag: $LATEST_TAG"
+            echo "Latest numeric tag: $LATEST_TAG"
             
             # Extract version numbers (assuming format vMAJOR.MINOR.PATCH)
             VERSION_NUMBER=$(echo $LATEST_TAG | sed 's/^v//')
