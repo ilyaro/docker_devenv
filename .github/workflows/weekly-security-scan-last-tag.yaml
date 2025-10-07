@@ -1,0 +1,120 @@
+name: Weekly Security Scan
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Weekly scan every Monday at 6 AM UTC
+  workflow_dispatch:  # Manual trigger option
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_IMAGE: gfish/devenv_amazonlinux_2023
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get latest v0.0.X tag
+        id: get_tag
+        run: |
+          # Find most recent v0.0.X tag
+          latest_tag=$(git tag -l "v0.0.*" | sort -V | tail -1)
+          
+          if [ -z "$latest_tag" ]; then
+            echo "No v0.0.X tags found"
+            exit 1
+          fi
+          
+          echo "tag=$latest_tag" >> $GITHUB_OUTPUT
+          echo "LATEST_TAG=$latest_tag" >> $GITHUB_ENV
+
+      - name: Pull image from DockerHub
+        run: docker pull ${{ env.DOCKER_IMAGE }}:${{ env.LATEST_TAG }}
+
+      - name: Scan for critical vulnerabilities
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: ${{ env.DOCKER_IMAGE }}:${{ env.LATEST_TAG }}
+          format: 'json'
+          output: 'scan-results.json'
+          severity: 'CRITICAL'
+
+      - name: Process scan results
+        id: process_cves
+        run: |
+          # Count critical CVEs found
+          cve_count=$(jq '[.Results[]?.Vulnerabilities[]? | select(.Severity == "CRITICAL")] | length' scan-results.json)
+          echo "Critical CVEs: $cve_count"
+          echo "cve_count=$cve_count" >> $GITHUB_OUTPUT
+          
+          # Create issue if 2+ critical CVEs found
+          if [ "$cve_count" -ge 2 ]; then
+            echo "create_issue=true" >> $GITHUB_OUTPUT
+            
+            # Generate CVE list for issue description
+            jq -r '.Results[]?.Vulnerabilities[]? | select(.Severity == "CRITICAL") | "- **\(.VulnerabilityID)**: \(.Title // .Description)"' scan-results.json > cve-details.txt
+          else
+            echo "create_issue=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub issue for critical CVEs
+        if: steps.process_cves.outputs.create_issue == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const cveDetails = fs.readFileSync('cve-details.txt', 'utf8');
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Critical Vulnerabilities in ${process.env.LATEST_TAG} (${process.env.GITHUB_OUTPUT.match(/cve_count=(\d+)/)[1]} CVEs)`,
+              body: `## Critical Security Vulnerabilities Detected
+            
+            **Image:** \`${process.env.DOCKER_IMAGE}:${process.env.LATEST_TAG}\`  
+            **Critical CVEs Found:** ${process.env.GITHUB_OUTPUT.match(/cve_count=(\d+)/)[1]}  
+            **Scan Date:** ${new Date().toISOString().split('T')[0]}
+            
+            ### Vulnerabilities:
+            ${cveDetails}
+            
+            ### Recommended Actions:
+            - [ ] Update base image to latest Amazon Linux 2023
+            - [ ] Rebuild Docker image with updated dependencies  
+            - [ ] Test updated image before deployment
+            - [ ] Create new release tag after fixes
+            
+            **Workflow Run:** [View Details](${context.payload.repository.html_url}/actions/runs/${context.runId})`,
+              labels: ['security', 'critical', 'vulnerability']
+            });
+
+      - name: Update tag with CVE info
+        if: steps.process_cves.outputs.create_issue == 'true'
+        run: |
+          # Configure git for tagging
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Create security info tag with CVE count
+          security_tag="${{ env.LATEST_TAG }}-security-cve${{ steps.process_cves.outputs.cve_count }}"
+          
+          git tag -a "$security_tag" -m "Security Scan Results for ${{ env.LATEST_TAG }}
+          Critical CVEs Found: ${{ steps.process_cves.outputs.cve_count }}
+          Scan Date: $(date -u +%Y-%m-%d)
+          
+          Image: ${{ env.DOCKER_IMAGE }}:${{ env.LATEST_TAG }}
+          
+          This tag indicates security vulnerabilities were found.
+          See related GitHub issue for details and remediation steps."
+          
+          git push origin "$security_tag"
+
+      - name: Display scan summary
+        run: |
+          echo "=== Weekly Security Scan Complete ==="
+          echo "Image: ${{ env.DOCKER_IMAGE }}:${{ env.LATEST_TAG }}"
+          echo "Critical CVEs: ${{ steps.process_cves.outputs.cve_count }}"
+          
+          # Show vulnerability table in logs
+          trivy image --format table --severity CRITICAL ${{ env.DOCKER_IMAGE }}:${{ env.LATEST_TAG }}
