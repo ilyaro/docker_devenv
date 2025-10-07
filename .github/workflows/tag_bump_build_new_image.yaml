@@ -1,0 +1,85 @@
+name: Monthly Version Bump
+
+on:
+  schedule:
+    # Run at 2 AM UTC on the 1st day of every month
+    - cron: '0 2 1 * *'
+  workflow_dispatch: # Allow manual triggering for testing
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history to get all tags
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Get latest version tag and increment
+        id: version
+        run: |
+          # Get all version tags (v*) and sort them
+          LATEST_TAG=$(git tag -l "v*" | sort -V | tail -n1)
+          
+          if [ -z "$LATEST_TAG" ]; then
+            # No version tags exist, start with v1.0.0
+            NEW_TAG="v1.0.0"
+            echo "No existing version tags found. Starting with $NEW_TAG"
+          else
+            echo "Latest tag: $LATEST_TAG"
+            
+            # Extract version numbers (assuming format vMAJOR.MINOR.PATCH)
+            VERSION_NUMBER=$(echo $LATEST_TAG | sed 's/^v//')
+            IFS='.' read -ra VERSION_PARTS <<< "$VERSION_NUMBER"
+            
+            MAJOR=${VERSION_PARTS[0]:-0}
+            MINOR=${VERSION_PARTS[1]:-0}
+            PATCH=${VERSION_PARTS[2]:-0}
+            
+            # Increment minor version (monthly release)
+            MINOR=$((MINOR + 1))
+            NEW_TAG="v${MAJOR}.${MINOR}.0"
+            
+            echo "Incrementing to: $NEW_TAG"
+          fi
+          
+          echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
+          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
+
+      - name: Check if tag already exists
+        id: tag_check
+        run: |
+          if git rev-parse "$NEW_TAG" >/dev/null 2>&1; then
+            echo "Tag $NEW_TAG already exists. Skipping creation."
+            echo "tag_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Tag $NEW_TAG does not exist. Will create it."
+            echo "tag_exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create and push new version tag
+        if: steps.tag_check.outputs.tag_exists == 'false'
+        run: |
+          # Create annotated tag with timestamp and description
+          git tag -a "$NEW_TAG" -m "Monthly automated version bump to $NEW_TAG - $(date '+%Y-%m-%d %H:%M:%S UTC')"
+          
+          # Push the new tag
+          git push origin "$NEW_TAG"
+          
+          echo "✅ Created and pushed tag: $NEW_TAG"
+
+      - name: Summary
+        run: |
+          if [ "${{ steps.tag_check.outputs.tag_exists }}" == "true" ]; then
+            echo "🔄 Tag $NEW_TAG already exists - no action taken"
+          else
+            echo "🚀 Successfully created new version tag: $NEW_TAG"
+            echo "This will trigger the build workflow for the new image version."
+          fi
