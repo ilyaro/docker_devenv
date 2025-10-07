@@ -62,7 +62,7 @@ jobs:
 
       - name: Create GitHub issue for critical CVEs
         if: steps.process_cves.outputs.create_issue == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const fs = require('fs');
