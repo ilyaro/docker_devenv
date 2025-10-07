@@ -96,6 +96,3 @@ jobs:
           echo "=== Weekly Security Scan Complete ==="
           echo "Image: ${{ env.DOCKER_IMAGE }}:${{ env.LATEST_TAG }}"
           echo "Critical CVEs: ${{ steps.process_cves.outputs.cve_count }}"
-          
-          # Show vulnerability table in logs
-          trivy image --format table --severity CRITICAL ${{ env.DOCKER_IMAGE }}:${{ env.LATEST_TAG }}
