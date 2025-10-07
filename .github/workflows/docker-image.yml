@@ -119,3 +119,6 @@ jobs:
           AMD64: ${{ env.SHA_AMD64 }}
           ARM64: ${{ env.SHA_ARM64 }}
           Manifest: ${{ env.IMAGE_DIGEST }}"
+          
+          git push origin "$epoch_timestamp" -f
+          git push origin "${{ github.ref_name }}-SBOM" -f  
