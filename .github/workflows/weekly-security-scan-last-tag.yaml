@@ -12,24 +12,22 @@ jobs:
       DOCKER_IMAGE: gfish/devenv_amazonlinux_2023
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          # Fetch all tags and history for tag detection
-          fetch-depth: 0
-          fetch-tags: true
-
-      - name: Get latest v* tag
+      - name: Get latest v* tag from DockerHub
         id: get_tag
         run: |
-          # Find most recent v*.*.* tag (semantic versioning)
-          latest_tag=$(git tag -l "v*.*.*" | sort -V | tail -1)
+          # Get all tags from DockerHub API and find latest semantic version
+          latest_tag=$(curl -s "https://registry.hub.docker.com/v2/repositories/${{ env.DOCKER_IMAGE }}/tags/" | \
+            jq -r '.results[].name' | \
+            grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | \
+            sort -V | \
+            tail -1)
           
           if [ -z "$latest_tag" ]; then
-            echo "No v*.*.* tags found"
+            echo "No v*.*.* tags found on DockerHub"
             exit 1
           fi
           
+          echo "Found latest DockerHub tag: $latest_tag"
           echo "tag=$latest_tag" >> $GITHUB_OUTPUT
           echo "LATEST_TAG=$latest_tag" >> $GITHUB_ENV
 
