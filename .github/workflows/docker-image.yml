@@ -88,7 +88,7 @@ jobs:
             -c "cd /tmp/Scripts && ./test-devops-tools.sh"
 
       - name: Scan image for vulnerabilities
-        uses: aquasecurity/trivy-action@0.20.0
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: ${{ env.DOCKER_IMAGE }}:${{ github.ref_name }}
           format: 'table'
