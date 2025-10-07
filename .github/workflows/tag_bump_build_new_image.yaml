@@ -25,7 +25,7 @@ jobs:
       - name: Get latest version tag and increment
         id: version
         run: |
-          # Get all version tags (v*) and sort them
+          # Get all version tags (v*) and sort them using version sort
           LATEST_TAG=$(git tag -l "v*" | sort -V | tail -n1)
           
           if [ -z "$LATEST_TAG" ]; then
@@ -39,23 +39,26 @@ jobs:
             VERSION_NUMBER=$(echo $LATEST_TAG | sed 's/^v//')
             IFS='.' read -ra VERSION_PARTS <<< "$VERSION_NUMBER"
             
+            # Extract major, minor, patch with default values if missing
             MAJOR=${VERSION_PARTS[0]:-0}
             MINOR=${VERSION_PARTS[1]:-0}
             PATCH=${VERSION_PARTS[2]:-0}
             
-            # Increment minor version (monthly release)
-            MINOR=$((MINOR + 1))
-            NEW_TAG="v${MAJOR}.${MINOR}.0"
+            # Increment patch version only (monthly patch release)
+            PATCH=$((PATCH + 1))
+            NEW_TAG="v${MAJOR}.${MINOR}.${PATCH}"
             
             echo "Incrementing to: $NEW_TAG"
           fi
           
+          # Set outputs for use in subsequent steps
           echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
 
       - name: Check if tag already exists
         id: tag_check
         run: |
+          # Check if the new tag already exists to prevent duplicates
           if git rev-parse "$NEW_TAG" >/dev/null 2>&1; then
             echo "Tag $NEW_TAG already exists. Skipping creation."
             echo "tag_exists=true" >> $GITHUB_OUTPUT
@@ -70,7 +73,7 @@ jobs:
           # Create annotated tag with timestamp and description
           git tag -a "$NEW_TAG" -m "Monthly automated version bump to $NEW_TAG - $(date '+%Y-%m-%d %H:%M:%S UTC')"
           
-          # Push the new tag
+          # Push the new tag to trigger the build workflow
           git push origin "$NEW_TAG"
           
           echo "✅ Created and pushed tag: $NEW_TAG"
