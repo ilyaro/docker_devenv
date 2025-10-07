@@ -9,3 +9,10 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+
+version: 2
+updates:
+  - package-ecosystem: "devcontainers" # See documentation for possible values
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "weekly"
