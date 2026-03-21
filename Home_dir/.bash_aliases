@@ -32,6 +32,8 @@ alias d=docker
 alias v=vim
 alias c='code -r' 
 alias git-bd='git checkout origin/HEAD;git remote prune origin;git branch --merged | grep -v HEAD | xargs -I{} git branch -d {}'
+## AI commit message title
+alias gac='git commit -m "$(git diff --cached -U3 | copilot -p "Write a one-line conventional commit message for this diff. Output ONLY the message, nothing else." 2>/dev/null | tail -1 || git diff --cached -U0 | tail -1)" && push'
 alias pr='/Users/ilyaro/Git_CodeCommit/devops-tools/scripts/codecommit/create_pr.sh'
 
 #aws-sso-util configure populate --sso-start-url https://DOMAINHERE-sso.awsapps.com/start --sso-region eu-west-1 --region eu-west-1 --config-default output=json --config-default cli_pager="" --trim-account-name chkp-aws-rnd- --safe-account-names --components account_name,role_name --separator "."
