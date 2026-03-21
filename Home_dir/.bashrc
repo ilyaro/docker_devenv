@@ -136,3 +136,13 @@ _awsume() {
     return 0
 }
 complete -F _awsume awsume
+
+## Auto commit with AI commit message
+gi() {
+  local msg
+  git rev-parse --is-inside-work-tree >/dev/null 2>&1 || { echo "Not a git repo"; return 1; }
+  msg=$(git diff --cached -U3 | copilot -p "Write a one-line git commit message for this diff. No conventional commits prefix, no quotes, no backticks, max 70 characters. Output ONLY the message." 2>/dev/null | grep -v '^$' | tail -1)
+  [ -z "$msg" ] && msg=$(git diff --cached -U0 | tail -1)
+  git commit -m "$msg" && \
+  git symbolic-ref --short refs/remotes/origin/HEAD | grep -v "$(git branch --show-current)" > /dev/null 2>&1 && git push
+}
