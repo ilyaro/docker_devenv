@@ -8,19 +8,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest  # Lightweight OS for Docker builds
+    permissions:
+      contents: write
+      packages: write
     env:
-      DOCKER_IMAGE: gfish/devenv_amazonlinux_2023
+      DOCKER_IMAGE: ghcr.io/ilyaro/devenv_amazonlinux_2023
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v6
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2  # v3
 
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804  # v5
         with:
           images: ${{ env.DOCKER_IMAGE }}
           tags: |
@@ -28,15 +31,16 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha,prefix=sha-
        
-      - name: Log in to DockerHub
-        uses: docker/login-action@v3
+      - name: Log in to GHCR
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772  # v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
         id: build
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@14487ce63c7a62a4a324b0bfb37086795e31c6c1  # v6
         with:
           context: ./Dockerfiles
           file: ./Dockerfiles/Dockerfile_amazonlinux_2023 # Specify your custom Dockerfile name
@@ -88,7 +92,7 @@ jobs:
             -c "cd /tmp/Scripts && ./test-devops-tools.sh"
 
       - name: Scan image for vulnerabilities
-        uses: aquasecurity/trivy-action@0.34.0
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1  # v0.35.0
         with:
           image-ref: ${{ env.DOCKER_IMAGE }}:${{ github.ref_name }}
           format: 'table'
@@ -121,4 +125,4 @@ jobs:
           Manifest: ${{ env.IMAGE_DIGEST }}"
           
           git push origin "$epoch_timestamp" -f
-          git push origin "${{ github.ref_name }}-SBOM" -f  
+          git push origin "${{ github.ref_name }}-SBOM" -f
