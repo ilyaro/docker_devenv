@@ -4,6 +4,8 @@ name: Link PR to Issue
 on:
   pull_request:
     types: [opened]  # Only run when PR is first opened
+    branches: # Works only on branches with issue, example fix/777-important-fix
+      - '**/[0-9]*-*'
 
 jobs:
   link-issue:

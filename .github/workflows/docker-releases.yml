@@ -17,11 +17,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Fetch Docker Image Details
         id: fetch-details
@@ -34,65 +35,47 @@ jobs:
             IFS=',' read -ra IMAGES <<< "${{ github.event.inputs.docker_tags }}"
             for image in "${IMAGES[@]}"; do
               image=$(echo "$image" | xargs)
-              echo "Fetching details for $image..."
+              echo "Processing image: $image..."
               
-              TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d "{\"username\": \"${{ secrets.DOCKERHUB_USERNAME }}\", \"password\": \"${{ secrets.DOCKERHUB_PASSWORD }}\"}" https://hub.docker.com/v2/users/login/ | jq -r .token)
-              
-              NAMESPACE=$(echo $image | cut -d'/' -f1)
-              REPOSITORY=$(echo $image | cut -d'/' -f2)
               VERSION="${{ github.event.inputs.version }}"
-              
-              # Fetch repository info
-              REPO_INFO=$(curl -s -H "Authorization: JWT ${TOKEN}" "https://hub.docker.com/v2/repositories/${NAMESPACE}/${REPOSITORY}/")
-              
-              # Fetch specific tag info
-              TAG_INFO=$(curl -s -H "Authorization: JWT ${TOKEN}" "https://hub.docker.com/v2/repositories/${NAMESPACE}/${REPOSITORY}/tags/${VERSION}/")
-              
-              echo "Debug: Full Tag Info for ${image}"
-              echo "$TAG_INFO" | jq '.'
-              
-              DESCRIPTION=$(echo $REPO_INFO | jq -r '.description // "No description available"')
-              LAST_UPDATED=$(echo $TAG_INFO | jq -r '.last_updated // "Unknown"')
-              SIZE=$(echo $TAG_INFO | jq -r '.full_size // "0"')
-              
-              # Get architectures with improved detection
-              ARCHITECTURES=$(echo $TAG_INFO | jq -r '.images[] | . as $img | 
-                if ($img.architecture == "arm64") or ($img.os_arch == "arm64") then
-                  "\n- **ARM64:** `" + $img.digest + "`"
-                elif ($img.architecture == "amd64") or ($img.os_arch == "amd64") then
-                  "\n- **AMD64:** `" + $img.digest + "`"
-                else
-                  "\n- **" + ($img.architecture // "unknown") + ":** `" + $img.digest + "`"
-                end')
-              
-              if [ "$SIZE" != "0" ] && [ "$SIZE" != "Unknown" ]; then
-                SIZE_MB=$(echo "scale=2; $SIZE/1024/1024" | bc)
-              else
-                SIZE_MB="Unknown"
-              fi
               
               echo "## ${image}:${VERSION}"
               echo ""
-              echo "- **Description:** ${DESCRIPTION}"
-              echo "- **Size:** ${SIZE_MB} MB"
-              echo "- **Last Updated:** ${LAST_UPDATED}"
+              echo "**Repository:** \`${image}\`"
+              echo "**Tag:** \`${VERSION}\`"
               echo ""
-              echo "### Digests by Architecture"
-              echo "${ARCHITECTURES}"
+              
+              # Fetch manifest list to get architecture info
+              echo "### Supported Architectures"
               echo ""
-              echo "### Image References"
+              
+              # Try to get manifest info using docker CLI or API
+              # For GHCR, we can use the OCI Image Spec to inspect manifests
+              MANIFEST=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                -H "Accept: application/vnd.docker.distribution.manifest.list.v2+json" \
+                "https://ghcr.io/v2/${image#ghcr.io/}/manifests/${VERSION}" 2>/dev/null || echo "")
+              
+              if [ ! -z "$MANIFEST" ] && echo "$MANIFEST" | jq . > /dev/null 2>&1; then
+                # Parse manifest list for architectures
+                echo "$MANIFEST" | jq -r '.manifests[] | 
+                  "- **\(.platform.architecture | ascii_upcase)** (os: \(.platform.os)): `\(.digest)`"' \
+                  2>/dev/null || echo "- Multi-architecture image"
+              else
+                echo "- Single or multi-platform image available"
+              fi
+              
+              echo ""
+              echo "### Pull Commands"
+              echo "\`\`\`bash"
+              echo "# Pull for current platform"
+              echo "docker pull ${image}:${VERSION}"
+              echo ""
+              echo "# Pull specific architecture"
+              echo "docker pull ${image}:${VERSION} --platform linux/amd64"
+              echo "docker pull ${image}:${VERSION} --platform linux/arm64"
               echo "\`\`\`"
-              echo "$TAG_INFO" | jq -r '.images[] | . as $img | 
-                if ($img.architecture == "arm64") or ($img.os_arch == "arm64") then
-                  "# ARM64\n" + "'${image}'" + "@" + $img.digest + "\n"
-                elif ($img.architecture == "amd64") or ($img.os_arch == "amd64") then
-                  "# AMD64\n" + "'${image}'" + "@" + $img.digest + "\n"
-                else
-                  "# " + ($img.architecture // "unknown") + "\n" + "'${image}'" + "@" + $img.digest + "\n"
-                end'
-              echo "\`\`\`"
               echo ""
-              echo "View on [Docker Hub](https://hub.docker.com/r/${NAMESPACE}/${REPOSITORY}/tags?name=${VERSION})"
+              echo "View on [GitHub Container Registry](https://github.com/${{ github.repository_owner }}/packages?repo_name=$(echo ${image} | cut -d'/' -f3))"
               echo ""
             done
             echo 'EOF'
