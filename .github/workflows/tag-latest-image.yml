@@ -10,7 +10,7 @@ jobs:
   tag-latest:
     runs-on: ubuntu-latest
     env:
-      DOCKERHUB_REPO: gfish/devenv_amazonlinux_2023
+      GHCR_REPO: ghcr.io/${{ github.repository_owner }}/devenv_amazonlinux_2023
 
     steps:
       - name: Get git tag name to put docker latest tag on it
@@ -30,21 +30,22 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
 
-      - name: Login to Docker Hub
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create latest tag
         run: |
           # get output of step id: get_tag named vtag
           TAG_NAME="${{ steps.get_tag.outputs.vtag }}"
-          echo "Taging dockerhub tag ${TAG_NAME} with latest tag"
+          echo "Tagging GHCR tag ${TAG_NAME} with latest tag"
           # Assuming the tag is in the format v0.0.4
           docker buildx imagetools create \
-            --tag "${DOCKERHUB_REPO}:latest" \
-            "${DOCKERHUB_REPO}:${TAG_NAME}"
+            --tag "${GHCR_REPO}:latest" \
+            "${GHCR_REPO}:${TAG_NAME}"
 
       - name: Issue Docker Release
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
@@ -57,6 +58,6 @@ jobs:
               ref: context.ref,
               inputs: {
                 version: '${{ steps.get_tag.outputs.vtag }}',
-                docker_tags: '${{ env.DOCKERHUB_REPO }}'
+                docker_tags: '${{ env.GHCR_REPO }}'
               }
             });
