@@ -182,6 +182,9 @@ RUN TERRAFORM_VERSION=$(curl -s https://api.github.com/repos/hashicorp/terraform
     # Verify installation
     terraform version
 
+# Set Go environment variables
+ENV PATH="/usr/local/go/bin:${PATH}"
+
 # Install latest recommended Go version (fixes CVE-2025-22871)
 RUN GO_VERSION=$(curl -s https://go.dev/dl/ | grep -oP 'go\d+\.\d+\.\d+' | head -1 | sed 's/go//') && \
     ARCH=$(echo ${TARGETPLATFORM} | awk -F\/ '{print $2}') && \
@@ -191,9 +194,6 @@ RUN GO_VERSION=$(curl -s https://go.dev/dl/ | grep -oP 'go\d+\.\d+\.\d+' | head 
     tar -C /usr/local -xzf "go${GO_VERSION}.linux-${ARCH}.tar.gz" && \
     rm "go${GO_VERSION}.linux-${ARCH}.tar.gz" && \
     go version
-
-# Set Go environment variables
-ENV PATH="/usr/local/go/bin:${PATH}"
 
 # Install Kubectl with repository configuration
 RUN KUBECTL_VERSION=$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt) && \
