@@ -9,13 +9,15 @@ on:
 jobs:
   bump-version:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write # Allow pushing tags to the repository
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0 # Fetch all history to get all tags
-          token: ${{ secrets.PAT_TOKEN }} # Use PAT to allow triggering other workflows
+          token: ${{ secrets.GITHUB_TOKEN }} # Use GITHUB_TOKEN to allow triggering other workflows
 
       - name: Configure Git
         run: |
