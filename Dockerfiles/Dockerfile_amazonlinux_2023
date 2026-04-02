@@ -280,7 +280,7 @@ RUN go install github.com/google/go-containerregistry/cmd/crane@latest && \
     rm -rf /tmp/go-* /root/.cache/go-build /root/go/pkg/mod/cache
 
 # Install kustomize for Kubernetes configuration management
-RUN KUSTOMIZE_VERSION=$(curl -s https://api.github.com/repos/kubernetes-sigs/kustomize/releases/latest | jq -r .tag_name | sed 's/kustomize\///') && \
+RUN KUSTOMIZE_VERSION=$(curl -s https://api.github.com/repos/kubernetes-sigs/kustomize/releases | jq -r '[.[] | select(.tag_name | startswith("kustomize/"))][0].tag_name' | sed 's/kustomize\///') && \
     ARCH=$(echo ${TARGETPLATFORM} | awk -F\/ '{print $2}') && \
     echo "Installing kustomize version: ${KUSTOMIZE_VERSION} for architecture: ${ARCH}" && \
     # Download the latest kustomize binary for the target architecture
