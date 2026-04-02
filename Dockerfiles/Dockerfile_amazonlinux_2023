@@ -27,7 +27,6 @@ RUN dnf install -y \
         git \
         glibc-common \
         glibc-utils \
-        golang \
         hwloc \
         iotop \
         iproute \
@@ -182,6 +181,16 @@ RUN TERRAFORM_VERSION=$(curl -s https://api.github.com/repos/hashicorp/terraform
     rm -f "terraform_${TERRAFORM_VERSION}_linux_${TERRAFORM_ARCH}.zip" && \
     # Verify installation
     terraform version
+
+# Install latest recommended Go version (fixes CVE-2025-22871)
+RUN GO_VERSION=$(curl -s https://go.dev/dl/ | grep -oP 'go\d+\.\d+\.\d+' | head -1 | sed 's/go//') && \
+    ARCH=$(echo ${TARGETPLATFORM} | awk -F\/ '{print $2}') && \
+    echo "Installing Go version: ${GO_VERSION} for architecture: ${ARCH}" && \
+    curl -LO "https://go.dev/dl/go${GO_VERSION}.linux-${ARCH}.tar.gz" && \
+    rm -rf /usr/local/go && \
+    tar -C /usr/local -xzf "go${GO_VERSION}.linux-${ARCH}.tar.gz" && \
+    rm "go${GO_VERSION}.linux-${ARCH}.tar.gz" && \
+    go version
 
 # Set Go environment variables
 ENV PATH="/usr/local/go/bin:${PATH}"
