@@ -20,3 +20,4 @@ jobs:
         with:
           file: '.github/workflows/*.yml'
           schema: 'https://json.schemastore.org/github-workflow.json'
+          fixSchema: 'true'
