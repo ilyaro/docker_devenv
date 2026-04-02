@@ -4,6 +4,8 @@ name: Link PR to Issue
 on:
   pull_request:
     types: [opened]  # Only run when PR is first opened
+      branches:
+        - '**/[0-9]*-*'
 
 jobs:
   link-issue:
@@ -15,23 +17,23 @@ jobs:
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           script: |
-            // Extract branch name from the pull request
+            # Extract branch name from the pull request
             const branch = context.payload.pull_request.head.ref;
             
-            // Extract issue number from branch name using pattern: /digits- or digits-
-            // Examples: "123-feature", "fix/456-bug" will extract 123, 456
+            # Extract issue number from branch name using pattern: /digits- or digits-
+            # Examples: "123-feature", "fix/456-bug" will extract 123, 456
             const match = branch.match(/(?:^|\/)(\d+)-/);
-            if (!match) return;  // Exit if no issue number found in branch name
+            if (!match) return;  # Exit if no issue number found in branch name
             
             const issueNum = match[1];
             const currentTitle = context.payload.pull_request.title;
             const currentBody = context.payload.pull_request.body || '';
             
-            // Update PR title to include issue number and body to auto-close the linked issue
+            # Update PR title to include issue number and body to auto-close the linked issue
             await github.rest.pulls.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number,
-              title: `#${issueNum} ${currentTitle}`,  // Prepend issue number to title
-              body: `Closes #${issueNum}\n\n${currentBody}`  // Add "Closes" keyword to auto-close issue
+              title: `#${issueNum} ${currentTitle}`,  # Prepend issue number to title
+              body: `Closes #${issueNum}\n\n${currentBody}`  # Add "Closes" keyword to auto-close issue
             });
