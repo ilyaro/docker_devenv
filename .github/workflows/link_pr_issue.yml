@@ -1,29 +1,37 @@
 name: Link PR to Issue
+
+# Trigger workflow on new pull requests
 on:
   pull_request:
-    types: [opened]
+    types: [opened]  # Only run when PR is first opened
 
 jobs:
   link-issue:
     runs-on: ubuntu-latest
     permissions:
-      pull-requests: write
+      pull-requests: write  # Allows updating PR title and body
     steps:
       - name: Extract issue and update PR
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           script: |
+            # Extract branch name from the pull request
             const branch = context.payload.pull_request.head.ref;
+            
+            # Extract issue number from branch name using pattern: /digits- or digits-
+            # Examples: "123-feature", "fix/456-bug" will extract 123, 456
             const match = branch.match(/(?:^|\/)(\d+)-/);
-            if (!match) return;
+            if (!match) return;  # Exit if no issue number found in branch name
+            
             const issueNum = match[1];
             const currentTitle = context.payload.pull_request.title;
             const currentBody = context.payload.pull_request.body || '';
             
+            # Update PR title to include issue number and body to auto-close the linked issue
             await github.rest.pulls.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.payload.pull_request.number,
-              title: `#${issueNum} ${currentTitle}`,
-              body: `Closes #${issueNum}\n\n${currentBody}`
+              title: `#${issueNum} ${currentTitle}`,  # Prepend issue number to title
+              body: `Closes #${issueNum}\n\n${currentBody}`  # Add "Closes" keyword to auto-close issue
             });
