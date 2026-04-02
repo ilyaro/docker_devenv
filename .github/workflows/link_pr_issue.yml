@@ -15,7 +15,7 @@ jobs:
       - name: Check branch name
         id: check
         run: |
-          [[ "${{ github.event.pull_request.head.ref }}" =~ (^|/)[0-9] ]] && echo "match=true" >> $GITHUB_OUTPUT || echo "match=false" >> $GITHUB_OUTPUT
+          [[ "${{ github.event.pull_request.head.ref }}" =~ (^|/)[0-9]+-. ]] && echo "match=true" >> $GITHUB_OUTPUT || echo "match=false" >> $GITHUB_OUTPUT
       - name: Extract issue and update PR
         if: steps.check.outputs.match == 'true'
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
