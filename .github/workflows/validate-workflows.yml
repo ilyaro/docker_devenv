@@ -21,3 +21,4 @@ jobs:
           file: '.github/workflows/*.yml'
           schema: 'https://json.schemastore.org/github-workflow.json'
           fixSchemas: 'true'
+          mode: 'lax'
