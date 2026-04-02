@@ -47,12 +47,16 @@ jobs:
             "${DOCKERHUB_REPO}:${TAG_NAME}"
 
       - name: Issue Docker Release
-        uses: peter-evans/workflow-dispatch@v1
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          workflow: docker-releases.yml
-          ref: ${{ github.ref }}
-          inputs: |
-            version: ${{ steps.get_tag.outputs.vtag }}
-            docker_tags: ${{ env.DOCKERHUB_REPO }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'docker-releases.yml',
+              ref: context.ref,
+              inputs: {
+                version: '${{ steps.get_tag.outputs.vtag }}',
+                docker_tags: '${{ env.DOCKERHUB_REPO }}'
+              }
+            });
