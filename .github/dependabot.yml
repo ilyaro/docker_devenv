@@ -9,8 +9,18 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    # Always use commit SHA instead of tags
+    target-branch: "main"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
       
   - package-ecosystem: "docker" # Monitor Dockerfile dependencies
     directory: "/" # Location of Dockerfiles
     schedule:
       interval: "weekly"
+    # Always use digest (SHA) instead of tags
+    target-branch: "main"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
