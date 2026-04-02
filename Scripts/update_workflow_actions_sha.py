@@ -132,7 +132,8 @@ def update_workflow(filepath: str, validate_only: bool = False) -> bool:
     original_content = content
     
     # Find all uses statements: uses: owner/repo@version [# comment]
-    pattern = r'uses:\s+([a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+)@([^\s#]+)(.*?)$'
+    # Matches versions like: v1, v1.2.3, 0.34.0, commit-sha (40 hex chars)
+    pattern = r'uses:\s+([a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+)@([a-zA-Z0-9._-]+)(.*?)$'
     
     def replace_func(match):
         action = match.group(1)
@@ -194,8 +195,11 @@ def main():
         print("\n[UPDATE MODE - Files will be modified]\n")
     
     updated_count = 0
+    problematic_actions = []
     
-    for filename in sorted(workflows_dir.glob('*.{yml,yaml}')):
+    for filename in sorted(workflows_dir.glob('*')) :
+        if filename.suffix not in ['.yml', '.yaml']:
+            continue
         print(f"\nProcessing: {filename.name}")
         
         if update_workflow(str(filename), validate_only=validate_only):
@@ -204,8 +208,27 @@ def main():
         else:
             status = "No changes" if validate_only else "Already up to date"
             print(f"- {status}: {filename.name}")
+        
+        # Check for non-SHA actions
+        with open(filename, 'r') as f:
+            content = f.read()
+        
+        pattern = r'uses:\s+([a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+)@([a-zA-Z0-9._-]+)(.*?)$'
+        for match in re.finditer(pattern, content, flags=re.MULTILINE):
+            version = match.group(2)
+            is_sha = re.match(r'^[0-9a-f]{40}$', version)
+            
+            if not is_sha:
+                action = match.group(1)
+                problematic_actions.append((filename.name, action, version))
     
     print("\n" + "=" * 80)
+    if problematic_actions:
+        print("\n⚠ ACTIONS NOT USING SHA1 HASHES:")
+        for workflow, action, version in problematic_actions:
+            print(f"  {workflow}: {action}@{version}")
+        print()
+    
     if validate_only:
         print("Validation complete!")
     else:
