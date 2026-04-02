@@ -1,4 +1,4 @@
-name: Validate Docker Hub SHA256
+name: Validate GHCR SHA256
 
 on:
   schedule:
@@ -9,7 +9,7 @@ jobs:
   validate-sha:
     runs-on: ubuntu-latest
     env:
-      DOCKER_REPO: gfish/devenv_amazonlinux_2023
+      DOCKER_REPO: ghcr.io/${{ github.repository_owner }}/devenv_amazonlinux_2023
     steps:
       - name: Get latest release info
         id: get_release
@@ -68,26 +68,29 @@ jobs:
               arm_sha256: armMatch[1] 
             };
 
-      - name: Get SHA256 for AMD64 and ARM64 from Docker Hub
+      - name: Get SHA256 for AMD64 and ARM64 from GHCR
         id: get_docker_sha
         run: |
           TAG="${{fromJson(steps.get_release.outputs.result).tag}}"
-          REPO="$DOCKER_REPO"
-          # Get the full tag info from Docker Hub API
-          RESPONSE=$(curl -s -H "Accept: application/json" \
-            "https://hub.docker.com/v2/repositories/${REPO}/tags/${TAG}")
+          REPO_NAME="devenv_amazonlinux_2023"
+          REPO_OWNER="${{ github.repository_owner }}"
+          
+          # Get the manifest list from GHCR API with authentication
+          RESPONSE=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.docker.distribution.manifest.list.v2+json" \
+            "https://ghcr.io/v2/${REPO_OWNER}/${REPO_NAME}/manifests/${TAG}")
           
           # Extract SHA256 for AMD64 and ARM64 using jq
-          AMD_SHA=$(echo "$RESPONSE" | jq -r '.images[] | select(.architecture=="amd64") | .digest | split(":")[1]')
-          ARM_SHA=$(echo "$RESPONSE" | jq -r '.images[] | select(.architecture=="arm64") | .digest | split(":")[1]')
+          AMD_SHA=$(echo "$RESPONSE" | jq -r '.manifests[] | select(.platform.architecture=="amd64") | .digest | split(":")[1]')
+          ARM_SHA=$(echo "$RESPONSE" | jq -r '.manifests[] | select(.platform.architecture=="arm64") | .digest | split(":")[1]')
           
           # Validate both SHAs were found
           if [ -z "$AMD_SHA" ]; then
-            echo "Error: Could not find AMD64 SHA in Docker Hub response"
+            echo "Error: Could not find AMD64 SHA in GHCR response"
             exit 1
           fi
           if [ -z "$ARM_SHA" ]; then
-            echo "Error: Could not find ARM64 SHA in Docker Hub response"
+            echo "Error: Could not find ARM64 SHA in GHCR response"
             exit 1
           fi
           
@@ -103,8 +106,8 @@ jobs:
           ARM_SHA="${{steps.get_docker_sha.outputs.arm_sha}}"
           echo "Release amd64 sha256: $RELEASE_AMD_SHA"
           echo "Release arm64 sha256: $RELEASE_ARM_SHA"
-          echo "Docker Hub AMD64 sha256: $AMD_SHA"
-          echo "Docker Hub ARM64 sha256: $ARM_SHA"
+          echo "GHCR AMD64 sha256: $AMD_SHA"
+          echo "GHCR ARM64 sha256: $ARM_SHA"
           if [ "$RELEASE_AMD_SHA" != "$AMD_SHA" ]; then
             echo "ERROR: SHA256 value does not match for AMD64"
             exit 1

@@ -9,29 +9,30 @@ jobs:
   security-scan:
     runs-on: ubuntu-latest
     env:
-      DOCKER_IMAGE: gfish/devenv_amazonlinux_2023
+      DOCKER_IMAGE: ghcr.io/${{ github.repository_owner }}/devenv_amazonlinux_2023
 
     steps:
-      - name: Get latest v* tag from DockerHub
+      - name: Get latest v* tag from GitHub Container Registry
         id: get_tag
         run: |
-          # Get all tags from DockerHub API and find latest semantic version
-          latest_tag=$(curl -s "https://registry.hub.docker.com/v2/repositories/${{ env.DOCKER_IMAGE }}/tags/" | \
-            jq -r '.results[].name' | \
-            grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | \
+          # Get all tags from GHCR API and find latest semantic version
+          latest_tag=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://ghcr.io/v2/${{ github.repository_owner }}/devenv_amazonlinux_2023/tags/list" | \
+            jq -r '.tags[]' | \
+            grep -E '^v[0-9]+\.[0-9]+\.[0-9]+' | \
             sort -V | \
             tail -1)
           
           if [ -z "$latest_tag" ]; then
-            echo "No v*.*.* tags found on DockerHub"
+            echo "No v*.*.* tags found on GHCR"
             exit 1
           fi
           
-          echo "Found latest DockerHub tag: $latest_tag"
+          echo "Found latest GHCR tag: $latest_tag"
           echo "tag=$latest_tag" >> $GITHUB_OUTPUT
           echo "LATEST_TAG=$latest_tag" >> $GITHUB_ENV
 
-      - name: Pull image from DockerHub
+      - name: Pull image from GitHub Container Registry
         run: docker pull ${{ env.DOCKER_IMAGE }}:${{ env.LATEST_TAG }}
 
       - name: Scan for critical vulnerabilities

@@ -101,8 +101,15 @@ jobs:
       - name: Get latest Amazon Linux 2023 tag update timestamp
         id: get_timestamp
         run: |
+          # Fetch latest AL2023 base image info from Docker Hub (public library)
           response=$(curl -s "https://hub.docker.com/v2/repositories/library/amazonlinux/tags/2023")
-          timestamp=$(echo "$response" | jq -r '.last_updated')
+          timestamp=$(echo "$response" | jq -r '.last_updated // empty')
+          
+          if [ -z "$timestamp" ]; then
+            echo "Could not fetch timestamp, using current time"
+            timestamp=$(date -u +'%Y-%m-%dT%H:%M:%S.000000Z')
+          fi
+          
           epoch_timestamp=$(date -d "$timestamp" +%s)
           echo "Latest epoch timestamp: $epoch_timestamp timestamp: $timestamp"
           echo "epoch_timestamp=al2023-$epoch_timestamp" >> $GITHUB_ENV
