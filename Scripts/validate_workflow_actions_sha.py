@@ -103,7 +103,9 @@ def main():
     valid_count = 0
     invalid_count = 0
     
-    for filepath in sorted(workflows_dir.glob('*.{yml,yaml}')):
+    for filepath in sorted(workflows_dir.glob('*')):
+        if filepath.suffix not in ['.yml', '.yaml']:
+            continue
         with open(filepath, 'r') as f:
             content = f.read()
         
