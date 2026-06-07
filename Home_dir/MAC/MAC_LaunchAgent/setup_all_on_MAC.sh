@@ -3,17 +3,19 @@ set -x
 # This script sets up the environment for a macOS system.
 ## It creates a ramdisk and sets up a LaunchAgent to automatically create the ramdisk at startup.
 
-# Define paths
-LAUNCH_AGENTS_DIR="/Users/ilyaro/Library/LaunchAgents"
-HOME_DIR="/Users/ilyaro"
+LAUNCH_AGENTS_DIR="$HOME/Library/LaunchAgents"
+DEPLOY_DIR="$HOME/Deploy/RAMDISK"
 
-# Create LaunchAgents directory if it doesn't exist
+# Create directories
 mkdir -p "$LAUNCH_AGENTS_DIR"
+mkdir -p "$DEPLOY_DIR"
 
-# It also copies a plist file to the LaunchAgents directory and loads it.
-cp com.user.ramdisk.plist "$LAUNCH_AGENTS_DIR/com.user.ramdisk.plist"
-cp create_ramdisk.sh "$HOME_DIR/create_ramdisk.sh"
-chmod +x "$HOME_DIR/create_ramdisk.sh"
+# Deploy the ramdisk script
+cp create_ramdisk.sh "$DEPLOY_DIR/create_ramdisk.sh"
+chmod +x "$DEPLOY_DIR/create_ramdisk.sh"
+
+# Copy plist with the actual path substituted
+sed "s|__HOME_DIR__|$HOME|g" com.user.ramdisk.plist > "$LAUNCH_AGENTS_DIR/com.user.ramdisk.plist"
 
 # Check if plist file exists
 if [ ! -f "$LAUNCH_AGENTS_DIR/com.user.ramdisk.plist" ]; then
