@@ -4,9 +4,11 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BIN_DIR="$HOME/bin"
-PLIST_DIR="$HOME/Library/LaunchAgents"
-PLIST_NAME="com.ilya.ramdisk-autocommit.plist"
+USERNAME="${USERNAME:-${SUDO_USER:-$(id -un)}}"
+TARGET_HOME="$(eval echo "~$USERNAME")"
+BIN_DIR="$TARGET_HOME/bin"
+PLIST_DIR="$TARGET_HOME/Library/LaunchAgents"
+PLIST_NAME="com.user.ramdisk-autocommit.plist"
 
 echo "==> Checking for Homebrew..."
 if ! command -v brew >/dev/null 2>&1; then
@@ -29,7 +31,7 @@ chmod +x "$BIN_DIR/ramdisk-autocommit.sh"
 
 echo "==> Installing launchd agent to $PLIST_DIR..."
 mkdir -p "$PLIST_DIR"
-sed "s|__HOME__|$HOME|g" "$SCRIPT_DIR/$PLIST_NAME" > "$PLIST_DIR/$PLIST_NAME"
+sed "s|__HOME__|$TARGET_HOME|g" "$SCRIPT_DIR/$PLIST_NAME" > "$PLIST_DIR/$PLIST_NAME"
 
 echo "==> Loading launchd agent..."
 # Unload first in case it's already loaded from a previous install
