@@ -25,6 +25,8 @@ fi
   msg=$(git diff -U0 -- "$file" | tail -1)
   [ -z "$msg" ] && msg="update ${file##*/}"
 
-  git add -A -- "$file"
-  git commit -m "$msg" -- "$file" && git push
+  git ls-files --error-unmatch -- "$file" && \
+  git commit -m "$msg" -- "$file" && \
+  git symbolic-ref --short refs/remotes/origin/HEAD | grep -v "$(git branch --show-current)" > /dev/null 2>&1 && \
+  git push
 done
