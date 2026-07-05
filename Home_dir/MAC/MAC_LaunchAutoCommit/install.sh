@@ -3,6 +3,8 @@
 # auto-commits + pushes tracked git repos found there.
 set -euo pipefail
 
+PATH=$PATH:/opt/homebrew/bin/
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 USERNAME="${USERNAME:-${SUDO_USER:-$(id -un)}}"
 TARGET_HOME="$(eval echo "~$USERNAME")"
