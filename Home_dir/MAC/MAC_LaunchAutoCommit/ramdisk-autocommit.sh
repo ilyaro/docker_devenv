@@ -3,7 +3,18 @@ set -euo pipefail
 
 WATCH_DIR="/Volumes/RAMDisk"
 
-fswatch -0 -r --event Updated "$WATCH_DIR" | while read -d "" file; do
+if command -v fswatch >/dev/null 2>&1; then
+  FSWATCH_BIN="$(command -v fswatch)"
+elif [ -x "/opt/homebrew/bin/fswatch" ]; then
+  FSWATCH_BIN="/opt/homebrew/bin/fswatch"
+elif [ -x "/usr/local/bin/fswatch" ]; then
+  FSWATCH_BIN="/usr/local/bin/fswatch"
+else
+  echo "fswatch not found. Install it with 'brew install fswatch'." >&2
+  exit 1
+fi
+
+"$FSWATCH_BIN" -0 -r --event Updated "$WATCH_DIR" | while read -d "" file; do
   [ -f "$file" ] || continue
   dir=$(dirname "$file")
   cd "$dir" || continue
