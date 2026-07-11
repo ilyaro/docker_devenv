@@ -147,3 +147,6 @@ gi() {
   git commit -m "$msg" && \
   git symbolic-ref --short refs/remotes/origin/HEAD | grep -v "$(git branch --show-current)" > /dev/null 2>&1 && git push
 }
+
+bindkey "^[[1;3D" backward-word
+bindkey "^[[1;3C" forward-word
