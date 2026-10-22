@@ -1,133 +1,263 @@
 # Define application directory for casks
 cask_args appdir: '/Applications'
 
-# Shell and utilities
-brew "coreutils"
-brew "bash"
-brew "bash-completion"
-brew 'bashish'
-brew "brew-cask-completion"
-brew "cheat"
-brew "cmake"
-brew "make"
-brew "pidof"
-brew "proctools"
-brew 'wget'
-brew 'rsync'
-brew "tldr"
-brew 'autoenv'
-
-# Version control
-brew "git"
-brew "git-cal"
-brew "git-crypt"
-brew "git-flow"
-brew "git-lfs"
-brew "git-plus"
-brew "git-secret"
-brew "git-secrets"
-brew "git-remote-codecommit"
-
-# Configuration management and cloud
+tap "azure/kubelogin", "https://github.com/Azure/homebrew-kubelogin"
+tap "kreuzwerker/taps"
+# Automate deployment, configuration, and upgrading
 brew "ansible"
+# Generates static HTML overview page from Ansible facts
 brew "ansible-cmdb"
+# Checks ansible playbooks for practices and behaviour
 brew "ansible-lint"
+# Bourne-Again SHell, a UNIX command interpreter
+brew "bash"
+# Per-project, per-directory shell environments
+brew "autoenv"
+# Smooth out the rough edges of AWS SSO (temporarily, until AWS makes it better)
+brew "aws-sso-util"
+# Official Amazon AWS command-line interface
 brew "awscli"
-brew "azure-cli"
-brew "terraform"
-brew "terraform-inventory"
-brew "terraform_landscape"
-brew "cf-terraforming"
-brew "terragrunt"
-brew "aws-sso-util" 
+# Utility for easily assuming AWS IAM roles from the command-line
 brew "awsume"
-
-# Container and orchestration
-cask "docker"
-brew "docker-gen"
-brew "docker-machine"
-brew "docker-slim"
-brew "dockviz"
-brew "podman"
-brew "kompose"
-
-# Kubernetes
-brew "kubectl"
-brew "kubectx"
-brew "kubecfg"
-brew "kubespy"
-brew "kustomize"
-cask "kubecontext"
-cask "kubernetic"
-cask 'lens'
-brew "ktmpl"
-brew "helm"
-## installs latest version 1.0 which doesn't suport our helmfiles, see bash file to install helmfile
-##brew "helmfile"
-
-# Programming languages and frameworks
-# Go
-brew "go"
-brew "goenv"
-
-# Python
-brew "python"
-brew 'jython'
-brew "pipenv"
-brew "pyenv"
-brew "pip-completion"
-brew "python-setuptools"
-
-# Ruby
-brew "ruby"
-brew "ruby-completion"
-brew "ruby-install"
-brew "ruby-build"
-brew "rbenv"
-
-# Rust
-brew 'rust'
-
-# Others
-brew "perl"
-brew "node"
-brew "node-build"
-brew "nodenv"
-brew "groovy"
-brew "gcc"
-brew "gdrive"
-
-# Network and Hardware utilities
-brew "telnet"
-brew 'netcat'
-brew 'nmap'
-brew "tcptraceroute"
-brew 'certbot'
+# Microsoft Azure CLI 2.0
+brew "azure-cli"
+# Programmable completion for Bash 3.2
+brew "bash-completion"
+# Theme environment for text terminals
+brew "bashish"
+# Fish completion for brew-cask
+brew "brew-cask-completion"
+# Tool to obtain certs from Let's Encrypt and autoenable HTTPS
+brew "certbot"
+# CLI to facilitate terraforming your existing Cloudflare resources
+brew "cf-terraforming"
+# Create and view interactive cheat sheets for *nix commands
+brew "cheat"
+# Cross-platform make
+brew "cmake"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# USB programmer
 brew "dfu-util"
+# Generate files from docker container metadata
+brew "docker-gen"
+# Create Docker hosts locally and on cloud providers
+brew "docker-machine"
+# Visualizing docker data
+brew "dockviz"
+# Play, record, convert, and stream select audio and video codecs
+brew "ffmpeg"
+# Monitor a directory for changes and run a shell command
+brew "fswatch"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+# GNU compiler collection
+brew "gcc"
+# Google Drive CLI Client
+brew "gdrive"
+# GitHub command-line tool
+brew "gh", link: false
+# Distributed revision control system
+brew "git"
+# GitHub-like contributions calendar but on the command-line
+brew "git-cal"
+# Enable transparent encryption/decryption of files in a git repo
+brew "git-crypt"
+# Extensions to follow Vincent Driessen's branching model
+brew "git-flow"
+# Git extension for versioning large files
+brew "git-lfs"
+# Git utilities: git multi, git relation, git old-branches, git recent
+brew "git-plus"
+# Git Remote Helper to interact with AWS CodeCommit
+brew "git-remote-codecommit"
+# Bash-tool to store the private data inside a git repo
+brew "git-secret"
+# Prevents you from committing sensitive information to a git repo
+brew "git-secrets"
+# Audit git repos for secrets
+brew "gitleaks"
+# Open-source GitLab command-line tool
+brew "glab"
+# Open source programming language to build simple/reliable/efficient software
+brew "go"
+# Go version management
+brew "goenv"
+# Java-based scripting language
+brew "groovy"
+# Kubernetes package manager
+brew "helm"
+# Tool to monitor I/O latency in real time
 brew "ioping"
+# JSON diff and patch
+brew "jd"
+# Lightweight and flexible command-line JSON processor
 brew "jq"
-brew 'yq'
-brew 'xsv'
+# Python implementation written in Java (successor to JPython)
+brew "jython"
+# Kubernetes CLI To Manage Your Clusters In Style!
+brew "k9s"
+# Tool to move from `docker-compose` to Kubernetes
+brew "kompose"
+# Parameterized templates for Kubernetes manifests
+brew "ktmpl"
+# Manage complex enterprise Kubernetes environments as code
+brew "kubecfg"
+# Kubernetes command-line interface
+brew "kubernetes-cli"
+# Tool that can switch between kubectl contexts easily and create aliases
+brew "kubectx"
+# Tools for observing Kubernetes resources in realtime
+brew "kubespy"
+# Template-free customization of Kubernetes YAML manifests
+brew "kustomize"
+# List USB devices, just like the Linux lsusb command
 brew "lsusb"
-brew "openhmd"
+# Utility for directing compilation
+brew "make"
+# Minify and secure Docker images
+brew "mintoolkit"
+# Utility for managing network connections
+brew "netcat"
+# Port scanning utility for large networks
+brew "nmap"
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
+# Install NodeJS versions
+brew "node-build"
+# Node.js version manager
+brew "nodenv"
+# Network performance measurement tool
 brew "nuttcp"
-
-# Applications
-cask 'tad'
-cask "dotnet-sdk"
-cask "drawio"
-cask "gitnote"
-cask "github"
-cask "grammarly-desktop"
-cask "iterm2"
+# Free and open source API and drivers for immersive technology
+brew "openhmd"
+# Highly capable, feature-rich programming language
+brew "perl"
+# Display the PID number for a given process name
+brew "pidof"
+# Bash completion for Pip
+brew "pip-completion"
+# Python dependency management tool
+brew "pipenv"
+# Execute binaries from Python packages in isolated environments
+brew "pipx"
+# Tool for managing OCI containers and pods
+brew "podman"
+# Command-line shell and scripting language
+brew "powershell", link: false
+# OpenBSD and Darwin versions of pgrep, pkill, and pfind
+brew "proctools"
+# Service monitoring system and time series database
+brew "prometheus"
+# Python version management
+brew "pyenv"
+# Easily download, build, install, upgrade, and uninstall Python packages
+brew "python-setuptools"
+# Install various Ruby versions and implementations
+brew "ruby-build"
+# Ruby version manager
+brew "rbenv"
+# Docker and OCI Registry Client in Go and tooling using those libraries
+brew "regclient"
+# Utility that provides fast incremental file transfer
+brew "rsync"
+# Bash completion for Ruby
+brew "ruby-completion"
+# Install Ruby, JRuby, Rubinius, TruffleRuby, or mruby
+brew "ruby-install"
+# Safe, concurrent, practical language
+brew "rust"
+# Traceroute implementation using TCP packets
+brew "tcptraceroute"
+# User interface to the TELNET protocol
+brew "telnet"
+# Tool to build, change, and version infrastructure
+brew "terraform"
+# Go app which generates a dynamic Ansible inventory from a Terraform state file
+brew "terraform-inventory"
+# Improve Terraform's plan output
+brew "terraform_landscape"
+# Thin wrapper for Terraform e.g. for locking state
+brew "terragrunt"
+# Programmatically correct mistyped console commands
+brew "thefuck"
+# Simplified and community-driven man pages
+brew "tldr"
+# Terminal multiplexer
+brew "tmux"
+# Find and verify credentials
+brew "trufflehog"
+# Collection of Linux utilities
+brew "util-linux"
+# Vi 'workalike' with many additional features
+brew "vim"
+# Internet file retriever
+brew "wget"
+# Fast CSV toolkit written in Rust
+brew "xsv"
+# Process YAML, JSON, XML, CSV and properties documents from the CLI
+brew "yq"
+# Command-line interface for 1Password
+cask "1password-cli"
+# App to build and share containerised applications and microservices
+cask "docker-desktop", args: { appdir: "/Applications" }
+# Developer platform
+cask "dotnet-sdk", args: { appdir: "/Applications" }
+# Online diagram software
+cask "drawio", args: { appdir: "/Applications" }
+# Web browser
+cask "firefox", args: { appdir: "/Applications" }
+# Desktop client for GitHub repositories
+cask "github", args: { appdir: "/Applications" }
+cask "gitnote", args: { appdir: "/Applications" }
+# Grammarly for desktop
+cask "grammarly-desktop", args: { appdir: "/Applications" }
+# Terminal emulator as alternative to Apple's Terminal app
+cask "iterm2", args: { appdir: "/Applications" }
+# Menu bar app for managing Kubernetes contexts
+cask "kubecontext", args: { appdir: "/Applications" }
+# Kubernetes desktop client
+cask "kubernetic", args: { appdir: "/Applications" }
+# Kubernetes IDE
+cask "lens", args: { appdir: "/Applications" }
+# Clipboard manager
+cask "maccy", args: { appdir: "/Applications" }
+# Multi-platform web browser
+cask "microsoft-edge", args: { appdir: "/Applications" }
+# Collaboration platform for API development
+cask "postman"
 cask "powershell"
-cask "vagrant-manager"
-cask "vagrant"
-cask "vagrant-vmware-utility"
-cask "visual-studio-code"
-cask "pycharm-ce"
-cask 'microsoft-edge'
-cask "firefox"
-
-## Optional Maccy - Clipboard manager https://maccy.app/ 
-cask "maccy"
+# IDE for Python programming - Community Edition
+cask "pycharm-ce", args: { appdir: "/Applications" }
+# Desktop application for viewing and analyzing tabular data
+cask "tad", args: { appdir: "/Applications" }
+# Development environment
+cask "vagrant", args: { appdir: "/Applications" }
+cask "vagrant-manager", args: { appdir: "/Applications" }
+# Gives Vagrant VMware plugin access to various VMware functionalities
+cask "vagrant-vmware-utility", args: { appdir: "/Applications" }
+# Open-source code editor
+cask "visual-studio-code", args: { appdir: "/Applications" }
+# Multimedia player
+cask "vlc"
+# CLI for interacting with the Wiz platform
+cask "wizcli"
+vscode "emeraldwalk.runonsave"
+vscode "github.vscode-github-actions"
+vscode "golang.go"
+vscode "ms-azuretools.vscode-containers"
+vscode "ms-azuretools.vscode-docker"
+vscode "ms-python.debugpy"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+vscode "ms-vscode-remote.remote-containers"
+vscode "ms-vscode.powershell"
+vscode "vscodevim.vim"
+go "github.com/rhysd/actionlint/cmd/actionlint"
+go "github.com/google/go-containerregistry/cmd/crane"
+go "golang.org/x/tools/gopls"
+go "github.com/getsops/sops/v3/cmd/sops"
+go "honnef.co/go/tools/cmd/staticcheck"
+uv "gh-org-secret-manager"
+npm "@anthropic-ai/claude-code"
+npm "@github/copilot"
