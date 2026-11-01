@@ -49,5 +49,6 @@ alias ad='dscl "/Active Directory/AD/All Domains" read /Users/$USERNAME | grep -
 
 alias kb='kustomize build . --load-restrictor=LoadRestrictionsNone --enable-helm'
 
-alias git-rebase='git fetch --prune && git reset --soft $(git merge-base HEAD origin/HEAD) && git commit && git rebase origin/HEAD && git push --force-with-lease
-'
+alias git-rebase='git fetch --prune && git reset --soft $(git merge-base HEAD origin/HEAD) && git commit && git rebase origin/HEAD && git push --force-with-lease'
+
+alias vima='vim ~/.oh-my-zsh/custom/aliases.zsh'
