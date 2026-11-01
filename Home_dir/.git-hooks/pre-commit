@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Escape hatch
+if [ "${WIZ_HOOK_SKIP:-0}" = "1" ]; then exit 0; fi
+
+# Wiz CI/CD policy to enforce. `wizcli scan dir` returns non-zero (which blocks
+# the commit) ONLY on a BLOCK-type policy hit; without --policies it evaluates
+# the built-in Audit/WARN defaults and never blocks. The Wiz portal "tenant
+# default" toggle does NOT change the CLI's no-flag behavior, so we name a
+# Block-type policy explicitly. Override or extend (comma-separated) via env.
+WIZ_HOOK_POLICY="${WIZ_HOOK_POLICY:-mis-github-secrets-policy}"
+
+# Fallback locations so GUI git clients can find wizcli. Appended (not
+# prepended) so a wizcli already on PATH — including the test stub — wins.
+# Skippable for hermetic tests.
+if [ "${WIZ_HOOK_NO_PATH_FALLBACK:-0}" != "1" ]; then
+  export PATH="$PATH:/opt/homebrew/bin:/usr/local/bin"
+fi
+
+# Resolve this script's real path (recursion guard)
+self_rp() { cd "$(dirname "$1")" && printf '%s/%s\n' "$(pwd -P)" "$(basename "$1")"; }
+SELF_RP="$(self_rp "$0")"
+
+# Chain to the repo's OWN hook dir. --git-common-dir is the real git dir even
+# when core.hooksPath is set globally and inside worktrees.
+COMMON_DIR="$(git rev-parse --git-common-dir 2>/dev/null || true)"
+if [ -n "$COMMON_DIR" ]; then
+  LOCAL_HOOK="$COMMON_DIR/hooks/pre-commit"
+  if [ -x "$LOCAL_HOOK" ] && [ "$(self_rp "$LOCAL_HOOK")" != "$SELF_RP" ]; then
+    "$LOCAL_HOOK" "$@" || exit $?
+  fi
+fi
+
+# Collect staged files (added/copied/modified; excludes deletes), null-delimited
+staged=()
+while IFS= read -r -d '' f; do staged+=("$f"); done \
+  < <(git diff --cached --name-only --diff-filter=ACM -z)
+if [ "${#staged[@]}" -eq 0 ]; then exit 0; fi
+
+# wizcli must be present (fail-closed)
+if ! command -v wizcli >/dev/null 2>&1; then
+  echo "❌ wiz pre-commit: wizcli not found on PATH." >&2
+  echo "   Install it, or bypass with:  git commit --no-verify   (or WIZ_HOOK_SKIP=1)" >&2
+  exit 1
+fi
+
+# Materialize staged blob content (index version, NOT working tree) into a temp dir
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+for f in "${staged[@]}"; do
+  # Skip non-blob entries (e.g. submodule gitlinks) — nothing to scan.
+  [ "$(git cat-file -t ":$f" 2>/dev/null)" = blob ] || continue
+  mkdir -p "$TMP/$(dirname "$f")"
+  # A real blob that fails to materialize must fail closed, not be skipped.
+  if ! git show ":$f" > "$TMP/$f"; then
+    echo "❌ wiz pre-commit: failed to read staged content of '$f'. Blocking (fail-closed)." >&2
+    echo "   Bypass: git commit --no-verify   (or WIZ_HOOK_SKIP=1)" >&2
+    exit 1
+  fi
+done
+
+# Secrets-focused scan; output visible; fail-closed
+# NOTE: `rc=$?` inside `if ! wizcli ...; then` would capture the negated
+# test's status (always 0), not wizcli's real exit code. Use the
+# &&/|| idiom instead — set -e does not trigger on non-final list members.
+wizcli scan dir "$TMP" \
+      --no-publish \
+      --disabled-scanners=Vulnerability,Misconfiguration,SAST,AIModels \
+      ${WIZ_HOOK_POLICY:+--policies="$WIZ_HOOK_POLICY"} && rc=0 || rc=$?
+if [ "$rc" -ne 0 ]; then
+  echo "❌ wiz pre-commit blocked (exit $rc)." >&2
+  echo "   Either findings are shown above, or wizcli is not authed / offline." >&2
+  echo "   Re-auth:  wizcli auth --use-device-code" >&2
+  echo "   Bypass:   git commit --no-verify   (or WIZ_HOOK_SKIP=1 git commit ...)" >&2
+  exit "$rc"
+fi
+exit 0
