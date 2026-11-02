@@ -21,7 +21,6 @@ alias ll='ls -lah'
 alias l='ls -lah'
 alias lt='du -sh * | sort -h'
 alias mnt='mount | grep -E ^/dev | column -t'
-alias gh='history|grep'
 
 alias g=git
 alias k=kubectl
