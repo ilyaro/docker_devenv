@@ -30,7 +30,6 @@ alias tg="/opt/homebrew/bin/terragrunt"
 alias d=docker
 alias v=vim
 alias c='code -r' 
-alias git-bd='git checkout origin/HEAD;git remote prune origin;git branch --merged | grep -v HEAD | xargs -I{} git branch -d {}'
 ## AI commit message title
 alias gac='git commit -m "$(git diff --cached -U3 | copilot -p "Write a one-line conventional commit message for this diff. Output ONLY the message, nothing else." 2>/dev/null | tail -1 || git diff --cached -U0 | tail -1)" && push'
 alias pr='/Users/ilyaro/Git_CodeCommit/devops-tools/scripts/codecommit/create_pr.sh'
@@ -51,3 +50,7 @@ alias kb='kustomize build . --load-restrictor=LoadRestrictionsNone --enable-helm
 alias git-rebase='git fetch --prune && git reset --soft $(git merge-base HEAD origin/HEAD) && git commit && git rebase origin/HEAD && git push --force-with-lease'
 
 alias vima='vim ~/.oh-my-zsh/custom/aliases.zsh'
+
+# git command not more with ow
+#alias git-bd='op run --env-file="$HOME/.env.op.ilyaro_chkpsw" -- git fetch --prune;git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D'
+alias git-bd="git checkout origin/HEAD; git fetch --prune; git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D"
