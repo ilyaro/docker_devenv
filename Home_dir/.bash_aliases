@@ -53,4 +53,4 @@ alias vima='vim ~/.oh-my-zsh/custom/aliases.zsh'
 
 # git command not more with ow
 #alias git-bd='op run --env-file="$HOME/.env.op.ilyaro_chkpsw" -- git fetch --prune;git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D'
-alias git-bd="git checkout main && git fetch --prune && git branch -vv | grep ': gone]' | sed 's/\*//' | awk '{print \$1}' | xargs -I {} git branch -D {}"
+alias git-bd="git checkout origin/HEAD && git fetch --prune && git branch -vv | grep ': gone]' | sed 's/\*//' | awk '{print \$1}' | xargs -I {} git branch -D {}"
