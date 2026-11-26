@@ -34,8 +34,6 @@ alias c='code -r'
 alias gac='git commit -m "$(git diff --cached -U3 | copilot -p "Write a one-line conventional commit message for this diff. Output ONLY the message, nothing else." 2>/dev/null | tail -1 || git diff --cached -U0 | tail -1)" && push'
 alias pr='/Users/ilyaro/Git_CodeCommit/devops-tools/scripts/codecommit/create_pr.sh'
 
-#aws-sso-util configure populate --sso-start-url https://DOMAINHERE-sso.awsapps.com/start --sso-region eu-west-1 --region eu-west-1 --config-default output=json --config-default cli_pager="" --trim-account-name chkp-aws-rnd- --safe-account-names --components account_name,role_name --separator "."
-alias sso='aws-sso-util login --all'
 ## Add cluster with profile to see all clusters in Lens
 #aws eks update-kubeconfig --region eu-west-1 --name firefly-dev-env-eu-west-1 --profile XXX.Admin # from awsume
 
@@ -59,3 +57,33 @@ git-bd() {
     git branch -vv | grep ': gone]' | sed 's/\*//' | awk '{print $1}' | xargs -I {} git branch -D {}
 }
 
+## How to run copilot to reuse token from shell and op
+unalias co 2>/dev/null
+co() {
+  (
+    set -a
+    source <(op inject -i "$HOME/.env.op")
+    set +a
+    exec copilot "$@"
+  )
+}
+
+## SSO populate aws profiles
+AWS_SSO_CREDENTIAL_PROCESS_NAME="/opt/homebrew/bin/aws-sso-util credential-process" \
+aws-sso-util configure populate \
+  --sso-start-url https://YOUR_DOMAIN-sso.awsapps.com/start \
+  --sso-region eu-west-1 \
+  --region eu-west-1 \
+  --config-default output=json \
+  --config-default cli_pager="" \
+  --trim-account-name chkp-aws-rnd- \
+  --safe-account-names \
+  --components account_name,role_name \
+  --separator "." \
+  --existing-config-action overwrite
+
+# AWS SSO login
+alias sso='aws-sso-util login --all'
+## Get profiles list, and assume the profile
+## awsume -l
+## awsume cloudinfra-devops-prd.Admin
